@@ -5,6 +5,7 @@ namespace Dms\Document;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Exception;
+use Dms\Storage\Storage;
 
 class Manager implements ServiceLocatorAwareInterface
 {
@@ -119,6 +120,7 @@ class Manager implements ServiceLocatorAwareInterface
         }
 
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
+        $this->document->setSupport(Storage::SUP_FILE);
         $this->getStorage()->write(serialize($this->document), $this->document->getId() .'.inf');
 
         return $this->document;

@@ -31,7 +31,7 @@ class DocumentController extends AbstractActionController
            }
 
            if ($document) {
-               $content = $document->getDatas();
+                $content = $document->getDatas();
                 $headers = $this->getResponse()->getHeaders();
 
                 if ($document->getType()!=null) {

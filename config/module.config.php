@@ -1,21 +1,6 @@
 <?php
 
 return array(
-        'dms-conf' => array(
-                'size_allowed' => array(
-                        array('width' => 300, 'height' => 200),
-                        array('width' => 300, 'height' => 300),
-                        array('width' => 150, 'height' => 100),
-                        array('width' => 80, 'height' => 80),
-                        array('width' => 300),
-                ),
-                'default_path' => 'upload/',
-                'adapter' => 'http-adapter',
-                'headers'=> array(
-                        'Access-Control-Allow-Origin'=>'http://local.wow.in',
-                        'Access-Control-Allow-Credentials'=>'true'
-                ),
-        ),
         'view_manager' => array(
                 'display_not_found_reason' => false,
                 'display_exceptions'       => false,
