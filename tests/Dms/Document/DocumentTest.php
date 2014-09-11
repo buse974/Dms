@@ -29,7 +29,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                  ->setType('jpg');
 
         $serialize = serialize($document);
-        $this->assertEquals($serialize, 'C:21:"Dms\Document\Document":201:{a:7:{s:2:"id";s:10:"id-300x200";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";}}');
+        $this->assertEquals($serialize, 'C:21:"Dms\Document\Document":216:{a:8:{s:2:"id";s:10:"id-300x200";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";s:6:"weight";N;}}');
     }
 
     public function testCanunserialize()

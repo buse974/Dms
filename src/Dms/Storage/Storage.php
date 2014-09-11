@@ -3,10 +3,11 @@
 namespace Dms\Storage;
 
 use Zend\File\Transfer\Adapter\Http;
+use Dms\Document\Document;
 
 class Storage extends AbstractStorage
 {
-    public function write($data, $name, $support = Storage::SUP_DATA)
+    public function write($data, $name, $support = Document::SUPPORT_DATA_STR)
     {
         $ret = null;
         $nameMod = substr($name, 4);
@@ -14,7 +15,7 @@ class Storage extends AbstractStorage
         if (!is_dir($path)) {
             mkdir($path,0777,true);
         }
-        if ($support===Storage::SUP_FILE_MULTI_PART) {
+        if ($support===Document::SUPPORT_FILE_MULTI_PART_STR) {
              $adp = new Http();
              $adp->setDestination($path);
              $adp->addFilter('Rename', array('target' => $nameMod));

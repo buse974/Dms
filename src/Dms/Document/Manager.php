@@ -4,8 +4,7 @@ namespace Dms\Document;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\Exception;
-use Dms\Storage\Storage;
+use Dms\Storage\StorageInterface;
 
 class Manager implements ServiceLocatorAwareInterface
 {
@@ -14,170 +13,232 @@ class Manager implements ServiceLocatorAwareInterface
      * @var \Dms\Document\Document
      */
     protected $document;
+    
+    /**
+     * 
+     * @var string
+     */
+    protected $format;
+    
+    /**
+     * 
+     * @var string
+     */
+    protected $size;
+    
+    /**
+     * 
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
     protected $serviceLocator;
+    
+    /**
+     * 
+     * @var \Dms\Storage\StorageInterface
+     */
     protected $storage;
 
     /**
-     * Get a document
-     * @param  integer|Document $documentOrId
-     * @return Document
+     *  Load document
+     * 
+     * @param string|\Dms\Document\Document $document
+     * @throws \Exception
+     * @return \Dms\Document\Manager
      */
-    public function getDocumentById($id)
+    public function loadDocument($document)
     {
-        if (!is_string($id)) {
-            throw new \Exception('Param is not numeric' . $id);
-        }
-        $info = $this->getStorage()->read($id .'.inf');
+    	if($document instanceof Document && is_string($document->getId())) {
+    		$document = $document->getId();
+    	}
+    	if(!is_string($document)) {
+    		throw new \Exception('Param is not id: ' . $id);
+    	}
+
+        $info = $this->getStorage()->read($document .'.inf');
 
         if (!$info) {
-            throw new \Exception('Not document with ' . $id . ' id');
+            throw new \Exception('Not document: ' . $id);
         }
 
         $this->document = unserialize($info);
-        $this->initData();
-
-        return $this->document;
-    }
-
-    /**
-     * Get a document
-     * @param  integer|Document $documentOrId
-     * @return bool
-     */
-    public function initData($document = null)
-    {
-        if ($document) {
-            $this->setDocument($document);
-        }
-
-        $datas = $this->getStorage()->read($this->document->getId() . '.dat');
+        
+        $datas = $this->getStorage()->read($document . '.dat');
         if ($datas) {
-            $this->document->setDatas($datas);
+        	$this->document->setDatas($datas);
         }
 
-        return true;
+        return $this;
     }
 
     /**
-     * Get a document
-     * @param  integer|Document $documentOrId
-     * @return Document
+     * Load document info
+     * 
+     * @param string|\Dms\Document\Document $document
+     * @throws \Exception
+     * @return \Dms\Document\Manager
      */
-    public function getInfoDocument($document = null)
+    public function loadDocumentInfo($document)
     {
-        if ($document) {
-            $this->setDocument($document);
+    	if($document instanceof Document && is_string($document->getId())) {
+    		$document = $document->getId();
+    	}
+    	if(!is_string($document)) {
+    		throw new \Exception('Param is not id: ' . $id);
+    	}
+
+        $info = $this->getStorage()->read($document .'.inf');
+        
+        if (!$info) {
+        	throw new \Exception('Not document: ' . $id);
         }
+        
+        $this->document = unserialize($info);
 
-        $info = $this->getStorage()->read($this->document->getId() .'.inf');
-
-        return (!$info)?null:unserialize($info);
+        return $this;
     }
 
+    /**
+     * Get Document
+     * 
+     * @return \Dms\Document\Document
+     */
     public function getDocument()
     {
+        if(null === $this->document) {
+        	$this->document = new Document();
+        }
+        	
         return $this->document;
     }
 
-    public function setDocument($documentOrArray)
+    /**
+     * Initialise Document with a array
+     * 
+     * @param array $document
+     * @return \Dms\Document\Manager
+     */
+    public function createDocument(array $document)
     {
-        $document = $documentOrArray;
+    	$this->clear();
+        $this->document = new Document();
+        $this->document->setId((isset($document['id'])) ? $document['id'] : null)
+                       ->setDatas((isset($document['data'])) ? $document['data'] : null)
+                       ->setEncoding((isset($document['coding'])) ? $document['coding'] : null)
+                       ->setType((isset($document['type'])) ? $document['type']: null)
+                       ->setSupport((isset($document['support'])) ? $document['support'] : null)
+                       ->setName((isset($document['name'])) ? $document['name'] : null)
+                       ->setSize((isset($document['size'])) ? $document['size'] : null)
+                       ->setWeight((isset($document['weight'])) ? $document['weight'] : null)
+                       ->setId((isset($document['hash'])) ? $document['hash']: null);
 
-        switch (true) {
-            case is_array($document) :
-                $document = new Document();
-                $document->setId((isset($documentOrArray['id'])) ? $documentOrArray['id'] : null)
-                         ->setDatas((isset($documentOrArray['data'])) ? $documentOrArray['data'] : null)
-                         ->setEncoding((isset($documentOrArray['coding'])) ? $documentOrArray['coding'] : null)
-                         ->setType((isset($documentOrArray['type'])) ? $documentOrArray['type']: null)
-                         ->setSupport((isset($documentOrArray['support'])) ? $documentOrArray['support'] : null)
-                         ->setName((isset($documentOrArray['name'])) ? $documentOrArray['name'] : null)
-                         ->setSize((isset($documentOrArray['size'])) ? $documentOrArray['size'] : null)
-                         ->setId((isset($documentOrArray['hash'])) ? $documentOrArray['hash']: null);
-                break;
-            case is_string($document) :
-                $document = new Document();
-                $document->setId($documentOrArray);
-                break;
-        }
-        if (!$document instanceof Document) {
-            throw new Exception('Document must be a string, array or document object');
-        }
-
-        return $this->document = $document;
+        return $this;
     }
 
     /**
      * Record a document to the Dms
      *
-     * @param  string|array|document $document
-     * @return Document
+     * @return \Dms\Document\Manager
      */
-    public function recordDocument($document = null)
+    public function writeFile()
     {
-        if ($document) {
-            $this->setDocument($document);
+        if (null === $this->document) {
+            throw new \Exception('Document does not exist');
         }
-
+		if(null !== $this->size) {
+			$this->resize();
+		}
+		if(null !== $this->format) {
+			$this->convert();
+		}
+		
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
-        $this->document->setSupport(Storage::SUP_FILE);
+        $this->document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getStorage()->write(serialize($this->document), $this->document->getId() .'.inf');
 
-        return $this->document;
-    }
-
-    public function decode($document=null)
-    {
-        $type = 'binary';
-        if ($document) {
-            $this->setDocument($document);
-        }
-
-        if ($this->document->getEncoding()!=$type && $this->document->getSupport()=='data') {
-            $encdec = $this->getEncDec($this->document->getEncoding());
-            $this->document->setDatas($encdec->decode($this->document->getDatas()));
-            $this->document->setEncoding($type);
-        }
-
-        return $this->document;
+        return $this;
     }
 
     /**
-     * @TODO if support != data and encoding != binary
-     * @param  string         $str_size
-     * @param  array|Document $document
-     * @return boolean
+     * Decode Document to binary
+     * 
+     * @throws \Exception
+     * @return \Dms\Document\Manager
      */
-    public function resizeDocument($str_size, $document=null)
+    public function decode()
     {
-        if ($document) {
-            $this->setDocument($document);
+    	if (null === $this->document) {
+    		throw new \Exception('Document does not exist');
+    	}
+    	
+        if ($this->document->getEncoding()!=Document::TYPE_BINARY_STR && $this->document->getSupport()==Document::SUPPORT_DATA_STR) {
+            $this->document->setDatas($this->getEncDec($this->document->getEncoding())->decode($this->document->getDatas()));
+            $this->document->setEncoding(Document::TYPE_BINARY_STR);
         }
 
-        $resize = $this->getServiceResize();
-
-        try {
-            $resize->setData($this->document->getDatas());
-            $img = $resize->getResizeData($str_size);
-            $this->document->setEncoding('binary');
-            $this->document->setDatas($img);
-            $this->document->setSize($str_size);
-            $this->document->setType($resize->getType());
-            $this->recordDocument();
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return $this->document;
+        return $this;
     }
 
+    /**
+     * Resize document
+     * 
+     * @param number $size
+     * @return \Dms\Document\Manager
+     */
+    private function resize()
+    {
+        try {
+        	$resize = $this->getServiceResize();
+            $resize->setData($this->document->getDatas());
+            $this->document->setEncoding(Document::TYPE_BINARY_STR);
+            $this->document->setDatas($resize->getResizeData($this->size));
+            $this->document->setSize($this->size);
+            $this->document->setType($resize->getType());
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 
+     */
+    private function convert()
+    {
+    	
+    }
+
+    public function getSize()
+    {
+    	return $this->size;
+    }
+    
+    public function setSize($size)
+    {
+    	$this->size = $size;
+    	
+    	return $this;
+    }
+    
+    public function getFormat()
+    {
+    	return $this->format;
+    }
+    
+    public function setFormat($format)
+    {
+    	$this->format = $format;
+    	 
+    	return $this;
+    }
+    
     /**
      * Get storage
      * @return \Dms\Storage\StorageInterface
      */
     public function getStorage()
     {
-        if (!$this->storage) {
+        if (null === $this->storage) {
             $this->storage = $this->getServiceLocator()->get('Storage');
         }
 
@@ -216,7 +277,7 @@ class Manager implements ServiceLocatorAwareInterface
     /**
      * Get service locator
      *
-     * @return ServiceLocatorInterface
+     * @return \Zend\ServiceManager\ServiceLocatorInterfac
      */
     public function getServiceLocator()
     {
@@ -226,7 +287,7 @@ class Manager implements ServiceLocatorAwareInterface
     /**
      * Set service locator
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -237,6 +298,8 @@ class Manager implements ServiceLocatorAwareInterface
 
     public function clear()
     {
+    	$this->size = null;
+    	$this->format = null;
         $this->document = null;
         $this->storage = null;
     }

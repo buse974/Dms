@@ -28,6 +28,13 @@ class Resize implements ServiceManagerAwareInterface
         $this->data = $data;
     }
 
+    /**
+     * resize data use library GD
+     * 
+     * @param unknown $size
+     * @throws \Exception
+     * @return string
+     */
     public function getResizeData($size)
     {
         if (empty($this->data) && empty($size)) {

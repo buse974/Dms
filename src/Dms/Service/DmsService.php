@@ -17,15 +17,16 @@ class DmsService implements ServiceManagerAwareInterface
      * @param  array  $document
      * @return string token
      */
-    public function add($document)
+    public function add(array $document)
     {
-        $this->getDocumentManager()->setDocument($document);
+        $this->getDocumentManager()->createDocument($document);
         $this->getDocumentManager()->decode();
-        $doc = $this->getDocumentManager()->recordDocument();
-
-        return $doc->getId();
+        $this->getDocumentManager()->writeFile();
+        $document = $this->getDocumentManager()->getDocument();
+        
+        return $document->getId();
     }
-
+    
     /**
      *
      * @param  array  $document
@@ -33,10 +34,11 @@ class DmsService implements ServiceManagerAwareInterface
      */
     public function resize($size)
     {
-        $this->getDocumentManager()->resizeDocument($size);
-        $doc = $this->getDocumentManager()->recordDocument();
-
-        return $doc->getId();
+    	$this->getDocumentManager()->setSize($size);
+    	$this->getDocumentManager()->writeFile();
+    	$document = $this->getDocumentManager()->getDocument();
+    	
+        return $document->getId();
     }
 
     public static function progressAction($id)

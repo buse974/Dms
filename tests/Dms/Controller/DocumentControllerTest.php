@@ -25,6 +25,7 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerName('ged_document');
         $this->assertActionName('get');
         $this->assertResponseStatusCode(200);
+
         $this->assertEquals(147186, strlen($this->getResponse()->getContent()));
 	}
 	

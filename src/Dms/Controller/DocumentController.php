@@ -6,49 +6,57 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Dms\Model\Dms;
 use Zend\View\Model\JsonModel;
 use Dms\Service\DmsService as Sp;
+use Dms\Document\Document;
 
 class DocumentController extends AbstractActionController
 {
     public function getAction()
     {
         $document = null;
-        if (null!==($file=$this->params('file',null))) {
-            try {
-                $document = $this->getManagerDms()->getDocumentById($file);
-            } catch (\Exception $e) {}
-            try {
-                if (!$document && strpos($this->params('file'), '-')!==false) {
-                    $t = explode('-', $this->params('file'));
-                    $document = $this->getManagerDms()->getDocumentById($t[0]);
-                    if ($document) {
-                        $this->getManagerDms()->resizeDocument($t[1]);
-                        $document = $this->getManagerDms()->getDocument();
-                    }
-               }
-           } catch (\Exception $e) {
-                   echo $e->getMessage();
-                   exit();
-           }
-
-           if ($document) {
-                $content = $document->getDatas();
-                $headers = $this->getResponse()->getHeaders();
-
-                if ($document->getType()!=null) {
-                    $headers->addHeaderLine('Content-type',$document->getType());
-                }
-                $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
-                $headers->addHeaderLine('Access-Control-Allow-Origin','*');
-                $headers->addHeaderLine('Content-Length', strlen($content));
-                $headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
-                $headers->addHeaderLine('Access-Control-Allow-Credentials','true');
-           } else {
-               $content = "file " . $file . " not found";
-           }
+        $id = null;
+        $size = null;
+        $format = null;
+        
+        if (null===($file=$this->params('file',null))) {
+        	throw new \Exception('file id does not exist');
         }
-
+       
+        try {
+            $document = $this->getManagerDms()->loadDocument($file)->getDocument();
+        } catch (\Exception $e) {}
+        try {
+        	if (!$document && strpos($this->params('file'), '-')!==false) {
+        		list($id, $size) = explode('-', $this->params('file'));
+                if(strpos($size, '.')!==false) {
+                	list($size, $format) = explode('.', $size);
+                }
+                $this->getManagerDms()->loadDocument($id);
+                if(null !== $size) {
+                	$this->getManagerDms()->setSize($size);
+                }
+                if(null !== $format) {
+                	$this->getManagerDms()->setFormat($format);
+                }
+                $document = $this->getManagerDms()->writeFile()->getDocument();
+        	}
+		} catch (\Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+        if ($document) {
+        	$content = $document->getDatas();
+			$headers = $this->getResponse()->getHeaders();
+			if (null !== $document->getType()) {
+				$headers->addHeaderLine('Content-type',$document->getType());
+			}
+            $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
+            $headers->addHeaderLine('Content-Length', strlen($content));
+            $headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
+		} else {
+			$content = "file " . $file . " not found";
+		}
+        
         return $this->getResponse()->setContent($content);
-
     }
 
     public function getTypeAction()
@@ -56,9 +64,9 @@ class DocumentController extends AbstractActionController
         $content = null;
 
         if (null!==($file=$this->params('file',null))) {
-            $doc = $this->getManagerDms()->getInfoDocument($file);
-            if ($doc) {
-                $content = $doc->getType();
+            $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
+            if ($m_document) {
+                $content = $m_document->getType();
             }
         }
 
@@ -68,10 +76,11 @@ class DocumentController extends AbstractActionController
     public function getNameAction()
     {
         $content = null;
+        
         if (null!==($file=$this->params('file',null))) {
-            $doc = $this->getManagerDms()->getInfoDocument($file);
-            if ($doc) {
-                $content = $doc->getName();
+            $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
+            if ($m_document) {
+                $content = $m_document->getName();
             }
         }
 
@@ -81,10 +90,11 @@ class DocumentController extends AbstractActionController
     public function getDescriptionAction()
     {
         $content = null;
+        
         if (null!==($file=$this->params('file',null))) {
-            $doc = $this->getManagerDms()->getInfoDocument($file);
-            if ($doc) {
-                $content = $doc->getDescription();
+            $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
+            if ($m_document) {
+                $content = $m_document->getDescription();
             }
         }
 
@@ -109,7 +119,7 @@ class DocumentController extends AbstractActionController
         if ($request->isPost()) {
             $files = $request->getFiles()->toArray();
             foreach ($files as $name_file => $file) {
-                    $document['support'] = 'file_multi_part';
+                    $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
                     $document['coding'] = 'binary';
                     $document['data']   = $file;
                     $document['name']   = $file['name'];

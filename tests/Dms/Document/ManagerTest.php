@@ -24,13 +24,13 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 	
     public function testCanGetDocumentById()
     { 
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->getDocumentById('2b5c466bf06d665b479e85c48ec733d235d13884');
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$m_document = $manager->loadDocument('2b5c466bf06d665b479e85c48ec733d235d13884')->getDocument();
     	
-    	$this->assertInstanceOf("Dms\Document\Document", $doc);
-    	$this->assertNotNull($doc->getDatas());
-    	$this->assertNotNull($doc->getId());
-    	$this->assertNotNull($doc->getSupport());
+    	$this->assertInstanceOf("Dms\Document\Document", $m_document);
+    	$this->assertNotNull($m_document->getDatas());
+    	$this->assertNotNull($m_document->getId());
+    	$this->assertNotNull($m_document->getSupport());
     }
 
     /**
@@ -38,9 +38,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanGetDocument()
     {
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->getDocument();
-    	$this->assertInstanceOf("Dms\Document\Document", $doc);
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$m_document = $manager->getDocument();
+    	$this->assertInstanceOf("Dms\Document\Document", $m_document);
     }
     
     /**
@@ -48,46 +48,23 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanClearManager()
     {
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$dm->clear();
-    	$doc = $dm->getDocument();
-    	$this->assertNull($doc);
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$old_document_id = $manager->getDocument()->getId();
+    	$manager->clear();
+    	$m_document = $manager->getDocument();
+    	$this->assertInstanceOf("Dms\Document\Document", $m_document);
+    	$this->assertNotEquals($old_document_id, $m_document->getId());
     }
 
     public function testCanGetInfoDocumentWithoutData()
     {  
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->getInfoDocument('2b5c466bf06d665b479e85c48ec733d235d13884');
-    	 
-    	$this->assertInstanceOf("Dms\Document\Document", $doc);
-    	$this->assertNull($doc->getDatas());
-    	$this->assertNotNull($doc->getId());
-    	$this->assertNotNull($doc->getSupport());
-    }
-
-    public function testCanSetDocumentById()
-    {
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$dm->clear();
-    	$doc = $dm->setDocument('2b5c466bf06d665b479e85c48ec733d235d13884');
-    	$this->assertInstanceOf("Dms\Document\Document", $doc);
-    	$this->assertEquals('2b5c466bf06d665b479e85c48ec733d235d13884',$doc->getId());
-    }
-    
-    /**
-     * @depends testCanSetDocumentById
-     */
-    public function testInitDataWithoutDocument()
-    {
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->getDocument();
-    	$this->assertNull($doc->getDatas());
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$m_document = $manager->loadDocumentInfo('2b5c466bf06d665b479e85c48ec733d235d13884')->getDocument();
     	
-    	$ret = $dm->initData();
-    	$this->assertTrue($ret);
-    	
-    	$doc = $dm->getDocument();
-    	$this->assertNotNull($doc->getDatas());
+    	$this->assertInstanceOf("Dms\Document\Document", $m_document);
+    	$this->assertNull($m_document->getDatas());
+    	$this->assertNotNull($m_document->getId());
+    	$this->assertNotNull($m_document->getSupport());
     }
 
     public function testCanRecordDocument()
@@ -97,14 +74,15 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     	$document['coding'] = 'binary';
     	$document['data'] = $image;
     	
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->recordDocument($document);
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
     	
-    	$ret = $doc->getId();
-    	$this->assertEquals(11, strlen($doc->getId()));
-    	$this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
-    	$this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.inf');
-    	$this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
+    	$document = $manager->createDocument($document)->writeFile()->getDocument();
+    	$document_id = $document->getId();
+
+    	$this->assertEquals(11, strlen($document_id));
+    	$this->assertFileExists(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat');
+    	$this->assertFileExists(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.inf');
+    	$this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat'));
     }
 
     public function testCanDecodeBase()
@@ -114,10 +92,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     	$document['coding'] = 'base';
     	$document['data'] = base64_encode($image);
     	 
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->decode($document);
-    	$this->assertEquals('binary', $doc->getEncoding());
-    	$this->assertEquals($image, $doc->getDatas());
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$manager->decode($document);
+    	$document = $manager->getDocument();
+    	$this->assertEquals('binary', $document->getEncoding());
+    	$this->assertEquals($image, $document->getDatas());
     }
 
     public function testCanResizeDocument()
@@ -127,9 +106,13 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     	$document['coding'] = 'binary';
     	$document['data'] = $image;
     	
-    	$dm = bootstrap::getServiceManager()->get('dms.manager');
-    	$doc = $dm->resizeDocument('80x80',$document);
-    	$this->assertTrue(strlen($doc->getDatas()) < strlen($image));
+    	$manager = bootstrap::getServiceManager()->get('dms.manager');
+    	$manager->createDocument($document);
+    	$manager->setSize('80x80');
+    	$manager->writeFile();
+    	$document = $manager->getDocument();
+    	
+    	$this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
 
     public function testCanGetStorage()

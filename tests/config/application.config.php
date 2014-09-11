@@ -5,7 +5,7 @@ return array(
     ),
     'module_listener_options' => array(
         'module_paths' => array(
-            'Dms' => __DIR__ . '/../../../Dms',
+            'Dms' => __DIR__ . '/../../../DMS',
         ),
     	// An array of paths from which to glob configuration files after
     	// modules are loaded. These effectively override configuration
