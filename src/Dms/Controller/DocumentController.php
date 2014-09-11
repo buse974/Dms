@@ -16,46 +16,46 @@ class DocumentController extends AbstractActionController
         $id = null;
         $size = null;
         $format = null;
-        
+
         if (null===($file=$this->params('file',null))) {
-        	throw new \Exception('file id does not exist');
+            throw new \Exception('file id does not exist');
         }
-       
+
         try {
             $document = $this->getManagerDms()->loadDocument($file)->getDocument();
         } catch (\Exception $e) {}
         try {
-        	if (!$document && strpos($this->params('file'), '-')!==false) {
-        		list($id, $size) = explode('-', $this->params('file'));
-                if(strpos($size, '.')!==false) {
-                	list($size, $format) = explode('.', $size);
+            if (!$document && strpos($this->params('file'), '-')!==false) {
+                list($id, $size) = explode('-', $this->params('file'));
+                if (strpos($size, '.')!==false) {
+                    list($size, $format) = explode('.', $size);
                 }
                 $this->getManagerDms()->loadDocument($id);
-                if(null !== $size) {
-                	$this->getManagerDms()->setSize($size);
+                if (null !== $size) {
+                    $this->getManagerDms()->setSize($size);
                 }
-                if(null !== $format) {
-                	$this->getManagerDms()->setFormat($format);
+                if (null !== $format) {
+                    $this->getManagerDms()->setFormat($format);
                 }
                 $document = $this->getManagerDms()->writeFile()->getDocument();
-        	}
-		} catch (\Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit();
+        }
         if ($document) {
-        	$content = $document->getDatas();
-			$headers = $this->getResponse()->getHeaders();
-			if (null !== $document->getType()) {
-				$headers->addHeaderLine('Content-type',$document->getType());
-			}
+            $content = $document->getDatas();
+            $headers = $this->getResponse()->getHeaders();
+            if (null !== $document->getType()) {
+                $headers->addHeaderLine('Content-type',$document->getType());
+            }
             $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
             $headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
-		} else {
-			$content = "file " . $file . " not found";
-		}
-        
+        } else {
+            $content = "file " . $file . " not found";
+        }
+
         return $this->getResponse()->setContent($content);
     }
 
@@ -76,7 +76,7 @@ class DocumentController extends AbstractActionController
     public function getNameAction()
     {
         $content = null;
-        
+
         if (null!==($file=$this->params('file',null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {
@@ -90,7 +90,7 @@ class DocumentController extends AbstractActionController
     public function getDescriptionAction()
     {
         $content = null;
-        
+
         if (null!==($file=$this->params('file',null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {

@@ -23,10 +23,10 @@ class DmsService implements ServiceManagerAwareInterface
         $this->getDocumentManager()->decode();
         $this->getDocumentManager()->writeFile();
         $document = $this->getDocumentManager()->getDocument();
-        
+
         return $document->getId();
     }
-    
+
     /**
      *
      * @param  array  $document
@@ -34,10 +34,10 @@ class DmsService implements ServiceManagerAwareInterface
      */
     public function resize($size)
     {
-    	$this->getDocumentManager()->setSize($size);
-    	$this->getDocumentManager()->writeFile();
-    	$document = $this->getDocumentManager()->getDocument();
-    	
+        $this->getDocumentManager()->setSize($size);
+        $this->getDocumentManager()->writeFile();
+        $document = $this->getDocumentManager()->getDocument();
+
         return $document->getId();
     }
 

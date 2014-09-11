@@ -5,19 +5,19 @@
  */
 
 return array(
-	'dms-conf' => array(
-		'size_allowed' => array(
-			array('width' => 300, 'height' => 200),
-			array('width' => 300, 'height' => 300),
-			array('width' => 150, 'height' => 100),
-			array('width' => 80, 'height' => 80),
-			array('width' => 300),
-		),
-		'default_path' => __DIR__ . '/../../_upload/',
-		'adapter' => 'http-adapter',
-		'headers'=> array(
-			'Access-Control-Allow-Origin'=>'http://local.wow.in',
-			'Access-Control-Allow-Credentials'=>'true'
-		),
-	),
+    'dms-conf' => array(
+        'size_allowed' => array(
+            array('width' => 300, 'height' => 200),
+            array('width' => 300, 'height' => 300),
+            array('width' => 150, 'height' => 100),
+            array('width' => 80, 'height' => 80),
+            array('width' => 300),
+        ),
+        'default_path' => __DIR__ . '/../../_upload/',
+        'adapter' => 'http-adapter',
+        'headers'=> array(
+            'Access-Control-Allow-Origin'=>'http://local.wow.in',
+            'Access-Control-Allow-Credentials'=>'true'
+        ),
+    ),
 );

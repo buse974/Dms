@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CS=$(php ../../../vendor/fabpot/php-cs-fixer/php-cs-fixer fix -v ../)
+CS=$(php ../../../fabpot/php-cs-fixer/php-cs-fixer fix -v ../)
 
 if [[ "$CS" ]];
 then

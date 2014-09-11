@@ -30,8 +30,8 @@ class Resize implements ServiceManagerAwareInterface
 
     /**
      * resize data use library GD
-     * 
-     * @param unknown $size
+     *
+     * @param  unknown    $size
      * @throws \Exception
      * @return string
      */

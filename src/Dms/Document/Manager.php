@@ -13,46 +13,46 @@ class Manager implements ServiceLocatorAwareInterface
      * @var \Dms\Document\Document
      */
     protected $document;
-    
+
     /**
-     * 
+     *
      * @var string
      */
     protected $format;
-    
+
     /**
-     * 
+     *
      * @var string
      */
     protected $size;
-    
+
     /**
-     * 
+     *
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
     protected $serviceLocator;
-    
+
     /**
-     * 
+     *
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
 
     /**
      *  Load document
-     * 
-     * @param string|\Dms\Document\Document $document
+     *
+     * @param  string|\Dms\Document\Document $document
      * @throws \Exception
      * @return \Dms\Document\Manager
      */
     public function loadDocument($document)
     {
-    	if($document instanceof Document && is_string($document->getId())) {
-    		$document = $document->getId();
-    	}
-    	if(!is_string($document)) {
-    		throw new \Exception('Param is not id: ' . $id);
-    	}
+        if ($document instanceof Document && is_string($document->getId())) {
+            $document = $document->getId();
+        }
+        if (!is_string($document)) {
+            throw new \Exception('Param is not id: ' . $id);
+        }
 
         $info = $this->getStorage()->read($document .'.inf');
 
@@ -61,10 +61,10 @@ class Manager implements ServiceLocatorAwareInterface
         }
 
         $this->document = unserialize($info);
-        
+
         $datas = $this->getStorage()->read($document . '.dat');
         if ($datas) {
-        	$this->document->setDatas($datas);
+            $this->document->setDatas($datas);
         }
 
         return $this;
@@ -72,26 +72,26 @@ class Manager implements ServiceLocatorAwareInterface
 
     /**
      * Load document info
-     * 
-     * @param string|\Dms\Document\Document $document
+     *
+     * @param  string|\Dms\Document\Document $document
      * @throws \Exception
      * @return \Dms\Document\Manager
      */
     public function loadDocumentInfo($document)
     {
-    	if($document instanceof Document && is_string($document->getId())) {
-    		$document = $document->getId();
-    	}
-    	if(!is_string($document)) {
-    		throw new \Exception('Param is not id: ' . $id);
-    	}
+        if ($document instanceof Document && is_string($document->getId())) {
+            $document = $document->getId();
+        }
+        if (!is_string($document)) {
+            throw new \Exception('Param is not id: ' . $id);
+        }
 
         $info = $this->getStorage()->read($document .'.inf');
-        
+
         if (!$info) {
-        	throw new \Exception('Not document: ' . $id);
+            throw new \Exception('Not document: ' . $id);
         }
-        
+
         $this->document = unserialize($info);
 
         return $this;
@@ -99,37 +99,37 @@ class Manager implements ServiceLocatorAwareInterface
 
     /**
      * Get Document
-     * 
+     *
      * @return \Dms\Document\Document
      */
     public function getDocument()
     {
-        if(null === $this->document) {
-        	$this->document = new Document();
+        if (null === $this->document) {
+            $this->document = new Document();
         }
-        	
+
         return $this->document;
     }
 
     /**
      * Initialise Document with a array
-     * 
-     * @param array $document
+     *
+     * @param  array                 $document
      * @return \Dms\Document\Manager
      */
     public function createDocument(array $document)
     {
-    	$this->clear();
+        $this->clear();
         $this->document = new Document();
         $this->document->setId((isset($document['id'])) ? $document['id'] : null)
                        ->setDatas((isset($document['data'])) ? $document['data'] : null)
                        ->setEncoding((isset($document['coding'])) ? $document['coding'] : null)
-                       ->setType((isset($document['type'])) ? $document['type']: null)
+                       ->setType((isset($document['type'])) ? $document['type'] : null)
                        ->setSupport((isset($document['support'])) ? $document['support'] : null)
                        ->setName((isset($document['name'])) ? $document['name'] : null)
                        ->setSize((isset($document['size'])) ? $document['size'] : null)
                        ->setWeight((isset($document['weight'])) ? $document['weight'] : null)
-                       ->setId((isset($document['hash'])) ? $document['hash']: null);
+                       ->setId((isset($document['hash'])) ? $document['hash'] : null);
 
         return $this;
     }
@@ -144,13 +144,13 @@ class Manager implements ServiceLocatorAwareInterface
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-		if(null !== $this->size) {
-			$this->resize();
-		}
-		if(null !== $this->format) {
-			$this->convert();
-		}
-		
+        if (null !== $this->size) {
+            $this->resize();
+        }
+        if (null !== $this->format) {
+            $this->convert();
+        }
+
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
         $this->document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getStorage()->write(serialize($this->document), $this->document->getId() .'.inf');
@@ -160,16 +160,16 @@ class Manager implements ServiceLocatorAwareInterface
 
     /**
      * Decode Document to binary
-     * 
+     *
      * @throws \Exception
      * @return \Dms\Document\Manager
      */
     public function decode()
     {
-    	if (null === $this->document) {
-    		throw new \Exception('Document does not exist');
-    	}
-    	
+        if (null === $this->document) {
+            throw new \Exception('Document does not exist');
+        }
+
         if ($this->document->getEncoding()!=Document::TYPE_BINARY_STR && $this->document->getSupport()==Document::SUPPORT_DATA_STR) {
             $this->document->setDatas($this->getEncDec($this->document->getEncoding())->decode($this->document->getDatas()));
             $this->document->setEncoding(Document::TYPE_BINARY_STR);
@@ -180,14 +180,14 @@ class Manager implements ServiceLocatorAwareInterface
 
     /**
      * Resize document
-     * 
-     * @param number $size
+     *
+     * @param  number                $size
      * @return \Dms\Document\Manager
      */
     private function resize()
     {
         try {
-        	$resize = $this->getServiceResize();
+            $resize = $this->getServiceResize();
             $resize->setData($this->document->getDatas());
             $this->document->setEncoding(Document::TYPE_BINARY_STR);
             $this->document->setDatas($resize->getResizeData($this->size));
@@ -201,37 +201,37 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * 
+     *
      */
     private function convert()
     {
-    	
+
     }
 
     public function getSize()
     {
-    	return $this->size;
+        return $this->size;
     }
-    
+
     public function setSize($size)
     {
-    	$this->size = $size;
-    	
-    	return $this;
+        $this->size = $size;
+
+        return $this;
     }
-    
+
     public function getFormat()
     {
-    	return $this->format;
+        return $this->format;
     }
-    
+
     public function setFormat($format)
     {
-    	$this->format = $format;
-    	 
-    	return $this;
+        $this->format = $format;
+
+        return $this;
     }
-    
+
     /**
      * Get storage
      * @return \Dms\Storage\StorageInterface
@@ -298,8 +298,8 @@ class Manager implements ServiceLocatorAwareInterface
 
     public function clear()
     {
-    	$this->size = null;
-    	$this->format = null;
+        $this->size = null;
+        $this->format = null;
         $this->document = null;
         $this->storage = null;
     }

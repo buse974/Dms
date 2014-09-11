@@ -11,10 +11,10 @@ use \Serializable;
  */
 class Document implements Serializable
 {
-	const TYPE_BINARY_STR = 'binary';
-	const SUPPORT_DATA_STR = 'data';
-	const SUPPORT_FILE_STR = 'file';
-	const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
+    const TYPE_BINARY_STR = 'binary';
+    const SUPPORT_DATA_STR = 'data';
+    const SUPPORT_FILE_STR = 'file';
+    const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
     /**
      *
      * @var string
@@ -53,30 +53,30 @@ class Document implements Serializable
 
     /**
      * Document Name
-     * 
+     *
      * @var string
      */
     protected $name;
 
     /**
-     * 
+     *
      * @var string
      */
     protected $description;
 
     /**
-     * 
+     *
      * @var string
      */
     protected $size;
 
     /**
      * weight of document
-     * 
+     *
      * @var number
      */
     protected $weight;
-    
+
     /**
      * Constructor
      * @param String $encoding
@@ -95,7 +95,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = (($this->size)? $this->getHash() . '-' . $this->size : $this->getHash());
+            $this->id = (($this->size) ? $this->getHash() . '-' . $this->size : $this->getHash());
         }
 
         return $this->id;
@@ -302,30 +302,29 @@ class Document implements Serializable
 
         return $this->hash;
     }
-    
+
     /**
      * Set weight of document
-     * 
-     * @param number $weight
+     *
+     * @param  number                 $weight
      * @return \Dms\Document\Document
      */
     public function setWeight($weight)
     {
-    	$this->weight = $weight;
-    	
-    	return $this;
+        $this->weight = $weight;
+
+        return $this;
     }
-    
+
     /**
-     * Get weight of document 
-     * 
+     * Get weight of document
+     *
      * @return number
      */
     public function getWeight()
     {
-    	return  $this->weight;
+        return  $this->weight;
     }
-    
 
     /**
      * (non-PHPdoc)
@@ -333,32 +332,32 @@ class Document implements Serializable
      */
     public function serialize()
     {
-    	return serialize(array(
-    			'id' => $this->getId(),
-    			'size' => $this->getSize(),
-    			'name' => $this->getName(),
-    			'type' => $this->getType(),
-    			'description' => $this->getDescription(),
-    			'encoding' => $this->getEncoding(),
-    			'support' => $this->getSupport(),
-    			'weight' => $this->getWeight(),
-    	));
+        return serialize(array(
+                'id' => $this->getId(),
+                'size' => $this->getSize(),
+                'name' => $this->getName(),
+                'type' => $this->getType(),
+                'description' => $this->getDescription(),
+                'encoding' => $this->getEncoding(),
+                'support' => $this->getSupport(),
+                'weight' => $this->getWeight(),
+        ));
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Serializable::unserialize()
      */
     public function unserialize($serialized)
     {
-    	$datas = unserialize($serialized);
-    	$this->setId($datas['id']);
-    	$this->setSize((isset($datas['size']) ? $datas['size'] : ''));
-    	$this->setName($datas['name']);
-    	$this->setType($datas['type']);
-    	$this->setDescription($datas['description']);
-    	$this->setEncoding($datas['encoding']);
-    	$this->setSupport($datas['support']);
-    	$this->setWeight((isset($datas['weight']))?$datas['weight']:null);
+        $datas = unserialize($serialized);
+        $this->setId($datas['id']);
+        $this->setSize((isset($datas['size']) ? $datas['size'] : ''));
+        $this->setName($datas['name']);
+        $this->setType($datas['type']);
+        $this->setDescription($datas['description']);
+        $this->setEncoding($datas['encoding']);
+        $this->setSupport($datas['support']);
+        $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
     }
 }

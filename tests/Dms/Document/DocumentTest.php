@@ -55,13 +55,13 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($enc,'binary');
     }
-    
+
     public function testCanGetSupportDefault()
     {
-    	$document = new Document();
-    	$sup = $document->getSupport();
-    
-    	$this->assertEquals($sup,'data');
+        $document = new Document();
+        $sup = $document->getSupport();
+
+        $this->assertEquals($sup,'data');
     }
 
     public function testCanGetIdAfterSetSize()
@@ -74,14 +74,14 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $document->setSize('300x200');
         $this->assertEquals(strlen($document->getId()),40+strlen('-300x200'));
     }
-    
+
     public function testCanSetIdWithSize()
     {
-    	$id = 'id1234-300x300';
-    
-    	$document = new Document();
-    	$document->setId($id);
-    	$this->assertEquals($document->getId(),'id1234-300x300');
-    	$this->assertEquals($document->getSize(),'300x300');
+        $id = 'id1234-300x300';
+
+        $document = new Document();
+        $document->setId($id);
+        $this->assertEquals($document->getId(),'id1234-300x300');
+        $this->assertEquals($document->getSize(),'300x300');
     }
 }
