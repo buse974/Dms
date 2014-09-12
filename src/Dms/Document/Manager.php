@@ -5,6 +5,7 @@ namespace Dms\Document;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Dms\Storage\StorageInterface;
+use Dms\Convert\Convert;
 
 class Manager implements ServiceLocatorAwareInterface
 {
@@ -144,11 +145,11 @@ class Manager implements ServiceLocatorAwareInterface
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-        if (null !== $this->size) {
-            $this->resize();
-        }
         if (null !== $this->format) {
             $this->convert();
+        }
+        if (null !== $this->size) {
+        	$this->resize();
         }
 
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
@@ -186,26 +187,28 @@ class Manager implements ServiceLocatorAwareInterface
      */
     private function resize()
     {
-        try {
-            $resize = $this->getServiceResize();
-            $resize->setData($this->document->getDatas());
-            $this->document->setEncoding(Document::TYPE_BINARY_STR);
-            $this->document->setDatas($resize->getResizeData($this->size));
-            $this->document->setSize($this->size);
-            $this->document->setType($resize->getType());
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $resize = $this->getServiceResize();
+        $resize->setData($this->document->getDatas());
+        $this->document->setEncoding(Document::TYPE_BINARY_STR);
+        $this->document->setDatas($resize->getResizeData($this->size));
+        $this->document->setSize($this->size);
+        $this->document->setType($resize->getType());
 
         return $this;
     }
 
     /**
-     *
+     * Convert format file
      */
     private function convert()
     {
-
+    	$convert = new Convert();
+    	$convert->setData($this->getDocument()->getDatas())
+    			->setFormat($this->getDocument()->getType());
+    	
+    	$this->document->setDatas($convert->getConvertData($this->getFormat()));
+    	$this->document->setEncoding(Document::TYPE_BINARY_STR);
+    	$this->document->setType($this->getFormat());
     }
 
     public function getSize()
