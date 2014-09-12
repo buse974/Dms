@@ -95,7 +95,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = (($this->size) ? $this->getHash() . '-' . $this->size : $this->getHash());
+            $this->id = $this->getHash() . (($this->size)?'-'.$this->size:'') . (($this->type)?'.'.$this->type:'');
         }
 
         return $this->id;
@@ -108,15 +108,12 @@ class Document implements Serializable
      */
     public function setId($id)
     {
-        $t = explode('-', $id);
-
-        if (count($t) > 1) {
-            $this->hash = $t[0];
-            $this->size = $t[1];
-        } else {
-            $this->hash = $id;
-        }
-
+    	preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(.*\.(?P<fmt>\w+)$)?/', $id, $matches, PREG_OFFSET_CAPTURE );
+    	
+    	$this->id = null;
+    	$this->hash = $matches['id'][0];
+    	$this->size = (isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null;
+    	$this->type = (isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null;
         $this->getId();
 
         return $this;
@@ -162,7 +159,9 @@ class Document implements Serializable
     public function setType($type)
     {
         $this->type = $type;
-
+        $this->id=null;
+        $this->getId();
+        
         return $this;
     }
 
@@ -174,7 +173,7 @@ class Document implements Serializable
     public function getEncoding()
     {
         if (null === $this->encoding) {
-            $this->encoding = 'binary';
+            $this->encoding = self::TYPE_BINARY_STR;
         }
 
         return $this->encoding;
@@ -258,9 +257,8 @@ class Document implements Serializable
     public function setSize($size)
     {
         $this->size = $size;
-        $id_tmp=$this->getId();
         $this->id=null;
-        $this->setId($id_tmp . '-' . $size);
+        $this->getId();
 
         return $this;
     }
@@ -283,7 +281,7 @@ class Document implements Serializable
     public function getSupport()
     {
         if (null === $this->support) {
-            $this->support='data';
+            $this->support = self::SUPPORT_DATA_STR;
         }
 
         return $this->support;

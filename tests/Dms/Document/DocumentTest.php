@@ -29,19 +29,19 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                  ->setType('jpg');
 
         $serialize = serialize($document);
-        $this->assertEquals($serialize, 'C:21:"Dms\Document\Document":216:{a:8:{s:2:"id";s:10:"id-300x200";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";s:6:"weight";N;}}');
+        $this->assertEquals($serialize, 'C:21:"Dms\Document\Document":220:{a:8:{s:2:"id";s:14:"id-300x200.jpg";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";s:6:"weight";N;}}');
     }
 
     public function testCanunserialize()
     {
-        $serialize = 'C:21:"Dms\Document\Document":201:{a:7:{s:2:"id";s:10:"id-300x200";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";}}';
+        $serialize = 'C:21:"Dms\Document\Document":220:{a:8:{s:2:"id";s:14:"id-300x200.jpg";s:4:"size";s:7:"300x200";s:4:"name";s:4:"file";s:4:"type";s:3:"jpg";s:11:"description";s:20:"description document";s:8:"encoding";s:6:"binary";s:7:"support";s:4:"data";s:6:"weight";N;}}';
         $document = unserialize($serialize);
 
         $data = $document->getDatas();
         $this->assertEquals(empty($data),true);
         $this->assertEquals($document->getDescription(),'description document');
         $this->assertEquals($document->getEncoding(),'binary');
-        $this->assertEquals($document->getId(),'id-300x200');
+        $this->assertEquals($document->getId(),'id-300x200.jpg');
         $this->assertEquals($document->getName(),'file');
         $this->assertEquals($document->getSupport(),'data');
         $this->assertEquals($document->getSize(),'300x200');

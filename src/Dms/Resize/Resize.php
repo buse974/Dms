@@ -58,7 +58,7 @@ class Resize implements ServiceManagerAwareInterface
                 throw new \Exception('size conversion denied',3299);
         }
 
-        $img = imagecreatefromstring($this->data);
+        $img = @imagecreatefromstring($this->data);
         if (!$img) {
             throw new \Exception('Data is not in a recognized format');
         }
@@ -97,8 +97,13 @@ class Resize implements ServiceManagerAwareInterface
         $this->serviceManager = $serviceManager;
     }
 
-    public function getType()
+    public function getTypeMine()
     {
         return 'image/jpeg';
+    }
+    
+    public function getFormat()
+    {
+    	return 'jpeg';
     }
 }

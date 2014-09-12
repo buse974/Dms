@@ -52,13 +52,13 @@ class Manager implements ServiceLocatorAwareInterface
             $document = $document->getId();
         }
         if (!is_string($document)) {
-            throw new \Exception('Param is not id: ' . $id);
+            throw new \Exception('Param is not id: ' . $document);
         }
 
         $info = $this->getStorage()->read($document .'.inf');
 
         if (!$info) {
-            throw new \Exception('Not document: ' . $id);
+            throw new \Exception('Not document: ' . $document);
         }
 
         $this->document = unserialize($info);
@@ -129,8 +129,7 @@ class Manager implements ServiceLocatorAwareInterface
                        ->setSupport((isset($document['support'])) ? $document['support'] : null)
                        ->setName((isset($document['name'])) ? $document['name'] : null)
                        ->setSize((isset($document['size'])) ? $document['size'] : null)
-                       ->setWeight((isset($document['weight'])) ? $document['weight'] : null)
-                       ->setId((isset($document['hash'])) ? $document['hash'] : null);
+                       ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
 
         return $this;
     }
@@ -145,12 +144,13 @@ class Manager implements ServiceLocatorAwareInterface
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-        if (null !== $this->format) {
-            $this->convert();
-        }
         if (null !== $this->size) {
         	$this->resize();
         }
+        if (null !== $this->format) {
+            $this->convert();
+        }
+        
 
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
         $this->document->setSupport(Document::SUPPORT_FILE_STR);
@@ -192,7 +192,7 @@ class Manager implements ServiceLocatorAwareInterface
         $this->document->setEncoding(Document::TYPE_BINARY_STR);
         $this->document->setDatas($resize->getResizeData($this->size));
         $this->document->setSize($this->size);
-        $this->document->setType($resize->getType());
+        $this->document->setType($resize->getFormat());
 
         return $this;
     }
