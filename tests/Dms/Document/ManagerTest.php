@@ -114,58 +114,58 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
-    
+
     public function testCanFomatDocument()
     {
-    	$image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
-    	$document['id'] = '0002filname.pdf';
-    	$document['coding'] = 'binary';
-    	$document['data'] = $image;
-    	$document['type'] = 'png';
-    
-    	$manager = bootstrap::getServiceManager()->get('dms.manager');
-    	$manager->createDocument($document);
-    	$manager->setFormat('pdf');
-    	$manager->writeFile();
-    	$document = $manager->getDocument();
+        $image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
+        $document['id'] = '0002filname.pdf';
+        $document['coding'] = 'binary';
+        $document['data'] = $image;
+        $document['type'] = 'png';
 
-    	$this->assertTrue(strlen($document->getDatas()) < strlen($image));
+        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager->createDocument($document);
+        $manager->setFormat('pdf');
+        $manager->writeFile();
+        $document = $manager->getDocument();
+
+        $this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
-    
+
     public function testCanFomatDocumentOdttoPdf()
     {
-    	$image = file_get_contents(__DIR__ . '/../../_file/odt.odt');
-    	$document['id'] = '0002odt.pdf';
-    	$document['coding'] = 'binary';
-    	$document['data'] = $image;
-    	$document['type'] = 'odt';
-    
-    	$manager = bootstrap::getServiceManager()->get('dms.manager');
-    	$manager->createDocument($document);
-    	$manager->setFormat('pdf');
-    	$manager->writeFile();
-    	$document = $manager->getDocument();
-    
-    	$this->assertTrue(strlen($document->getDatas()) < strlen($image));
+        $image = file_get_contents(__DIR__ . '/../../_file/odt.odt');
+        $document['id'] = '0002odt.pdf';
+        $document['coding'] = 'binary';
+        $document['data'] = $image;
+        $document['type'] = 'odt';
+
+        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager->createDocument($document);
+        $manager->setFormat('pdf');
+        $manager->writeFile();
+        $document = $manager->getDocument();
+
+        $this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
-    
+
     public function testCanFomatDocumentOdtToBmp()
     {
-    	$image = file_get_contents(__DIR__ . '/../../_file/odt.odt');
-    	$document['id'] = '0002odt.bmp';
-    	$document['coding'] = 'binary';
-    	$document['data'] = $image;
-    	$document['type'] = 'odt';
-    
-    	$manager = bootstrap::getServiceManager()->get('dms.manager');
-    	$manager->createDocument($document);
-    	$manager->setFormat('jpg');
-    	$manager->writeFile();
-    	$document = $manager->getDocument();
+        $image = file_get_contents(__DIR__ . '/../../_file/odt.odt');
+        $document['id'] = '0002odt.bmp';
+        $document['coding'] = 'binary';
+        $document['data'] = $image;
+        $document['type'] = 'odt';
 
-    	$this->assertTrue(strlen($document->getDatas()) < strlen($image));
+        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager->createDocument($document);
+        $manager->setFormat('jpg');
+        $manager->writeFile();
+        $document = $manager->getDocument();
+
+        $this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
-    
+
     public function testCanGetStorage()
     {
         $dm = bootstrap::getServiceManager()->get('dms.manager');

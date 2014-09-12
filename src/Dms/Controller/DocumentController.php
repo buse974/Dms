@@ -20,32 +20,32 @@ class DocumentController extends AbstractActionController
 
         try {
             $document = $this->getManagerDms()->loadDocument($file)->getDocument();
-		} catch (\Exception $e) {
-	        try {
-	        	preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE );
-	        	
-	        	$this->getManagerDms()->loadDocument($matches['id'][0])->getDocument();
-	        	$this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
-	        	$this->getManagerDms()->setFormat((isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null);
-	        	
-	            $document = $this->getManagerDms()->writeFile()->getDocument();
-	            
-	        } catch (\Exception $e) {
-	        	$content = "file " . $file . " not found";
-	        }
-		}
+        } catch (\Exception $e) {
+            try {
+                preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE );
 
-		if ($document) {
-			$content = $document->getDatas();
-			$headers = $this->getResponse()->getHeaders();
-			if (null !== $document->getType()) {
-				$headers->addHeaderLine('Content-type',$document->getType());
-			}
-			$headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
-			$headers->addHeaderLine('Content-Length', strlen($content));
-			$headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
-		}
-		
+                $this->getManagerDms()->loadDocument($matches['id'][0])->getDocument();
+                $this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
+                $this->getManagerDms()->setFormat((isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null);
+
+                $document = $this->getManagerDms()->writeFile()->getDocument();
+
+            } catch (\Exception $e) {
+                $content = "file " . $file . " not found";
+            }
+        }
+
+        if ($document) {
+            $content = $document->getDatas();
+            $headers = $this->getResponse()->getHeaders();
+            if (null !== $document->getType()) {
+                $headers->addHeaderLine('Content-type',$document->getType());
+            }
+            $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
+            $headers->addHeaderLine('Content-Length', strlen($content));
+            $headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
+        }
+
         return $this->getResponse()->setContent($content);
     }
 

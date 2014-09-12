@@ -101,9 +101,9 @@ class Resize implements ServiceManagerAwareInterface
     {
         return 'image/jpeg';
     }
-    
+
     public function getFormat()
     {
-    	return 'jpeg';
+        return 'jpeg';
     }
 }

@@ -145,12 +145,11 @@ class Manager implements ServiceLocatorAwareInterface
             throw new \Exception('Document does not exist');
         }
         if (null !== $this->size) {
-        	$this->resize();
+            $this->resize();
         }
         if (null !== $this->format) {
             $this->convert();
         }
-        
 
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
         $this->document->setSupport(Document::SUPPORT_FILE_STR);
@@ -202,13 +201,13 @@ class Manager implements ServiceLocatorAwareInterface
      */
     private function convert()
     {
-    	$convert = new Convert();
-    	$convert->setData($this->getDocument()->getDatas())
-    			->setFormat($this->getDocument()->getType());
-    	
-    	$this->document->setDatas($convert->getConvertData($this->getFormat()));
-    	$this->document->setEncoding(Document::TYPE_BINARY_STR);
-    	$this->document->setType($this->getFormat());
+        $convert = new Convert();
+        $convert->setData($this->getDocument()->getDatas())
+                ->setFormat($this->getDocument()->getType());
+
+        $this->document->setDatas($convert->getConvertData($this->getFormat()));
+        $this->document->setEncoding(Document::TYPE_BINARY_STR);
+        $this->document->setType($this->getFormat());
     }
 
     public function getSize()

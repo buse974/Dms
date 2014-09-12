@@ -95,7 +95,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = $this->getHash() . (($this->size)?'-'.$this->size:'') . (($this->type)?'.'.$this->type:'');
+            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->type) ? '.'.$this->type : '');
         }
 
         return $this->id;
@@ -108,12 +108,12 @@ class Document implements Serializable
      */
     public function setId($id)
     {
-    	preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(.*\.(?P<fmt>\w+)$)?/', $id, $matches, PREG_OFFSET_CAPTURE );
-    	
-    	$this->id = null;
-    	$this->hash = $matches['id'][0];
-    	$this->size = (isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null;
-    	$this->type = (isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null;
+        preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(.*\.(?P<fmt>\w+)$)?/', $id, $matches, PREG_OFFSET_CAPTURE );
+
+        $this->id = null;
+        $this->hash = $matches['id'][0];
+        $this->size = (isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null;
+        $this->type = (isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null;
         $this->getId();
 
         return $this;
@@ -161,7 +161,7 @@ class Document implements Serializable
         $this->type = $type;
         $this->id=null;
         $this->getId();
-        
+
         return $this;
     }
 
