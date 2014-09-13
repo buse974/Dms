@@ -26,20 +26,19 @@ class Document implements Serializable
      * @var string
      */
     protected $is_write = false;
-    
+
     /**
      *
      * @var string
      */
     protected $hash;
 
-
     /**
      *
      * @var number
      */
     protected $page;
-    
+
     /**
      *
      * @var string
@@ -130,17 +129,17 @@ class Document implements Serializable
     }
 
     /**
-     * 
-     * @param bool $is_write
+     *
+     * @param  bool                   $is_write
      * @return \Dms\Document\Document
      */
     public function setIsWrite($is_write)
     {
-    	$this->is_write = $is_write;
-    
-    	return $this;
+        $this->is_write = $is_write;
+
+        return $this;
     }
-    
+
     /**
      * Get body document
      * @return string
@@ -182,11 +181,11 @@ class Document implements Serializable
     {
         $this->type = $type;
 
-        if($this->is_write) {
-        	$this->id = null;
-        	$this->getId();
+        if ($this->is_write) {
+            $this->id = null;
+            $this->getId();
         }
-        
+
         return $this;
     }
 
@@ -197,27 +196,27 @@ class Document implements Serializable
      */
     public function getPage()
     {
-    	return $this->page;
+        return $this->page;
     }
-    
+
     /**
      * Set page of File
      *
-     * @param  number	$page
+     * @param  number                 $page
      * @return \Dms\Document\Document
      */
     public function setPage($page)
     {
-    	$this->page = $page;
-    
-    	if($this->is_write) {
-    		$this->id = null;
-    		$this->getId();
-    	}
-    
-    	return $this;
+        $this->page = $page;
+
+        if ($this->is_write) {
+            $this->id = null;
+            $this->getId();
+        }
+
+        return $this;
     }
-    
+
     /**
      * Get Document Encoding
      *
@@ -311,11 +310,11 @@ class Document implements Serializable
     {
         $this->size = $size;
 
-        if($this->is_write) {
-        	$this->id = null;
-        	$this->getId();
+        if ($this->is_write) {
+            $this->id = null;
+            $this->getId();
         }
-        
+
         return $this;
     }
 
@@ -356,7 +355,7 @@ class Document implements Serializable
 
         return $this->hash;
     }
-    
+
     /**
      * Set Hash
      *
@@ -364,9 +363,9 @@ class Document implements Serializable
      */
     public function setHash($hash)
     {
-    	$this->hash = $hash;
-    
-    	return $this;
+        $this->hash = $hash;
+
+        return $this;
     }
 
     /**
@@ -403,7 +402,7 @@ class Document implements Serializable
                 'size' => $this->getSize(),
                 'name' => $this->getName(),
                 'type' => $this->getType(),
-        		'hash' => $this->getHash(),
+                'hash' => $this->getHash(),
                 'description' => $this->getDescription(),
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),

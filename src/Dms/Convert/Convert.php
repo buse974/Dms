@@ -33,17 +33,17 @@ class Convert
 
         return $this;
     }
-    
+
     /**
      *
-     * @param  string    $page
+     * @param  string               $page
      * @return \Dms\Convert\Convert
      */
     public function setPage($page)
     {
-    	$this->page = $page;
-    
-    	return $this;
+        $this->page = $page;
+
+        return $this;
     }
 
     /**
@@ -61,13 +61,13 @@ class Convert
         try {
             $im = new \Imagick();
             $im->readimageblob($this->data);
-            if(null!==$this->page) {
-            	$im->setiteratorindex($this->page);
+            if (null!==$this->page) {
+                $im->setiteratorindex($this->page);
             }
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
-        	$page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
+            $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
             try {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > /tmp/tmp.%s && unoconv %s -f %s --stdout /tmp/tmp.%s",$this->format,$page_opt,$format,$this->format))
