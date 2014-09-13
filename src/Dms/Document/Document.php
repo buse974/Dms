@@ -25,8 +25,21 @@ class Document implements Serializable
      *
      * @var string
      */
+    protected $is_write = false;
+    
+    /**
+     *
+     * @var string
+     */
     protected $hash;
 
+
+    /**
+     *
+     * @var number
+     */
+    protected $page;
+    
     /**
      *
      * @var string
@@ -95,7 +108,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->type) ? '.'.$this->type : '');
+            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->page) ? '[' . $this->page . ']' : '') . (($this->type) ? '.'.$this->type : '');
         }
 
         return $this->id;
@@ -104,21 +117,30 @@ class Document implements Serializable
     /**
      * Setter Id Document
      * @param $id
-     * @return Document
+     * @return \Dms\Document\Document
      */
     public function setId($id)
     {
-        preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(.*\.(?P<fmt>\w+)$)?/', $id, $matches, PREG_OFFSET_CAPTURE );
-
-        $this->id = null;
-        $this->hash = $matches['id'][0];
-        $this->size = (isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null;
-        $this->type = (isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null;
-        $this->getId();
+        $this->id = $id;
+        $this->is_write=false;
+        preg_match('/(?P<hash>\w+)($|\-|\.)/', $id, $matches, PREG_OFFSET_CAPTURE);
+        $this->hash = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0] : null;
 
         return $this;
     }
 
+    /**
+     * 
+     * @param bool $is_write
+     * @return \Dms\Document\Document
+     */
+    public function setIsWrite($is_write)
+    {
+    	$this->is_write = $is_write;
+    
+    	return $this;
+    }
+    
     /**
      * Get body document
      * @return string
@@ -159,12 +181,43 @@ class Document implements Serializable
     public function setType($type)
     {
         $this->type = $type;
-        $this->id=null;
-        $this->getId();
 
+        if($this->is_write) {
+        	$this->id = null;
+        	$this->getId();
+        }
+        
         return $this;
     }
 
+    /**
+     * Get page of file
+     *
+     * @return number
+     */
+    public function getPage()
+    {
+    	return $this->page;
+    }
+    
+    /**
+     * Set page of File
+     *
+     * @param  number	$page
+     * @return \Dms\Document\Document
+     */
+    public function setPage($page)
+    {
+    	$this->page = $page;
+    
+    	if($this->is_write) {
+    		$this->id = null;
+    		$this->getId();
+    	}
+    
+    	return $this;
+    }
+    
     /**
      * Get Document Encoding
      *
@@ -257,9 +310,12 @@ class Document implements Serializable
     public function setSize($size)
     {
         $this->size = $size;
-        $this->id=null;
-        $this->getId();
 
+        if($this->is_write) {
+        	$this->id = null;
+        	$this->getId();
+        }
+        
         return $this;
     }
 
@@ -300,6 +356,18 @@ class Document implements Serializable
 
         return $this->hash;
     }
+    
+    /**
+     * Set Hash
+     *
+     * @param string
+     */
+    public function setHash($hash)
+    {
+    	$this->hash = $hash;
+    
+    	return $this;
+    }
 
     /**
      * Set weight of document
@@ -335,6 +403,7 @@ class Document implements Serializable
                 'size' => $this->getSize(),
                 'name' => $this->getName(),
                 'type' => $this->getType(),
+        		'hash' => $this->getHash(),
                 'description' => $this->getDescription(),
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),
@@ -356,6 +425,8 @@ class Document implements Serializable
         $this->setDescription($datas['description']);
         $this->setEncoding($datas['encoding']);
         $this->setSupport($datas['support']);
+        $this->setHash((isset($datas['hash'])) ? $datas['hash'] : null);
         $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
+        $this->setIsWrite(true);
     }
 }

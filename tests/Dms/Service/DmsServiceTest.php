@@ -49,4 +49,20 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(12 + strlen('-80x80.jpeg') , strlen($ret));
         $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
     }
+    
+    public function testAddDocumentOdt()
+    {
+    	$image = file_get_contents(__DIR__ . '/../../_file/odt.odt');
+    	$document['id'] = '0200filenameodt';
+    	$document['coding'] = 'base';
+    	$document['data'] = base64_encode($image);
+    	$document['type'] = 'odt';
+    
+    	$dms = bootstrap::getServiceManager()->get('dms.service');
+    	$ret = $dms->add($document);
+    
+    	$this->assertEquals(15, strlen($ret));
+    	$this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
+    	$this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
+    }
 }

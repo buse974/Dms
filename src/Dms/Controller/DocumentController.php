@@ -26,9 +26,10 @@ class DocumentController extends AbstractActionController
 
                 $this->getManagerDms()->loadDocument($matches['id'][0])->getDocument();
                 $this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
+                $this->getManagerDms()->setPage((isset($matches['page']) && !empty($matches['page'][0])) ? $matches['page'][0] : null);
                 $this->getManagerDms()->setFormat((isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null);
 
-                $document = $this->getManagerDms()->writeFile()->getDocument();
+                $document = $this->getManagerDms()->writeFile($file)->getDocument();
 
             } catch (\Exception $e) {
                 $content = "file " . $file . " not found";
@@ -43,7 +44,9 @@ class DocumentController extends AbstractActionController
             }
             $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
-            $headers->addHeaderLine('Content-Disposition', 'filename=\'' . $document->getName() . '\'');
+            $name = $document->getName();
+            $file_name = ((empty($name)) ? $file . '.' . $document->getType() : $name);
+            $headers->addHeaderLine('Content-Disposition', 'filename=' . $file_name . '');
         }
 
         return $this->getResponse()->setContent($content);

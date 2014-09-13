@@ -9,6 +9,7 @@ return array(
         'size_allowed' => array(
             array('width' => 300, 'height' => 200),
             array('width' => 300, 'height' => 300),
+        	array('width' => 200, 'height' => 200),
             array('width' => 150, 'height' => 100),
             array('width' => 80, 'height' => 80),
             array('width' => 300),
