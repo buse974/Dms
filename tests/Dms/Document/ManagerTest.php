@@ -166,22 +166,22 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(strlen($document->getDatas()) < strlen($image));
     }
-    
+
     public function testCanFomatDocumentDocxToPdf()
     {
-    	$image = file_get_contents(__DIR__ . '/../../_file/docx.docx');
-    	$document['id'] = '0002docx';
-    	$document['coding'] = 'binary';
-    	$document['data'] = $image;
-    	$document['type'] = 'docx';
-    
-    	$manager = bootstrap::getServiceManager()->get('dms.manager');
-    	$manager->createDocument($document);
-    	$manager->setFormat('pdf');
-    	$manager->writeFile();
-    	$document = $manager->getDocument();
+        $image = file_get_contents(__DIR__ . '/../../_file/docx.docx');
+        $document['id'] = '0002docx';
+        $document['coding'] = 'binary';
+        $document['data'] = $image;
+        $document['type'] = 'docx';
 
-    	$this->assertTrue(strlen($document->getDatas()) > strlen($image));
+        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager->createDocument($document);
+        $manager->setFormat('pdf');
+        $manager->writeFile();
+        $document = $manager->getDocument();
+
+        $this->assertTrue(strlen($document->getDatas()) > strlen($image));
     }
 
     public function testCanGetStorage()

@@ -42,19 +42,19 @@ class Process
 
         return $this;
     }
-    
+
     public function setTmp($tmp)
     {
-    	$this->tmp = $tmp;
-    
-    	return $this;
+        $this->tmp = $tmp;
+
+        return $this;
     }
-    
+
     public function setEnv($env)
     {
-    	$this->env = $env;
-    
-    	return $this;
+        $this->env = $env;
+
+        return $this;
     }
 
     public function getOutput($input)
@@ -69,7 +69,7 @@ class Process
         $this->output = null;
 
         $process = proc_open($this->cmd, $this->descriptors, $pipes, $this->tmp,$this->env);
-        
+
         if (is_resource($process)) {
             fwrite($pipes[0], $this->input);
             fclose($pipes[0]);
