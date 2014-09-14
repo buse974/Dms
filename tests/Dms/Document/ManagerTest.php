@@ -10,6 +10,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->deleteDirRec(__DIR__ . '/../../_upload/00');
+        $this->deleteDirRec(__DIR__ . '/../../_upload/02');
     }
 
     public function deleteDirRec($path)
