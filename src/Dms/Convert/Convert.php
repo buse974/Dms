@@ -68,15 +68,22 @@ class Convert
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
             $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
+            
+            /**
+				Bug unoconv: dellete Path
+             */
+            $env = array('PATH'=>'/usr/bin','DISPLAY'=>':0');
             try {
-                $process = new Process();
-                $process->setCmd(sprintf("cat - > /tmp/tmp.%s && unoconv %s -f %s --stdout /tmp/tmp.%s",$this->format,$page_opt,$format,$this->format))
+            	$process = new Process();
+                $process->setCmd(sprintf("cat - > /tmp/tmp.%s && unoconv -v %s -f %s --stdout /tmp/tmp.%s",$this->format,$page_opt,$format,$this->format))
+            	        ->setEnv($env)
                         ->setInput($this->data);
                 $datas = $process->run();
             } catch (ConvertException $e) {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > /tmp/tmp.%s && unoconv %s -f pdf /tmp/tmp.%s && unoconv -f %s --stdout /tmp/tmp.pdf",$this->format,$page_opt,$this->format,$format))
-                        ->setInput($this->data);
+                		->setEnv($env)
+                		->setInput($this->data);
                 $datas = $process->run();
             }
         }

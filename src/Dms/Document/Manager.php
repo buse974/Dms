@@ -15,7 +15,7 @@ class Manager implements ServiceLocatorAwareInterface
      * @var \Dms\Document\Document
      */
     protected $document;
-
+    
     /**
      *
      * @var string
@@ -27,13 +27,13 @@ class Manager implements ServiceLocatorAwareInterface
      * @var string
      */
     protected $size;
-
+    
     /**
      *
      * @var number
      */
     protected $page;
-
+    
     /**
      *
      * @var \Zend\ServiceManager\ServiceLocatorInterface
@@ -137,7 +137,7 @@ class Manager implements ServiceLocatorAwareInterface
                        ->setName((isset($document['name'])) ? $document['name'] : null)
                        ->setSize((isset($document['size'])) ? $document['size'] : null)
                        ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
-
+        
         return $this;
     }
 
@@ -151,43 +151,47 @@ class Manager implements ServiceLocatorAwareInterface
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-        if (null !== $id) {
-            $this->getDocument()->setId($id);
+        if(null !== $id) {
+        	$this->getDocument()->setId($id);
         }
-        if (null !== $this->size) {
-            try {
-                 $this->resize();
-               } catch (\Exception $e) {
-                   if (null !== $this->format) {
-                       try {
-                           $this->convert();
-                           $this->format=null;
-                           $this->resize();
-                           $this->size=null;
-                       } catch (ConvertException $e) {
-                           exit("Error format");
-                       } catch (\Exception $e) {
-                           exit("Error resize");
-                       }
-                   } else {
-                       exit("Error resize");
-                   }
-               }
-        }
+        if(null !== $this->size) {
+        	try {
+         		$this->resize();
+           	} catch (\Exception $e) {
+           		if (null !== $this->format) {
+           			try {
+           				$this->convert();
+           				$this->format=null;
+           				$this->resize();
+           				$this->size=null;
+           			} catch (ConvertException $e) {
+           				exit("Error format");
+           			}catch (\Exception $e) {
+           				exit("Error resize");
+           			}
+           		} else {
+           			exit("Error resize");
+           		}
+           	}
+        } 
         if (null !== $this->format) {
-            try {
-                   $this->convert();
-               } catch (ConvertException $e) {
-                   echo $e->getMessage();
-                   exit("Error format");
-               }
+			try {
+           		$this->convert();
+           	} catch (ConvertException $e) {
+           		//echo $e->getMessage();
+           		exit("Error format");
+           	}
         }
-
+        
         $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
         $this->document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getStorage()->write(serialize($this->document), $this->document->getId() .'.inf');
         $this->document->setIsWrite(true);
+        
 
+
+        
+        
         return $this;
     }
 
@@ -269,17 +273,17 @@ class Manager implements ServiceLocatorAwareInterface
 
         return $this;
     }
-
+    
     public function getPage()
     {
-        return $this->page;
+    	return $this->page;
     }
-
+    
     public function setPage($page)
     {
-        $this->page = $page;
-
-        return $this;
+    	$this->page = $page;
+    
+    	return $this;
     }
 
     /**
@@ -352,5 +356,6 @@ class Manager implements ServiceLocatorAwareInterface
         $this->format = null;
         $this->document = null;
         $this->storage = null;
+        $this->page = null;
     }
 }

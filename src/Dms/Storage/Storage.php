@@ -25,7 +25,6 @@ class Storage extends AbstractStorage
             $ret = fwrite($fp, $data);
             fclose($fp);
         }
-
         $this->getEventManager()->trigger(__FUNCTION__,$this,array('path' => $path,'short_name' => $nameMod, 'all_path' => $path . $nameMod,'support' => $support, 'name' => $name));
 
         return $ret;

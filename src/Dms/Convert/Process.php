@@ -6,8 +6,10 @@ use Dms\Convert\Exception\ConvertException;
 class Process
 {
     protected $cmd;
+    protected $env;
     protected $error_code;
     protected $error_message;
+    protected $tmp;
     protected $output;
     protected $input;
     protected $descriptors = array(
@@ -40,6 +42,20 @@ class Process
 
         return $this;
     }
+    
+    public function setTmp($tmp)
+    {
+    	$this->tmp = $tmp;
+    
+    	return $this;
+    }
+    
+    public function setEnv($env)
+    {
+    	$this->env = $env;
+    
+    	return $this;
+    }
 
     public function getOutput($input)
     {
@@ -52,8 +68,8 @@ class Process
         $this->error_message = null;
         $this->output = null;
 
-        $process = proc_open($this->cmd, $this->descriptors, $pipes, '/tmp');
-
+        $process = proc_open($this->cmd, $this->descriptors, $pipes, $this->tmp,$this->env);
+        
         if (is_resource($process)) {
             fwrite($pipes[0], $this->input);
             fclose($pipes[0]);
