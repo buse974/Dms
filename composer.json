@@ -1,6 +1,18 @@
 {
-"name": "buse974/dms",
-"description": "Document management system for ZF2",
-"type": "library",
-"homepage": "https://github.com/buse974/DMS"
+  "name": "buse974/dms",
+  "description": "Document management system for ZF2",
+  "type": "library",
+  "homepage": "https://github.com/buse974/DMS"
+  "authors": [
+    {
+      "name": "Christophe Robert",
+      "email": "christophe.robert@ti1.fr"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev" : {
+    "phpunit/phpunit" : ">=3.7,<4"
+  }
 }
