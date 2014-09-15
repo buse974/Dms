@@ -2,7 +2,8 @@
   "name": "buse974/dms",
   "description": "Document management system for ZF2",
   "type": "library",
-  "homepage": "https://github.com/buse974/DMS",
+  "homepage": "https://github.com/buse974/Dms",
+  "license": "MIT"
   "authors": [
     {
       "name": "Christophe Robert",
