@@ -27,6 +27,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
         $document['id'] = '0200filename';
         $document['coding'] = 'base';
+        $document['type'] = 'image/png';
         $document['data'] = base64_encode($image);
 
         $dms = bootstrap::getServiceManager()->get('dms.service');

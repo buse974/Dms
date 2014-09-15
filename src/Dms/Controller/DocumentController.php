@@ -18,6 +18,7 @@ class DocumentController extends AbstractActionController
             throw new \Exception('file id does not exist');
         }
 
+        
         try {
             $document = $this->getManagerDms()->loadDocument($file)->getDocument();
         } catch (\Exception $e) {
@@ -28,7 +29,6 @@ class DocumentController extends AbstractActionController
                 $this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
                 $this->getManagerDms()->setPage((isset($matches['page']) && !empty($matches['page'][0])) ? $matches['page'][0] : null);
                 $this->getManagerDms()->setFormat((isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null);
-
                 $document = $this->getManagerDms()->writeFile($file)->getDocument();
 
             } catch (\Exception $e) {
@@ -41,14 +41,15 @@ class DocumentController extends AbstractActionController
             $headers = $this->getResponse()->getHeaders();
             if (null !== $document->getType()) {
                 $headers->addHeaderLine('Content-type',$document->getType());
+            } else {
+            	$headers->addHeaderLine('Content-type','application/octet-stream');
             }
             $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
             $name = $document->getName();
-            $file_name = ((empty($name)) ? $file . '.' . $document->getType() : $name);
-            $headers->addHeaderLine('Content-Disposition', 'filename=' . $file_name . '');
+            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s ', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
         }
-
+        
         return $this->getResponse()->setContent($content);
     }
 
@@ -59,7 +60,8 @@ class DocumentController extends AbstractActionController
         if (null!==($file=$this->params('file',null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {
-                $content = $m_document->getType();
+            	$type = $m_document->getType();
+                $content = (empty($type) ? $m_document->getFormat() : $type);
             }
         }
 

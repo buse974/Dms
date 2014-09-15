@@ -122,7 +122,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['id'] = '0002filname';
         $document['coding'] = 'binary';
         $document['data'] = $image;
-        $document['type'] = 'png';
+        $document['format'] = 'png';
 
         $manager = bootstrap::getServiceManager()->get('dms.manager');
         $manager->createDocument($document);
@@ -139,7 +139,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['id'] = '0002odt';
         $document['coding'] = 'binary';
         $document['data'] = $image;
-        $document['type'] = 'odt';
+        $document['format'] = 'odt';
 
         $manager = bootstrap::getServiceManager()->get('dms.manager');
         $manager->createDocument($document);
@@ -156,7 +156,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['id'] = '0002odt.bmp';
         $document['coding'] = 'binary';
         $document['data'] = $image;
-        $document['type'] = 'odt';
+        $document['format'] = 'odt';
 
         $manager = bootstrap::getServiceManager()->get('dms.manager');
         $manager->createDocument($document);
@@ -173,14 +173,14 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['id'] = '0002docx';
         $document['coding'] = 'binary';
         $document['data'] = $image;
-        $document['type'] = 'docx';
+        $document['format'] = 'docx';
 
         $manager = bootstrap::getServiceManager()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setFormat('pdf');
         $manager->writeFile();
+        
         $document = $manager->getDocument();
-
         $this->assertTrue(strlen($document->getDatas()) > strlen($image));
     }
 

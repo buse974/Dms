@@ -15,6 +15,7 @@ class Document implements Serializable
     const SUPPORT_DATA_STR = 'data';
     const SUPPORT_FILE_STR = 'file';
     const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
+    
     /**
      *
      * @var string
@@ -64,6 +65,13 @@ class Document implements Serializable
     protected $type;
 
     /**
+     *
+     * @var string
+     */
+    protected $format;
+    
+    
+    /**
      * Document Name
      *
      * @var string
@@ -107,7 +115,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->page) ? '[' . $this->page . ']' : '') . (($this->type) ? '.'.$this->type : '');
+            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->page) ? '[' . $this->page . ']' : '') . (($this->format) ? '.'.$this->format : '');
         }
 
         return $this->id;
@@ -142,13 +150,41 @@ class Document implements Serializable
 
     /**
      * Get body document
+     * 
      * @return string
      */
     public function getDatas()
     {
         return $this->datas;
     }
-
+    
+	/**
+	 * get format
+	 * 
+	 * @return string
+	 */
+    public function getFormat()
+    {
+    	return $this->format;
+    }
+    
+    /**
+     * Set format
+     * 
+     * @param string  $format
+     * @return \Dms\Document\Document
+     */
+    public function setFormat($format)
+    {
+    	$this->format = $format;
+    	
+    	if($type = MimeType::getMimeTypeByExtension($this->format)) {
+    		$this->type = $type;
+    	}
+    	
+    	return $this;
+    }
+    
     /**
      * Set body document
      * @param  string                 $datas
@@ -180,7 +216,10 @@ class Document implements Serializable
     public function setType($type)
     {
         $this->type = $type;
-
+        
+        if($fmt = MimeType::getExtensionByMimeType($this->type)) {
+        	$this->format = $fmt;
+        }
         if ($this->is_write) {
             $this->id = null;
             $this->getId();
@@ -407,6 +446,7 @@ class Document implements Serializable
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),
                 'weight' => $this->getWeight(),
+        		'format' => $this->getFormat()
         ));
     }
 
@@ -426,6 +466,7 @@ class Document implements Serializable
         $this->setSupport($datas['support']);
         $this->setHash((isset($datas['hash'])) ? $datas['hash'] : null);
         $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
+        $this->setFormat((isset($datas['format'])) ? $datas['format'] : null);
         $this->setIsWrite(true);
     }
 }

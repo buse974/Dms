@@ -44,7 +44,6 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerName('ged_document');
         $this->assertActionName('gettype');
         $this->assertResponseStatusCode(200);
-
         $this->assertEquals("png", $this->getResponse()->getContent());
     }
 

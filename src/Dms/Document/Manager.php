@@ -136,6 +136,7 @@ class Manager implements ServiceLocatorAwareInterface
                        ->setSupport((isset($document['support'])) ? $document['support'] : null)
                        ->setName((isset($document['name'])) ? $document['name'] : null)
                        ->setSize((isset($document['size'])) ? $document['size'] : null)
+                       ->setFormat((isset($document['format'])) ? $document['format'] : null)
                        ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
 
         return $this;
@@ -178,7 +179,6 @@ class Manager implements ServiceLocatorAwareInterface
             try {
                    $this->convert();
                } catch (ConvertException $e) {
-                   //echo $e->getMessage();
                    exit("Error format");
                }
         }
@@ -224,7 +224,7 @@ class Manager implements ServiceLocatorAwareInterface
         $this->document->setEncoding(Document::TYPE_BINARY_STR);
         $this->document->setDatas($resize->getResizeData($this->size));
         $this->document->setSize($this->size);
-        $this->document->setType($resize->getFormat());
+        $this->document->setFormat($resize->getFormat());
         $this->document->setPage($this->getPage());
 
         return $this;
@@ -237,12 +237,12 @@ class Manager implements ServiceLocatorAwareInterface
     {
         $convert = new Convert();
         $convert->setData($this->getDocument()->getDatas())
-                ->setFormat($this->getDocument()->getType())
+                ->setFormat($this->getDocument()->getFormat())
                 ->setPage($this->getPage());
 
         $this->document->setDatas($convert->getConvertData($this->getFormat()));
         $this->document->setEncoding(Document::TYPE_BINARY_STR);
-        $this->document->setType($this->getFormat());
+        $this->document->setFormat($this->getFormat());
         $this->document->setPage($this->getPage());
     }
 
