@@ -39,6 +39,7 @@ class DocumentController extends AbstractActionController
         if ($document) {
             $content = $document->getDatas();
             $headers = $this->getResponse()->getHeaders();
+            
             if (null !== $document->getType()) {
                 $headers->addHeaderLine('Content-type',$document->getType());
             } else {
@@ -47,9 +48,10 @@ class DocumentController extends AbstractActionController
             $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
             $name = $document->getName();
-            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s ', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
+            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
         }
         
+       
         return $this->getResponse()->setContent($content);
     }
 

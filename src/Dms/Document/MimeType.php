@@ -51,7 +51,6 @@ class MimeType
    'bin' => 'application/x-macbinary',
    'bm' => 'image/bmp',
    'bmp' => 'image/bmp',
-   'bmp' => 'image/x-windows-bmp',
    'boo' => 'application/book',
    'book' => 'application/book',
    'boz' => 'application/x-bzip2',
