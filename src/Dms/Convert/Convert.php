@@ -57,6 +57,7 @@ class Convert
      */
     public function getConvertData($format)
     {
+    	$tmp_work = '/tmp/';
         $datas = null;
         try {
             $im = new \Imagick();
@@ -69,14 +70,13 @@ class Convert
         } catch (\ImagickException $e) {
             $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
 
-           $uniq_name = uniqid('UNO');
+           $uniq_name = $tmp_work . uniqid('UNO');
            $actual_file = sprintf('%s.%s',$uniq_name,$this->format);
             try {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
                         ->setInput($this->data);
                 $datas = $process->run();
-                
             } catch (ConvertException $e) {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf",$actual_file,$page_opt,$actual_file,$format,$uniq_name))

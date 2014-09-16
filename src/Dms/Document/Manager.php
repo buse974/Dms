@@ -158,28 +158,28 @@ class Manager implements ServiceLocatorAwareInterface
         if (null !== $this->size) {
             try {
                  $this->resize();
-               } catch (\Exception $e) {
-                   if (null !== $this->format) {
-                       try {
-                           $this->convert();
-                           $this->format=null;
-                           $this->resize();
-                           $this->size=null;
-                       } catch (ConvertException $e) {
-                           exit("Error format");
-                       } catch (\Exception $e) {
-                           exit("Error resize");
-                       }
-                   } else {
-                       exit("Error resize");
-                   }
+                } catch (\Exception $e) {
+					if (null !== $this->format) {
+                        try {
+                            $this->convert();
+                            $this->format=null;
+                            $this->resize();
+                            $this->size=null;
+                        } catch (ConvertException $e) {
+                            throw new \Exception("Error format");
+                        } catch (\Exception $e) {
+                       	    throw new \Exception("Error resize");
+                        }
+                    } else {
+                   		throw new \Exception("Error resize");
+                    }
                }
         }
         if (null !== $this->format) {
             try {
                    $this->convert();
                } catch (ConvertException $e) {
-                   exit("Error format");
+               		throw new \Exception("Error format");
                }
         }
 
