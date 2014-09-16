@@ -238,6 +238,7 @@ class Manager implements ServiceLocatorAwareInterface
         $convert = new Convert();
         $convert->setData($this->getDocument()->getDatas())
                 ->setFormat($this->getDocument()->getFormat())
+                ->setTmp($this->getServiceLocator()->get('Config')['dms-conf']['convert']['tmp'])
                 ->setPage($this->getPage());
 
         $this->document->setDatas($convert->getConvertData($this->getFormat()));

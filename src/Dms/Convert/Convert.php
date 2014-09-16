@@ -8,6 +8,7 @@ class Convert
 {
     protected $data;
     protected $format;
+    protected $tmp='';
     protected $page;
 
     /**
@@ -20,6 +21,13 @@ class Convert
         $this->data = $data;
 
         return $this;
+    }
+    
+    public function setTmp($tmp)
+    {
+    	$this->tmp = $tmp;
+    
+    	return $this;
     }
 
     /**
@@ -57,7 +65,6 @@ class Convert
      */
     public function getConvertData($format)
     {
-    	$tmp_work = '/tmp/';
         $datas = null;
         try {
             $im = new \Imagick();
@@ -68,21 +75,18 @@ class Convert
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
-            $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
-
-           $uniq_name = $tmp_work . uniqid('UNO');
-           $actual_file = sprintf('%s.%s',$uniq_name,$this->format);
+        	$page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
+           	$uniq_name = $this->tmp . uniqid('UNO');
+           	$actual_file = sprintf('%s.%s',$uniq_name,($this->format)?:'tmp');
             try {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
-                        ->setInput($this->data)
-                        ->setTmp('/tmp');
+                        ->setInput($this->data);
                 $datas = $process->run();
             } catch (ConvertException $e) {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf",$actual_file,$page_opt,$actual_file,$format,$uniq_name))
-                        ->setInput($this->data)
-                        ->setTmp('/tmp');
+                        ->setInput($this->data);
                 $datas = $process->run();
             }
         }

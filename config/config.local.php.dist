@@ -11,6 +11,9 @@ return array(
                 ),
                 'default_path' => 'upload/',
                 'adapter' => 'http-adapter',
+                'convert' => array(
+                		'tmp' => '/tmp/',
+                ),
                 'headers'=> array(
                         'Access-Control-Allow-Origin'=>'http://local.wow.in',
                         'Access-Control-Allow-Credentials'=>'true'
