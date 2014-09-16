@@ -75,12 +75,14 @@ class Convert
             try {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
-                        ->setInput($this->data);
+                        ->setInput($this->data)
+                        ->setTmp('/tmp');
                 $datas = $process->run();
             } catch (ConvertException $e) {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf",$actual_file,$page_opt,$actual_file,$format,$uniq_name))
-                        ->setInput($this->data);
+                        ->setInput($this->data)
+                        ->setTmp('/tmp');
                 $datas = $process->run();
             }
         }
