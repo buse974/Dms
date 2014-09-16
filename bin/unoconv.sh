@@ -10,7 +10,7 @@
 UNOCONV='/usr/lib64/libreoffice/program/soffice.bin'
 OPTIONS='--headless --invisible --nocrashreport --nodefault --nologo --nofirststartwizard --norestore --accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.ComponentContext'
 ERROR=1
-PIIDFILE=/var/run/uniconv-server.pid
+PIDFILE=/var/run/uniconv-server.pid
 set -e
 
 start() {
@@ -18,7 +18,9 @@ start() {
 		echo "OpenOffice headless server has already started."
 	else
 		$UNOCONV $OPTIONS & > /dev/null 2>&1
+		if [ $? = 0 ]; then
 		echo $! > $PIDFILE
+		fi
 		ERROR=$?
 	fi
 }
