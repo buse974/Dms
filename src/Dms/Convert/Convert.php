@@ -89,6 +89,9 @@ class Convert
                         ->setInput($this->data);
                 $datas = $process->run();
             }
+            
+            $process = new Process();
+            $process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
         }
 
         return $datas;
