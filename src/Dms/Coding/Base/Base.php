@@ -36,9 +36,9 @@ class Base implements CodingInterface
             $this->setData($data);
         }
 
-        $datPos = strpos ($this->data , 'base64,');
+        $datPos = strpos($this->data , 'base64,');
         if ($datPos!==false) {
-             $data = substr($this->data, $datPos+7);
+             $this->data = substr($this->data, $datPos+7);
         }
 
         return base64_decode($this->data);

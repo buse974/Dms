@@ -25,10 +25,11 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
     public function testAddDocumentBases()
     {
         $image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
+      
         $document['id'] = '0200filename';
         $document['coding'] = 'base';
         $document['type'] = 'image/png';
-        $document['data'] = base64_encode($image);
+        $document['data'] =  'data:image/jpeg;base64,' . base64_encode($image);
 
         $dms = bootstrap::getServiceManager()->get('dms.service');
         $ret = $dms->add($document);
