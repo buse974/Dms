@@ -1,5 +1,5 @@
 {
-  "name": "buse974/dms",
+  "name": "buse974/Dms",
   "description": "Document management system for ZF2",
   "type": "library",
   "homepage": "https://github.com/buse974/Dms",
@@ -15,5 +15,8 @@
   },
   "require-dev" : {
     "phpunit/phpunit" : ">=3.7,<4"
+  },
+  "autoload": {
+        "psr-0": { "Dms": "src/" }
   }
 }
