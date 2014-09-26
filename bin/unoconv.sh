@@ -14,15 +14,19 @@ PIDFILE=/var/run/uniconv-server.pid
 set -e
 
 start() {
-	if [ -f $PIDFILE ]; then
-		echo "OpenOffice headless server has already started."
-	else
-		$UNOCONV $OPTIONS & > /dev/null 2>&1
-		if [ $? = 0 ]; then
-		echo $! > $PIDFILE
-		fi
-		ERROR=$?
-	fi
+        if [ -f $PIDFILE ] && [ -e /proc/`cat $PIDFILE` ]; then
+                echo "OpenOffice headless server has already started."
+        else
+                if [ -f $PIDFILE ] && [ ! -e /proc/`cat $PIDFILE` ]; then
+                        rm -f $PIDFILE
+                fi
+
+                $UNOCONV $OPTIONS & > /dev/null 2>&1
+                if [ $? = 0 ]; then
+                echo $! > $PIDFILE
+                fi
+                ERROR=$?
+        fi
 }
 
 stop() {
