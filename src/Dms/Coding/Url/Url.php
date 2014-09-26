@@ -8,7 +8,7 @@ use Zend\Http\Client;
 class Url implements CodingInterface
 {
     private $data;
-    private $name = 'Url';
+    private $name = self::CODING_URL_STR;
     private $options;
 
     /**

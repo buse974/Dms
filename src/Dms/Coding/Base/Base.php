@@ -7,7 +7,7 @@ use Dms\Coding\CodingInterface;
 class Base implements CodingInterface
 {
     private $data;
-    private $name = 'base';
+    private $name = self::CODING_BASE_STR;
 
     public function getData()
     {

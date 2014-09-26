@@ -6,7 +6,7 @@ use Dms\Coding\CodingInterface;
 
 class Gzip implements CodingInterface
 {
-    private $name = 'gzip';
+    private $name = self::CODING_GZIP_STR;
     private $data;
 
     public function getData()

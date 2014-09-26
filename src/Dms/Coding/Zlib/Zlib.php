@@ -6,7 +6,7 @@ use Dms\Coding\CodingInterface;
 
 class Zlib implements CodingInterface
 {
-    private $name = 'zlib';
+    private $name = self::CODING_ZLIB_STR;
     private $data;
 
     public function getData()

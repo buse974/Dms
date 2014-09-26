@@ -7,7 +7,7 @@ use Dms\Coding\CodingInterface;
 class Deflate implements CodingInterface
 {
     private $data;
-    private $name = 'deflate';
+    private $name = self::CODING_DEFLATE_STR;
 
     public function getData()
     {
