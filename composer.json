@@ -18,5 +18,8 @@
   },
   "autoload": {
         "psr-0": { "Dms": "src/" }
+  },
+  "config": {
+        "bin-dir": "bin/"
   }
 }
