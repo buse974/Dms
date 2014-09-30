@@ -194,5 +194,45 @@ $document = $manager->getDocument();
 /*
  * Return the document's token
  */
-$document->getId();
+$token = $document->getId();
 ```
+
+## Access by url
+
+Document can be accessed by URL.
+
+Urls are formated like this :
+
+    http://mondomaine.com/<KEY>/<TOKEN>-<SIZE>[<NUM-PAGE>].<FORMAT>
+    
+Documents are automatic convertion if not exist.  
+
+**KEY can be** 
+
+    data 
+    size
+    description
+    format
+    encoding
+
+    
+###Exemple
+
+**Basic document**
+
+    http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138
+    
+This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138
+
+**Basic document convert**
+
+    http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138-300x300
+    
+This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138 and convert in 300x300 pixel
+
+**Basic document convert format**
+
+    http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138.pdf
+    
+This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138 and convert in pdf
+
