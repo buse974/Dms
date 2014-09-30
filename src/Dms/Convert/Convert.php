@@ -22,12 +22,12 @@ class Convert
 
         return $this;
     }
-    
+
     public function setTmp($tmp)
     {
-    	$this->tmp = $tmp;
-    
-    	return $this;
+        $this->tmp = $tmp;
+
+        return $this;
     }
 
     /**
@@ -75,9 +75,9 @@ class Convert
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
-        	$page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
-           	$uniq_name = $this->tmp . uniqid('UNO');
-           	$actual_file = sprintf('%s.%s',$uniq_name,($this->format)?:'tmp');
+            $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
+               $uniq_name = $this->tmp . uniqid('UNO');
+               $actual_file = sprintf('%s.%s',$uniq_name,($this->format) ?: 'tmp');
             try {
                 $process = new Process();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
@@ -89,7 +89,7 @@ class Convert
                         ->setInput($this->data);
                 $datas = $process->run();
             }
-            
+
             $process = new Process();
             $process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
         }

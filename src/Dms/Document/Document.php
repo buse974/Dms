@@ -15,7 +15,7 @@ class Document implements Serializable
     const SUPPORT_DATA_STR = 'data';
     const SUPPORT_FILE_STR = 'file';
     const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
-    
+
     /**
      *
      * @var string
@@ -69,8 +69,7 @@ class Document implements Serializable
      * @var string
      */
     protected $format;
-    
-    
+
     /**
      * Document Name
      *
@@ -150,41 +149,41 @@ class Document implements Serializable
 
     /**
      * Get body document
-     * 
+     *
      * @return string
      */
     public function getDatas()
     {
         return $this->datas;
     }
-    
-	/**
+
+    /**
 	 * get format
-	 * 
+	 *
 	 * @return string
 	 */
     public function getFormat()
     {
-    	return $this->format;
+        return $this->format;
     }
-    
+
     /**
      * Set format
-     * 
-     * @param string  $format
+     *
+     * @param  string                 $format
      * @return \Dms\Document\Document
      */
     public function setFormat($format)
     {
-    	$this->format = $format;
-    	
-    	if($type = MimeType::getMimeTypeByExtension($this->format)) {
-    		$this->type = $type;
-    	}
-    	
-    	return $this;
+        $this->format = $format;
+
+        if ($type = MimeType::getMimeTypeByExtension($this->format)) {
+            $this->type = $type;
+        }
+
+        return $this;
     }
-    
+
     /**
      * Set body document
      * @param  string                 $datas
@@ -216,9 +215,9 @@ class Document implements Serializable
     public function setType($type)
     {
         $this->type = $type;
-        
-        if($fmt = MimeType::getExtensionByMimeType($this->type)) {
-        	$this->format = $fmt;
+
+        if ($fmt = MimeType::getExtensionByMimeType($this->type)) {
+            $this->format = $fmt;
         }
         if ($this->is_write) {
             $this->id = null;
@@ -446,7 +445,7 @@ class Document implements Serializable
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),
                 'weight' => $this->getWeight(),
-        		'format' => $this->getFormat()
+                'format' => $this->getFormat()
         ));
     }
 

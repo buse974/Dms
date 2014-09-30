@@ -3,7 +3,7 @@
 namespace Dms\Document;
 
 class MimeType
-{	
+{
     protected static $ext_mime =  array(
    '3dm' => 'x-world/x-3dmf',
    '3dmf' => 'x-world/x-3dmf',
@@ -672,7 +672,7 @@ class MimeType
 
     public static function getMimeTypeByExtension($ext)
     {
-    	$mime = null;
+        $mime = null;
         $ar_mt = self::$ext_mime;
         if (isset($ar_mt[$ext])) {
             $mime = $ar_mt[$ext];
@@ -680,17 +680,17 @@ class MimeType
 
         return $mime;
     }
-    
+
     public static function getExtensionByMimeType($mine)
     {
-    	$ext = null;
-    	
-    	$ar_mt = self::$ext_mime;
-    	$ar_ext = array_keys($ar_mt, $mine);
-    	if (count($ar_ext) > 0) {
-    		$ext = current($ar_ext);
-    	}
-    
-    	return $ext;
+        $ext = null;
+
+        $ar_mt = self::$ext_mime;
+        $ar_ext = array_keys($ar_mt, $mine);
+        if (count($ar_ext) > 0) {
+            $ext = current($ar_ext);
+        }
+
+        return $ext;
     }
 }

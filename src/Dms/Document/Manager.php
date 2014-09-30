@@ -159,7 +159,7 @@ class Manager implements ServiceLocatorAwareInterface
             try {
                  $this->resize();
                 } catch (\Exception $e) {
-					if (null !== $this->format) {
+                    if (null !== $this->format) {
                         try {
                             $this->convert();
                             $this->format=null;
@@ -168,10 +168,10 @@ class Manager implements ServiceLocatorAwareInterface
                         } catch (ConvertException $e) {
                             throw new \Exception("Error format");
                         } catch (\Exception $e) {
-                       	    throw new \Exception("Error resize");
+                               throw new \Exception("Error resize");
                         }
                     } else {
-                   		throw new \Exception("Error resize");
+                           throw new \Exception("Error resize");
                     }
                }
         }
@@ -179,7 +179,7 @@ class Manager implements ServiceLocatorAwareInterface
             try {
                    $this->convert();
                } catch (ConvertException $e) {
-               		throw new \Exception("Error format");
+                       throw new \Exception("Error format");
                }
         }
 

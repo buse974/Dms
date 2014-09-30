@@ -179,7 +179,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->createDocument($document);
         $manager->setFormat('pdf');
         $manager->writeFile();
-        
+
         $document = $manager->getDocument();
         $this->assertTrue(strlen($document->getDatas()) > strlen($image));
     }

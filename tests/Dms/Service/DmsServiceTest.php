@@ -25,7 +25,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
     public function testAddDocumentBases()
     {
         $image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
-      
+
         $document['id'] = '0200filename';
         $document['coding'] = 'base';
         $document['type'] = 'image/png';

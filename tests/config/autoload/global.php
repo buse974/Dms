@@ -20,8 +20,8 @@ return array(
             'Access-Control-Allow-Origin'=>'http://local.wow.in',
             'Access-Control-Allow-Credentials'=>'true'
         ),
-    	'convert' => array(
-    		'tmp' =>  __DIR__ . '/../../_tmp/',
-    	),
+        'convert' => array(
+            'tmp' =>  __DIR__ . '/../../_tmp/',
+        ),
     ),
 );

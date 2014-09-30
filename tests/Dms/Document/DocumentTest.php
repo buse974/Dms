@@ -46,8 +46,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($document->getSupport(),'data');
         $this->assertEquals($document->getSize(),'300x200');
         $this->assertEquals($document->getType(),'jpg');
-        
-        
+
     }
 
     public function testCanGetEncodingDefault()
