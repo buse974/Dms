@@ -1,0 +1,8 @@
+bin/php-cs-fixer
+bin/phpunit
+composer.lock
+vendor/
+bin/classmap_generator.php
+bin/pluginmap_generator.php
+bin/templatemap_generator.php
+tests/_upload/02/
