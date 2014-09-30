@@ -44,7 +44,8 @@ require "<projectpath>/vendor/autoload.php";
 
 ### Application config file
 Enabling it in your `application.config.php` file.
-```
+
+```php
 <?php
 return array(
     'modules' => array(
@@ -59,7 +60,8 @@ return array(
 ### Local file config
 
 Copy and paste the following configuration in your `config/autoloader/local.php`. You can find these configuration in `<application_path>/vendor/buse974/dms/config/local.php.dist`
-```
+
+```php
 'dms-conf' => array(
     /*
      * Allowed sizes - You can add as many as you need
@@ -98,6 +100,7 @@ Copy and paste the following configuration in your `config/autoloader/local.php`
 ),
 ```
 ### HTTP adapter (if it is not existing yet)
+
 ```php
 'http-adapter' => array(
         'adapter' => 'Zend\Http\Client\Adapter\Socket',
