@@ -98,7 +98,7 @@ Copy and paste the following configuration in your `config/autoloader/local.php`
 ),
 ```
 ### HTTP adapter (if it is not existing yet)
-```
+```php
 'http-adapter' => array(
         'adapter' => 'Zend\Http\Client\Adapter\Socket',
         'maxredirects'   => 5,
@@ -170,20 +170,21 @@ $manager = $this->serviceManager->get('dms.manager');
 /*
  * file exemple
  */
-$image = 'file_get_contents(__DIR__ . '/../../_file/gnu.png');
+$image = file_get_contents(__DIR__ . '/../../_file/gnu.png');
 
 $document = new Dms\Document\Document();
 $document->setDatas($image); 
 $document->setFormat('png');            
 
 
-$manager->loadDocument($document);    
+$manager->loadDocument($document);  
+
 $manager->setFormat('jpg');
-$document->setSize('80x80'); 
+$manager->setSize('80x80'); 
 $manager->writeFile();
 
 /*
- * Get the document's token (unique id)
+ * Get the document
  */
 $document = $manager->getDocument();
 
