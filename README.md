@@ -205,7 +205,7 @@ Urls are formated like this :
 
     http://mondomaine.com/<KEY>/<TOKEN>-<SIZE>[<NUM-PAGE>].<FORMAT>
     
-Documents are automatic convertion if not exist.  
+Documents are automatically converted if not exist.  
 
 **KEY can be** 
 
@@ -222,17 +222,17 @@ Documents are automatic convertion if not exist.
 
     http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138
     
-This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138
+This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138
 
 **Basic document convert**
 
     http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138-300x300
     
-This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138 and convert in 300x300 pixel
+This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138 and converts it in 300x300 pixel
 
 **Basic document convert format**
 
     http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138.pdf
     
-This url display document with token 2b5c466bf06d665b479e85c48ec733d235d138 and convert in pdf
+This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138 and converts it in pdf
 
