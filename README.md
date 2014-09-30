@@ -48,20 +48,16 @@ Enabling it in your `application.config.php` file.
 <?php
 return array(
     'modules' => array(
-        // ...
         'Dms',
     ),
-    // ...,
     'module_paths' => array(
-       // ...
        'Dms' => __DIR__ . '/../vendor/buse974/dms',
-       // ...
     ),
 ),
 );
-
-### Local autoloader file
 ```
+### Local file config
+
 Copy and paste the following configuration in your `config/autoloader/local.php`. You can find these configuration in `<application_path>/vendor/buse974/dms/config/local.php.dist`
 ```
 'dms-conf' => array(
@@ -144,8 +140,10 @@ $document['data'] =  base64_encode($image);
 /*
  * Return the document's token
  */
-$manager->add($document);                            
+$token = $manager->add($document);   
 ```
+
+To access this file use this url http://\<dns\>/data/\<token\> .
 
 ### Resize a document
 
@@ -155,8 +153,10 @@ Following the previous example
 /*
  *  width x height in a string - Return a new token for the document resized
  */
-$manager->resize('80x80');    
+$new_token = $manager->resize('80x80');    
 ```
+
+To access this file use this url http://\<dns\>/data/\<new_token\> .
 
 ## By DMS manager
 
@@ -165,7 +165,7 @@ $manager->resize('80x80');
 
 ```php
 
-$manager = $this->service-Manager->get('dms.manager');
+$manager = $this->serviceManager->get('dms.manager');
 
 /*
  * file exemple
@@ -178,13 +178,17 @@ $document->setFormat('png');
 
 
 $manager->loadDocument($document);    
-
-
 $manager->setFormat('jpg');
 $document->setSize('80x80'); 
 $manager->writeFile();
+
 /*
  * Get the document's token (unique id)
  */
 $document = $manager->getDocument();
+
+/*
+ * Return the document's token
+ */
+$document->getId();
 ```
