@@ -12,7 +12,7 @@ The DMS lets you manage your documents for [Zend Framework 2](http://framework.z
 
 ## Prequisites :
 
-Before installing DMS module, please be sure to have installed on your apache server, the following PHP depencies :
+Before installing DMS module, please be sure the following PHP depencies are installed on your apache server:
 - libreoffice-headers
 - uniconv
 
@@ -20,7 +20,7 @@ Before installing DMS module, please be sure to have installed on your apache se
 
 ## With composer (recommended) :
 
-Composer helps manage dependencies for PHP projects. Find more info here: <http://getcomposer.org>
+Composer helps to manage dependencies in PHP projects. Find more info here: <http://getcomposer.org>
 
 Add this package (`buse974/dms`) to your `composer.json` file, or just run the following at the
 command line:
@@ -42,6 +42,15 @@ using composer to install, you just require the generated autoloader:
 require "<projectpath>/vendor/autoload.php";
 ```
 
+### Install daemon unoconv
+
+Execute the script vendor/buse974/dms/bin/unoconv.sh like a deamon.
+
+**examples**
+
+    vendor/buse974/dms/bin/unoconv.sh start
+    vendor/buse974/dms/bin/unoconv.sh stop
+
 ### Application config file
 Enabling it in your `application.config.php` file.
 
@@ -59,7 +68,7 @@ return array(
 ```
 ### Local file config
 
-Copy and paste the following configuration in your `config/autoloader/local.php`. You can find these configuration in `<application_path>/vendor/buse974/dms/config/local.php.dist`
+Copy and paste the following configuration in your `config/autoloader/local.php`. You can find this configuration in `<application_path>/vendor/buse974/dms/config/local.php.dist`
 
 ```php
 'dms-conf' => array(
@@ -86,7 +95,7 @@ Copy and paste the following configuration in your `config/autoloader/local.php`
         'convert' => array(
                 /* 
                  * path where you want to convert and stock the temporaries files
-                 * !! apache need all right for writing and reading on this directory !!
+                 * !! apache need all rights for writing and reading on this directory !!
                  */
                 'tmp' => '/tmp/',    
         ),
@@ -99,7 +108,7 @@ Copy and paste the following configuration in your `config/autoloader/local.php`
         ),
 ),
 ```
-### HTTP adapter (if it is not existing yet)
+### HTTP adapter (if it does not exist yet)
 
 ```php
 'http-adapter' => array(
@@ -136,7 +145,7 @@ $document['type'] = 'image/png';
 
 /*
  * datas with specified encoding
- * if you choose url coding, you can add the picture url which will be upload and save
+ * if you choose url coding, you can add the picture url which will be uploaded and saved
  */
 $document['data'] =  base64_encode($image);        
 
@@ -205,7 +214,7 @@ Urls are formated like this :
 
     http://mondomaine.com/<KEY>/<TOKEN>-<SIZE>[<NUM-PAGE>].<FORMAT>
     
-Documents are automatically converted if not exist.  
+Documents are automatically converted and created if they do not exist.  
 
 **KEY can be** 
 
@@ -216,7 +225,7 @@ Documents are automatically converted if not exist.
     encoding
 
     
-###Exemple
+###Examples
 
 **Basic document**
 
@@ -224,13 +233,13 @@ Documents are automatically converted if not exist.
     
 This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138
 
-**Basic document convert**
+**Document with size convertion**
 
     http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138-300x300
     
 This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138 and converts it in 300x300 pixel
 
-**Basic document convert format**
+**Document with format convertion**
 
     http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138.pdf
     
