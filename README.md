@@ -44,7 +44,7 @@ require "<projectpath>/vendor/autoload.php";
 
 ### Install daemon unoconv
 
-Execute the script vendor/buse974/dms/bin/unoconv.sh like a deamon.
+Execute the script `vendor/buse974/dms/bin/unoconv.sh` like a deamon.
 
 **examples**
 
