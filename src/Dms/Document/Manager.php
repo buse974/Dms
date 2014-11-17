@@ -328,7 +328,7 @@ class Manager implements ServiceLocatorAwareInterface
     /**
      * Get service locator
      *
-     * @return \Zend\ServiceManager\ServiceLocatorInterfac
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     public function getServiceLocator()
     {

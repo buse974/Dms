@@ -2,7 +2,7 @@
 
 namespace Dms\Convert;
 
-use Dms\Convert\Exception\ConvertException;
+use Dms\Convert\Exception\ProcessException;
 
 class Convert
 {
@@ -10,6 +10,7 @@ class Convert
     protected $format;
     protected $tmp='';
     protected $page;
+    private $process;
 
     /**
      *
@@ -78,22 +79,42 @@ class Convert
             $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
                $uniq_name = $this->tmp . uniqid('UNO');
                $actual_file = sprintf('%s.%s',$uniq_name,($this->format) ?: 'tmp');
+               if (!is_dir($this->tmp)) {
+               		throw new \Exception('Directory tmp is not exist');
+               }
             try {
-                $process = new Process();
+                $process = $this->getProcess();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
                         ->setInput($this->data);
                 $datas = $process->run();
-            } catch (ConvertException $e) {
-                $process = new Process();
+              } catch (ProcessException $e) {
+                $process = $this->getProcess();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf",$actual_file,$page_opt,$actual_file,$format,$uniq_name))
                         ->setInput($this->data);
                 $datas = $process->run();
             }
 
-            $process = new Process();
+            $process = $this->getProcess();
             $process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
         }
 
         return $datas;
+    }
+    
+    //@todo add interface
+    public function setProcess($process)
+    {
+    	$this->process = $process;
+    	 
+    	return $this;
+    }
+    
+    public function getProcess()
+    {
+    	if(null === $this->process) {
+    		$this->process = new Process();
+    	}
+    
+    	return $this->process;
     }
 }

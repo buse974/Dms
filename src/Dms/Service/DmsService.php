@@ -55,7 +55,7 @@ class DmsService implements ServiceManagerAwareInterface
     public function getDocumentManager()
     {
         if (null === $this->document_manager) {
-            $this->document_manager = $this->getServiceManager()->get('Dms');
+            $this->document_manager = $this->getServiceManager()->get('dms.manager');
         }
 
         return $this->document_manager;

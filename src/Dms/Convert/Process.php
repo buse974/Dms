@@ -2,7 +2,8 @@
 
 namespace Dms\Convert;
 
-use Dms\Convert\Exception\ConvertException;
+use Dms\Convert\Exception\ProcessException;
+
 class Process
 {
     protected $cmd;
@@ -57,7 +58,7 @@ class Process
         return $this;
     }
 
-    public function getOutput($input)
+    public function getOutput()
     {
         return $this->output;
     }
@@ -83,7 +84,7 @@ class Process
         }
 
         if ($this->error_code!=0) {
-            throw new ConvertException($this->error_message,$this->error_code);
+            throw new ProcessException($this->error_message,$this->error_code);
         }
 
         return $this->output;
