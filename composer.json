@@ -1,7 +1,7 @@
 {
   "name": "buse974/Dms",
   "description": "Document management system for ZF2",
-  "type": "module",
+  "type": "library",
   "homepage": "https://github.com/buse974/Dms",
   "license": "MIT",
   "authors": [
