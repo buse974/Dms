@@ -4,26 +4,47 @@ namespace Dms\Coding\Url;
 
 use Dms\Coding\CodingInterface;
 use Zend\Http\Client;
+use Zend\Http\Client\Adapter\Socket;
+use Dms\Exception\ErrorDocumentException;
+use Dms\Exception\ForbiddenDocumentException;
 
 class Url implements CodingInterface
 {
+	/**
+	 * data for encoded or decoded
+	 *
+	 * @var string
+	 */
     private $data;
+    
+    /**
+     * 
+     * @var string
+     */
     private $name = self::CODING_URL_STR;
-    private $options;
 
     /**
-     * @param array $options
+     * 
+     * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
-    public function __construct(array $options = array())
-    {
-        $this->options = new UrlOption($options);
-    }
+    private $adapter;
 
+    /**
+     * return string to encoded or decoded
+     * 
+     * @return string
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * set uri to get
+     * 
+     * @param string $data
+     * @return \Dms\Coding\Url\Url
+     */
     public function setData($data)
     {
         $this->data = $data;
@@ -31,60 +52,78 @@ class Url implements CodingInterface
         return $this;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::encode()
+     */
     public function encode($data = null)
     {
         if ($data!=null) {
             $this->setData($data);
         }
 
-        return null;
+        return false;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::decode()
+     */
     public function decode($data = null)
     {
         if ($data!=null) {
             $this->setData($data);
         }
 
-        return $this->getCurlData();
+        $client = new Client();
+        $client->setAdapter($this->getAdapter());
+        $client->setUri($this->data);
+        $response = $client->send();
+
+        if ($response->isClientError()) {
+            if ($response->getStatusCode()==403) {
+                throw new ForbiddenDocumentException($this->data);
+            }
+            throw new ErrorDocumentException($response->getReasonPhrase(),$response->getStatusCode());
+        }
+        $data = $response->getBody();
+
+        return $data;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::getCoding()
+     */
     public function getCoding()
     {
         return $this->name;
     }
-
-    private function getCurlData()
+    
+    /**
+     * Set adapter 
+     * 
+     * @param \Zend\Http\Client\Adapter\AdapterInterface $adapter
+     * @return \Dms\Coding\Url\Url
+     */
+    public function setAdapter($adapter)
     {
-        $cli = new Client();
-        $cli->setAdapter($this->options->getAdapter());
-        $cli->setUri($this->data);
-        $ret = $cli->send();
-
-        if ($ret->isClientError()) {
-            if ($ret->getStatusCode()==403) {
-                throw new ForbiddenDocumentException($this->data);
-            }
-            throw new ErrorDocumentException($ret->getReasonPhrase(),$ret->getStatusCode());
-        }
-        $data = $ret->getBody();
-        /*if ($this->type===null) {
-            $mime = $ret->getHeaders()->get('Content-Type');
-            if ($mime) {
-                $mime = $mime->getFieldValue();
-            }
-            if (empty($mime)) {
-                $tt = strrchr($this->data, '.' );
-                $mtype = new MimeType();
-                $mime = $mtype->getMimeTypeByExtension($tt);
-            }
-            if (empty($mime)) {
-                $fi = new finfo(FILEINFO_MIME);
-                $mime = $fi->buffer($this->data);
-            }
-            $this->type = $mime;
-        }*/
-
-        return $data;
+    	$this->adapter = $adapter;
+    
+    	return $this;
+    }
+    
+    /**
+     * return adapter
+     * 
+     * @return \Zend\Http\Client\Adapter\AdapterInterface
+     */
+    public function getAdapter()
+    {
+    	if (null === $this->adapter) {
+    		$this->adapter = new Socket();
+    	}
+    
+    	return $this->adapter;
     }
 }
