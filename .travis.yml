@@ -8,3 +8,4 @@ php :
 before_script :
     - composer install
     - printf "\n" | pecl install imagick
+    - sudo apt-get install -qq unoconv

@@ -35,7 +35,7 @@ class ProcessTest extends PHPUnit_Framework_TestCase
 	
 	public function testCanRunProcessException()
 	{
-		$this->setExpectedException('Dms\Convert\Exception\ProcessException', 'sh: kgk : commande introuvable', 127);
+		$this->setExpectedException('Dms\Convert\Exception\ProcessException',null, 127);
 		
 		$process = new Process();
 		$process->setCmd("kgk");
@@ -52,8 +52,8 @@ class ProcessTest extends PHPUnit_Framework_TestCase
 		}
 		catch (ProcessException $e) {
 			$this->assertEquals($process->getErrorCode(), 127);
-			$this->assertEquals($process->getErrorMessage(), "sh: notcmd : commande introuvable\n");
-			$this->assertEquals($process->getOutput(), '');
+			$this->assertContains("notcmd", $process->getErrorMessage());
+			$this->assertEmpty($process->getOutput());
 			
 			return;
 		}
