@@ -6,14 +6,35 @@ use Dms\Coding\CodingInterface;
 
 class Base implements CodingInterface
 {
+	/**
+	 * data for encoded or decoded
+	 * 
+	 * @var string
+	 */
     private $data;
+    
+    /**
+     * 
+     * @var string
+     */
     private $name = self::CODING_BASE_STR;
 
+    /**
+     * return string to encoded or decoded
+     * 
+     * @return string
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * set string to encoded or decoded
+     * 
+     * @param string $data
+     * @return \Dms\Coding\Base\Base
+     */
     public function setData($data)
     {
         $this->data = $data;
@@ -21,6 +42,10 @@ class Base implements CodingInterface
         return $this;
     }
 
+	/**
+	 * (non-PHPdoc)
+	 * @see \Dms\Coding\CodingInterface::encode()
+	 */
     public function encode($data = null)
     {
         if ($data!=null) {
@@ -30,6 +55,10 @@ class Base implements CodingInterface
         return base64_encode($this->data);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::decode()
+     */
     public function decode($data = null)
     {
         if ($data!=null) {
@@ -44,6 +73,10 @@ class Base implements CodingInterface
         return base64_decode($this->data);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::getCoding()
+     */
     public function getCoding()
     {
         return $this->name;
