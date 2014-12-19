@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Dms by buse974</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Dms</h1>
+        <h2>Simple Document management system for ZF2</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/buse974/Dms/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/buse974/Dms/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/buse974/Dms" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="dms" class="anchor" href="#dms" aria-hidden="true"><span class="octicon octicon-link"></span></a>DMS</h1>
+
+<p>Document management system for ZF2</p>
+
+<h1>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h1>
+
+<p>The DMS lets you manage your documents for <a href="http://framework.zend.com/">Zend Framework 2</a>.</p>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<h2>
+<a id="prequisites-" class="anchor" href="#prequisites-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prequisites :</h2>
+
+<p>Before installing DMS module, please be sure the following PHP depencies are installed on your apache server:</p>
+
+<ul>
+<li>libreoffice-headers</li>
+<li>uniconv</li>
+</ul>
+
+<h2>
+<a id="with-composer-recommended-" class="anchor" href="#with-composer-recommended-" aria-hidden="true"><span class="octicon octicon-link"></span></a>With composer (recommended) :</h2>
+
+<p>Composer helps to manage dependencies in PHP projects. Find more info here: <a href="http://getcomposer.org">http://getcomposer.org</a></p>
+
+<p>Add this package (<code>buse974/dms</code>) to your <code>composer.json</code> file, or just run the following at the
+command line:</p>
+
+<pre><code>$ composer require buse974/dms
+</code></pre>
+
+<h2>
+<a id="by-cloning-project-" class="anchor" href="#by-cloning-project-" aria-hidden="true"><span class="octicon octicon-link"></span></a>By cloning project :</h2>
+
+<p>Install the <a href="https://github.com/buse974/Dms.git">DMS</a> module by cloning it into <code>./vendor/</code> directory.</p>
+
+<h2>
+<a id="post-installation" class="anchor" href="#post-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Post-installation</h2>
+
+<p>This package follows the <a href="http://www.php-fig.org/psr/psr-0/">PSR-0</a> autoloading standard. If you are
+using composer to install, you just require the generated autoloader:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">require</span> <span class="pl-s1"><span class="pl-pds">"</span>&lt;projectpath&gt;/vendor/autoload.php<span class="pl-pds">"</span></span>;</span></pre></div>
+
+<h3>
+<a id="install-daemon-unoconv" class="anchor" href="#install-daemon-unoconv" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install daemon unoconv</h3>
+
+<p>Execute the script <code>vendor/buse974/dms/bin/unoconv.sh</code> like a deamon.</p>
+
+<p><strong>examples</strong></p>
+
+<pre><code>vendor/buse974/dms/bin/unoconv.sh start
+vendor/buse974/dms/bin/unoconv.sh stop
+</code></pre>
+
+<h3>
+<a id="application-config-file" class="anchor" href="#application-config-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application config file</h3>
+
+<p>Enabling it in your <code>application.config.php</code> file.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-k">return</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>modules<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>Dms<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    ),</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>module_paths<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">       <span class="pl-s1"><span class="pl-pds">'</span>Dms<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/../vendor/buse974/dms<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    ),</span>
+<span class="pl-s2">),</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h3>
+<a id="local-file-config" class="anchor" href="#local-file-config" aria-hidden="true"><span class="octicon octicon-link"></span></a>Local file config</h3>
+
+<p>Copy and paste the following configuration in your <code>config/autoloader/local.php</code>. You can find this configuration in <code>&lt;application_path&gt;/vendor/buse974/dms/config/local.php.dist</code></p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>dms-conf<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">    <span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c">     * Allowed sizes - You can add as many as you need</span></span>
+<span class="pl-s2"><span class="pl-c">     */</span></span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>size_allowed<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(                    </span>
+<span class="pl-s2">                <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>width<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">300</span>, <span class="pl-s1"><span class="pl-pds">'</span>height<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">200</span>),</span>
+<span class="pl-s2">                <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>width<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">300</span>, <span class="pl-s1"><span class="pl-pds">'</span>height<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">300</span>),</span>
+<span class="pl-s2">                <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>width<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">150</span>, <span class="pl-s1"><span class="pl-pds">'</span>height<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">100</span>),</span>
+<span class="pl-s2">                <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>width<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">80</span>, <span class="pl-s1"><span class="pl-pds">'</span>height<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">80</span>),</span>
+<span class="pl-s2">                <span class="pl-s3">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>width<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">300</span>),</span>
+<span class="pl-s2">        ),</span>
+<span class="pl-s2">        <span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c">         * path where all the documents will be uploaded</span></span>
+<span class="pl-s2"><span class="pl-c">         */</span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>default_path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>upload/<span class="pl-pds">'</span></span>,      </span>
+<span class="pl-s2">        <span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c">         * http adapter - You have to add your [http adapter](#HTTP-adapter) </span></span>
+<span class="pl-s2"><span class="pl-c">         * in your config/autoloader/local.php or config/autoloader/global.php</span></span>
+<span class="pl-s2"><span class="pl-c">         * If you already have a http adapter, please just specify its name</span></span>
+<span class="pl-s2"><span class="pl-c">         */</span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>adapter<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>http-adapter<span class="pl-pds">'</span></span>,             </span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>convert<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">                <span class="pl-c">/* </span></span>
+<span class="pl-s2"><span class="pl-c">                 * path where you want to convert and stock the temporaries files</span></span>
+<span class="pl-s2"><span class="pl-c">                 * !! apache need all rights for writing and reading on this directory !!</span></span>
+<span class="pl-s2"><span class="pl-c">                 */</span></span>
+<span class="pl-s2">                <span class="pl-s1"><span class="pl-pds">'</span>tmp<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-sr"><span class="pl-pds">'/</span>tmp<span class="pl-pds">/'</span></span>,    </span>
+<span class="pl-s2">        ),</span>
+<span class="pl-s2">        <span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c">         * the headers to add to your files - especially for cross-domain</span></span>
+<span class="pl-s2"><span class="pl-c">         */</span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>headers<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(                        </span>
+<span class="pl-s2">                <span class="pl-s1"><span class="pl-pds">'</span>Access-Control-Allow-Origin<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s1"><span class="pl-pds">'</span>http://local.wow.in<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">                <span class="pl-s1"><span class="pl-pds">'</span>Access-Control-Allow-Credentials<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s1"><span class="pl-pds">'</span>true<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        ),</span>
+<span class="pl-s2">),</span></pre></div>
+
+<h3>
+<a id="http-adapter-if-it-does-not-exist-yet" class="anchor" href="#http-adapter-if-it-does-not-exist-yet" aria-hidden="true"><span class="octicon octicon-link"></span></a>HTTP adapter (if it does not exist yet)</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>http-adapter<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>adapter<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>Zend\Http\Client\Adapter\Socket<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>maxredirects<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-c1">5</span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>timeout<span class="pl-pds">'</span></span>        <span class="pl-k">=&gt;</span> <span class="pl-c1">10</span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>sslverifypeer<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">false</span>,</span>
+<span class="pl-s2">),</span></pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<h2>
+<a id="by-dms-service" class="anchor" href="#by-dms-service" aria-hidden="true"><span class="octicon octicon-link"></span></a>By DMS service</h2>
+
+<h3>
+<a id="add-a-document" class="anchor" href="#add-a-document" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add a document</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$manager</span> <span class="pl-k">=</span> <span class="pl-vo">$this</span><span class="pl-k">-&gt;</span><span class="pl-vo">serviceManager</span><span class="pl-k">-&gt;</span>get(<span class="pl-s1"><span class="pl-pds">'</span>dms.service<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> *  exemple</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$image</span> <span class="pl-k">=</span> <span class="pl-s3">file_get_contents</span>(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/../../_file/gnu.png<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * string - document's codings specified in `dma/coding/CodingInterface`</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$document</span>[<span class="pl-s1"><span class="pl-pds">'</span>coding<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span>base<span class="pl-pds">'</span></span>;  </span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * mime-type</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$document</span>[<span class="pl-s1"><span class="pl-pds">'</span>type<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span>image/png<span class="pl-pds">'</span></span>;  </span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * datas with specified encoding</span></span>
+<span class="pl-s2"><span class="pl-c"> * if you choose url coding, you can add the picture url which will be uploaded and saved</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$document</span>[<span class="pl-s1"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>] <span class="pl-k">=</span>  <span class="pl-s3">base64_encode</span>(<span class="pl-vo">$image</span>);        </span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * Return the document's token</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$token</span> <span class="pl-k">=</span> <span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>add(<span class="pl-vo">$document</span>);   </span></pre></div>
+
+<p>To access this file use this url http://&lt;dns&gt;/data/&lt;token&gt; .</p>
+
+<h3>
+<a id="resize-a-document" class="anchor" href="#resize-a-document" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resize a document</h3>
+
+<p>Following the previous example</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> *  width x height in a string - Return a new token for the document resized</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$new_token</span> <span class="pl-k">=</span> <span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>resize(<span class="pl-s1"><span class="pl-pds">'</span>80x80<span class="pl-pds">'</span></span>);    </span></pre></div>
+
+<p>To access this file use this url http://&lt;dns&gt;/data/&lt;new_token&gt; .</p>
+
+<h2>
+<a id="by-dms-manager" class="anchor" href="#by-dms-manager" aria-hidden="true"><span class="octicon octicon-link"></span></a>By DMS manager</h2>
+
+<h3>
+<a id="add-and-get-a-document" class="anchor" href="#add-and-get-a-document" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add and get a document</h3>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$manager</span> <span class="pl-k">=</span> <span class="pl-vo">$this</span><span class="pl-k">-&gt;</span><span class="pl-vo">serviceManager</span><span class="pl-k">-&gt;</span>get(<span class="pl-s1"><span class="pl-pds">'</span>dms.manager<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * file exemple</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$image</span> <span class="pl-k">=</span> <span class="pl-s3">file_get_contents</span>(<span class="pl-c1">__DIR__</span> <span class="pl-k">.</span> <span class="pl-s1"><span class="pl-pds">'</span>/../../_file/gnu.png<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$document</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Dms\Document\</span><span class="pl-s3">Document</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$document</span><span class="pl-k">-&gt;</span>setDatas(<span class="pl-vo">$image</span>); </span>
+<span class="pl-s2"><span class="pl-vo">$document</span><span class="pl-k">-&gt;</span>setFormat(<span class="pl-s1"><span class="pl-pds">'</span>png<span class="pl-pds">'</span></span>);            </span>
+<span class="pl-s2"></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>loadDocument(<span class="pl-vo">$document</span>);  </span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>setFormat(<span class="pl-s1"><span class="pl-pds">'</span>jpg<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>setSize(<span class="pl-s1"><span class="pl-pds">'</span>80x80<span class="pl-pds">'</span></span>); </span>
+<span class="pl-s2"><span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>writeFile();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * Get the document</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$document</span> <span class="pl-k">=</span> <span class="pl-vo">$manager</span><span class="pl-k">-&gt;</span>getDocument();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">/*</span></span>
+<span class="pl-s2"><span class="pl-c"> * Return the document's token</span></span>
+<span class="pl-s2"><span class="pl-c"> */</span></span>
+<span class="pl-s2"><span class="pl-vo">$token</span> <span class="pl-k">=</span> <span class="pl-vo">$document</span><span class="pl-k">-&gt;</span>getId();</span></pre></div>
+
+<h2>
+<a id="access-by-url" class="anchor" href="#access-by-url" aria-hidden="true"><span class="octicon octicon-link"></span></a>Access by url</h2>
+
+<p>Document can be accessed by URL.</p>
+
+<p>Urls are formated like this :</p>
+
+<pre><code>http://mondomaine.com/&lt;KEY&gt;/&lt;TOKEN&gt;-&lt;SIZE&gt;[&lt;NUM-PAGE&gt;].&lt;FORMAT&gt;
+</code></pre>
+
+<p>Documents are automatically converted and created if they do not exist.  </p>
+
+<p><strong>KEY can be</strong> </p>
+
+<pre><code>data 
+size
+description
+format
+encoding
+</code></pre>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+
+<p><strong>Basic document</strong></p>
+
+<pre><code>http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138
+</code></pre>
+
+<p>This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138</p>
+
+<p><strong>Document with size convertion</strong></p>
+
+<pre><code>http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138-300x300
+</code></pre>
+
+<p>This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138 and converts it in 300x300 pixel</p>
+
+<p><strong>Document with format convertion</strong></p>
+
+<pre><code>http://mondomaine.com/data/2b5c466bf06d665b479e85c48ec733d235d138.pdf
+</code></pre>
+
+<p>This url displays document with token 2b5c466bf06d665b479e85c48ec733d235d138 and converts it in pdf</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
