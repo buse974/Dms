@@ -56,7 +56,10 @@ class Module implements ConfigProviderInterface
                         return $url;
                     },
                     '\Dms\Resize\Resize' => function ($sm) {
-                        return new \Dms\Resize\Resize(array('allow' => $sm->get('config')['dms-conf']['size_allowed']));
+                        return new \Dms\Resize\Resize(array(
+                        		'allow' => $sm->get('config')['dms-conf']['size_allowed'],
+                        		'active' => $sm->get('config')['dms-conf']['check_size_allowed']
+                        ));
                     },
                     '\Dms\Storage\Storage' => function ($sm) {
                          return new \Dms\Storage\Storage(array('path' => $sm->get('config')['dms-conf']['default_path']));

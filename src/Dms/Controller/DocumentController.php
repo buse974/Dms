@@ -58,6 +58,33 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    public function getDownloadAction()
+    {
+    	$document = null;
+    	
+    	if (null===($file=$this->params('file',null))) {
+    		throw new \Exception('file id does not exist');
+    	}
+    	
+    	try {
+    		$document = $this->getManagerDms()->loadDocument($file)->getDocument();
+    	} catch (\Exception $e) {
+    		$content = "file " . $file . " not found";	
+    	}
+    	
+    	if ($document) {
+    		$content = $document->getDatas();
+    		$headers = $this->getResponse()->getHeaders();
+    		$headers->addHeaderLine('Content-type','application/octet-stream');
+    		$headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
+    		$headers->addHeaderLine('Content-Length', strlen($content));
+    		$name = $document->getName();
+    		$headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
+    	}
+    	
+    	return $this->getResponse()->setContent($content);
+    }
+    
     public function getTypeAction()
     {
         $content = null;

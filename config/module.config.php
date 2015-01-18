@@ -2,8 +2,6 @@
 
 return array(
         'view_manager' => array(
-                'display_not_found_reason' => false,
-                'display_exceptions'       => false,
                 'strategies' => array(
                         'ViewJsonStrategy',
                 ),
@@ -20,6 +18,16 @@ return array(
                         ),
                     ),
                 ),
+            	'filedownload' => array(
+            		'type' => 'Segment',
+            		'options' => array(
+            			'route'    => '/download/:file',
+            			'defaults' => array(
+            					'controller' => 'ged_document',
+            					'action'     => 'getDownload',
+            			),
+            		),
+            	),
                 'filetype' => array(
                             'type' => 'Segment',
                             'options' => array(

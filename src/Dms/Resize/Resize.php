@@ -41,9 +41,18 @@ class Resize implements ServiceManagerAwareInterface
             throw new \Exception('No data binary or size define');
         }
 
+        $min=true;
         $arr_size = array();
         if (is_string($size)) {
-            $size = explode('x', $size);
+        	if(strpos($size, 'x')!==false) {
+        		$size = explode('x', $size);
+        	} elseif(strpos($size, 'm')!==false) {
+        		$size = explode('m', $size);
+        		$min=false;
+        	} else {
+        		$size = array($size);
+        	}
+            
             if ( isset($size[0]) && !empty($size[0])) {
                 $arr_size['width'] = $size[0];
             }
@@ -54,7 +63,7 @@ class Resize implements ServiceManagerAwareInterface
         }
 
         $size_allowed = $this->options->getAllow();
-        if (!empty($size_allowed) && !in_array($size, $size_allowed)) {
+        if ($this->options->getActive() && !empty($size_allowed) && !in_array($size, $size_allowed)) {
                 throw new \Exception('size conversion denied',3299);
         }
 
@@ -67,12 +76,18 @@ class Resize implements ServiceManagerAwareInterface
         $oriY = imagesy($img);
 
         if ( (!isset($size['width']) || $oriX < $size['width']) && ( !isset($size['height']) || $oriY < $size['height'])) {
-            throw new \Exception('Size is not valid');
+            return $this->data;
         }
 
         $rapportY = (isset($size['height'])) ? $oriY / $size['height'] : 0;
         $rapportX = (isset($size['width'])) ? $oriX / $size['width'] : 0;
-        $raportMax = ($rapportY > $rapportX ? $rapportY : $rapportX);
+        
+        if($min===false) {
+        	$raportMax = ($rapportY < $rapportX ? $rapportY : $rapportX);
+        } else {
+        	$raportMax = ($rapportY > $rapportX ? $rapportY : $rapportX);
+        }
+
         $optimalWidth = $oriX / $raportMax;
         $optimalHeight = $oriY / $raportMax;
         $imgResized = imagecreatetruecolor($optimalWidth, $optimalHeight);

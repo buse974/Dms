@@ -166,12 +166,12 @@ class Manager implements ServiceLocatorAwareInterface
                             $this->resize();
                             $this->size=null;
                         } catch (ConvertException $e) {
-                            throw new \Exception("Error format");
+                            throw new \Exception("Error format: " . $e->getMessage());
                         } catch (\Exception $e) {
-                               throw new \Exception("Error resize");
+                               throw new \Exception("Error resize: " . $e->getMessage());
                         }
                     } else {
-                           throw new \Exception("Error resize");
+                           throw new \Exception("Error resize: " . $e->getMessage());
                     }
                }
         }
