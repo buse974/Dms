@@ -3,7 +3,7 @@
 namespace BaseTest\Base\Base;
 
 use \PHPUnit_Framework_TestCase;
-use \Dms\Coding\Url\Url;
+use Dms\Coding\Url\Url;
 
 class UrlTest extends PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dms\Coding\Url\Coding\Url;
+namespace Dms\Coding\Url;
 
 use Dms\Coding\CodingInterface;
 use Zend\Http\Client;
