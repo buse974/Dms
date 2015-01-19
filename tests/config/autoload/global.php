@@ -6,6 +6,7 @@
 
 return array(
     'dms-conf' => array(
+    	'check_size_allowed' => false,
         'size_allowed' => array(
             array('width' => 300, 'height' => 200),
             array('width' => 300, 'height' => 300),

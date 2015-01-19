@@ -15,7 +15,7 @@ class ResizeTest extends PHPUnit_Framework_TestCase
     	$resize->setData($file);
     	
     	$this->assertEquals($resize->getResizeData('80x80'), $file_resize);
-    	$this->assertEquals($resize->getFormat(), 'jpeg');
+    	$this->assertEquals($resize->getFormat(), 'jpg');
     	$this->assertEquals($resize->getTypeMine(), 'image/jpeg');
     }
 }

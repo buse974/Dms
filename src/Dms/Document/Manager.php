@@ -169,7 +169,7 @@ class Manager implements ServiceLocatorAwareInterface
         	if($is_img && Resize::isCompatible($this->document->getFormat())) {
         		$this->resize();
         	} else { //convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
-        		if(!$is_img && $this->getPage == null) {
+        		if(!$is_img && $this->page == null) {
         			$this->setPage(1);
         		}
         		$this->setFormat('jpg');
