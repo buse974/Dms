@@ -92,13 +92,13 @@ class Manager implements ServiceLocatorAwareInterface
             $document = $document->getId();
         }
         if (!is_string($document)) {
-            throw new \Exception('Param is not id: ' . $id);
+            throw new \Exception('Param is not id: ' . $document);
         }
 
         $info = $this->getStorage()->read($document .'.inf');
 
         if (!$info) {
-            throw new \Exception('Not document: ' . $id);
+            throw new \Exception('Not document: ' . $document);
         }
 
         $this->document = unserialize($info);
