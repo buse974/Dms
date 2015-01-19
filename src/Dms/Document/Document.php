@@ -164,6 +164,9 @@ class Document implements Serializable
 	 */
     public function getFormat()
     {
+    	if(null === $this->format && null !== $this->type) {
+    		$this->format = MimeType::getExtensionByMimeType($this->type);
+    	}
         return $this->format;
     }
 

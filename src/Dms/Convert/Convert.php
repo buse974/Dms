@@ -14,7 +14,7 @@ class Convert
 
     /**
      *
-     * @param  string               $data
+     * @param string $data
      * @return \Dms\Convert\Convert
      */
     public function setData($data)
@@ -33,7 +33,7 @@ class Convert
 
     /**
      *
-     * @param  string               $format
+     * @param string $format
      * @return \Dms\Convert\Convert
      */
     public function setFormat($format)
@@ -45,7 +45,7 @@ class Convert
 
     /**
      *
-     * @param  string               $page
+     * @param string $page
      * @return \Dms\Convert\Convert
      */
     public function setPage($page)
@@ -58,9 +58,9 @@ class Convert
     /**
      * Convert datas Format IN > Format OUT
      *
-     * @param  string                    $data_in
-     * @param  string                    $format_in
-     * @param  string                    $format_out
+     * @param string $data_in
+     * @param string $format_in
+     * @param string $format_out
      * @throws ImagickException|Eception
      * @return string|NULL
      */
@@ -77,11 +77,11 @@ class Convert
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
             $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
-               $uniq_name = $this->tmp . uniqid('UNO');
-               $actual_file = sprintf('%s.%s',$uniq_name,($this->format) ?: 'tmp');
-               if (!is_dir($this->tmp)) {
-               		throw new \Exception('Directory tmp is not exist');
-               }
+            $uniq_name = $this->tmp . uniqid('UNO');
+            $actual_file = sprintf('%s.%s',$uniq_name,($this->format) ?: 'tmp');
+            if (!is_dir($this->tmp)) {
+            	throw new \Exception('Directory tmp is not exist');
+			}
             try {
                 $process = $this->getProcess();
                 $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
@@ -93,9 +93,8 @@ class Convert
                         ->setInput($this->data);
                 $datas = $process->run();
             }
-
-            $process = $this->getProcess();
-            $process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
+            //$process = $this->getProcess();
+            //$process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
         }
 
         return $datas;

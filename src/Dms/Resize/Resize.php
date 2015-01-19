@@ -12,7 +12,7 @@ class Resize implements ServiceManagerAwareInterface
      */
     protected $serviceManager;
     protected $data;
-    protected $formateur;
+    protected $format = 'jpg';
     protected $options;
 
     /**
@@ -26,6 +26,15 @@ class Resize implements ServiceManagerAwareInterface
     public function setData($data)
     {
         $this->data = $data;
+        
+        return $this;
+    }
+    
+    public function setFormat($format)
+    {
+    	$this->format = $format;
+    	
+    	return $this;
     }
 
     /**
@@ -94,13 +103,55 @@ class Resize implements ServiceManagerAwareInterface
         imagefill($imgResized,0,0,imagecolorallocate($imgResized,255,255,255));
         imagecopyresampled($imgResized, $img, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $oriX, $oriY);
 
+        switch ($this->format) {
+        	case 'gif':
+        		$fn = 'imagegif';
+        		break;
+        	case 'png':
+        		$fn = 'imagepng';
+        		break;
+        	case 'wbmp':
+        		$fn = 'imagewbmp';
+        		break;
+        	case 'jpg':
+        	case 'jpeg':
+        	default:
+        		$fn ='imagejpeg';
+        }
+        
         ob_start();
-        imagejpeg($imgResized, null, 85);
+        $fn($imgResized, null, 85);
         $imageFileContents = ob_get_contents();
         ob_end_clean();
 
     return $imageFileContents;
 
+    }
+    
+    public static function isCompatible($ext) {
+    	
+    	switch ($ext) {
+    		case 'gif':
+    			$t = IMG_GIF;
+    			break;
+    		case 'jpg':
+    		case 'jpeg':
+    			$t = IMG_JPG;
+    			break;
+    		case 'png':
+    			$t = IMG_PNG;
+    			break;
+    		case 'wbmp':
+    			$t = IMG_WBMP;
+    			break;
+    		case 'xmp':
+    			$t = IMG_XPM;
+    			break;
+    		default:
+    			return false;
+    	}
+    	
+    	return (imagetypes() & $t);
     }
 
     /**
@@ -119,6 +170,6 @@ class Resize implements ServiceManagerAwareInterface
 
     public function getFormat()
     {
-        return 'jpeg';
+        return $this->format;
     }
 }

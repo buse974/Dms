@@ -210,15 +210,10 @@ class MimeType
    'java' => 'text/plain',
    'java' => 'text/x-java-source',
    'jcm' => 'application/x-java-commerce',
-   'jfif' => 'image/jpeg',
    'jfif' => 'image/pjpeg',
-   'jfif-tbnl' => 'image/jpeg',
-   'jpe' => 'image/jpeg',
    'jpe' => 'image/pjpeg',
-   'jpeg' => 'image/jpeg',
    'jpeg' => 'image/pjpeg',
    'jpg' => 'image/jpeg',
-   'jpg' => 'image/pjpeg',
    'jps' => 'image/x-jps',
    'js' => 'application/x-javascript',
    'js' => 'application/javascript',
@@ -684,7 +679,6 @@ class MimeType
     public static function getExtensionByMimeType($mine)
     {
         $ext = null;
-
         $ar_mt = self::$ext_mime;
         $ar_ext = array_keys($ar_mt, $mine);
         if (count($ar_ext) > 0) {
