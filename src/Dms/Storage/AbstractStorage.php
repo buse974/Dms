@@ -75,5 +75,4 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
 
         return $this;
     }
-
 }

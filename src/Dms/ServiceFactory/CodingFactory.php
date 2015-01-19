@@ -18,7 +18,7 @@ class CodingFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        return (substr($requestedName, -6)==='Coding');
+        return (substr($requestedName, -6) === 'Coding');
     }
 
     /**
@@ -28,7 +28,7 @@ class CodingFactory implements AbstractFactoryInterface
      * @param $name
      * @param $requestedName
      * @return \Dms\ServiceFactory\CodingFactory
-    */
+     */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $factory = $serviceLocator->get(ucfirst($requestedName));
@@ -38,5 +38,4 @@ class CodingFactory implements AbstractFactoryInterface
 
         return $factory;
     }
-
 }

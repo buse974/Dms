@@ -10,28 +10,28 @@ use Dms\Exception\ForbiddenDocumentException;
 
 class Url implements CodingInterface
 {
-	/**
-	 * data for encoded or decoded
-	 *
-	 * @var string
-	 */
-    private $data;
-    
     /**
-     * 
+     * data for encoded or decoded
+     *
+     * @var string
+     */
+    private $data;
+
+    /**
+     *
      * @var string
      */
     private $name = self::CODING_URL_STR;
 
     /**
-     * 
+     *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
     private $adapter;
 
     /**
      * return string to encoded or decoded
-     * 
+     *
      * @return string
      */
     public function getData()
@@ -41,8 +41,8 @@ class Url implements CodingInterface
 
     /**
      * set uri to get
-     * 
-     * @param string $data
+     *
+     * @param  string              $data
      * @return \Dms\Coding\Url\Url
      */
     public function setData($data)
@@ -58,7 +58,7 @@ class Url implements CodingInterface
      */
     public function encode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -71,7 +71,7 @@ class Url implements CodingInterface
      */
     public function decode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -81,10 +81,10 @@ class Url implements CodingInterface
         $response = $client->send();
 
         if ($response->isClientError()) {
-            if ($response->getStatusCode()==403) {
+            if ($response->getStatusCode() == 403) {
                 throw new ForbiddenDocumentException($this->data);
             }
-            throw new ErrorDocumentException($response->getReasonPhrase(),$response->getStatusCode());
+            throw new ErrorDocumentException($response->getReasonPhrase(), $response->getStatusCode());
         }
         $data = $response->getBody();
 
@@ -99,31 +99,31 @@ class Url implements CodingInterface
     {
         return $this->name;
     }
-    
+
     /**
-     * Set adapter 
-     * 
-     * @param \Zend\Http\Client\Adapter\AdapterInterface $adapter
+     * Set adapter
+     *
+     * @param  \Zend\Http\Client\Adapter\AdapterInterface $adapter
      * @return \Dms\Coding\Url\Url
      */
     public function setAdapter($adapter)
     {
-    	$this->adapter = $adapter;
-    
-    	return $this;
+        $this->adapter = $adapter;
+
+        return $this;
     }
-    
+
     /**
      * return adapter
-     * 
+     *
      * @return \Zend\Http\Client\Adapter\AdapterInterface
      */
     public function getAdapter()
     {
-    	if (null === $this->adapter) {
-    		$this->adapter = new Socket();
-    	}
-    
-    	return $this->adapter;
+        if (null === $this->adapter) {
+            $this->adapter = new Socket();
+        }
+
+        return $this->adapter;
     }
 }

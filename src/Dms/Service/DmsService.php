@@ -79,5 +79,4 @@ class DmsService implements ServiceManagerAwareInterface
     {
         $this->service_manager = $service_manager;
     }
-
 }

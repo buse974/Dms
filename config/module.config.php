@@ -18,16 +18,16 @@ return array(
                         ),
                     ),
                 ),
-            	'filedownload' => array(
-            		'type' => 'Segment',
-            		'options' => array(
-            			'route'    => '/download/:file',
-            			'defaults' => array(
-            					'controller' => 'ged_document',
-            					'action'     => 'getDownload',
-            			),
-            		),
-            	),
+                'filedownload' => array(
+                    'type' => 'Segment',
+                    'options' => array(
+                        'route'    => '/download/:file',
+                        'defaults' => array(
+                                'controller' => 'ged_document',
+                                'action'     => 'getDownload',
+                        ),
+                    ),
+                ),
                 'filetype' => array(
                             'type' => 'Segment',
                             'options' => array(

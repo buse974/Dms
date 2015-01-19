@@ -8,13 +8,13 @@ class Convert
 {
     protected $data;
     protected $format;
-    protected $tmp='';
+    protected $tmp = '';
     protected $page;
     private $process;
 
     /**
      *
-     * @param string $data
+     * @param  string               $data
      * @return \Dms\Convert\Convert
      */
     public function setData($data)
@@ -33,7 +33,7 @@ class Convert
 
     /**
      *
-     * @param string $format
+     * @param  string               $format
      * @return \Dms\Convert\Convert
      */
     public function setFormat($format)
@@ -45,7 +45,7 @@ class Convert
 
     /**
      *
-     * @param string $page
+     * @param  string               $page
      * @return \Dms\Convert\Convert
      */
     public function setPage($page)
@@ -58,9 +58,9 @@ class Convert
     /**
      * Convert datas Format IN > Format OUT
      *
-     * @param string $data_in
-     * @param string $format_in
-     * @param string $format_out
+     * @param  string                    $data_in
+     * @param  string                    $format_in
+     * @param  string                    $format_out
      * @throws ImagickException|Eception
      * @return string|NULL
      */
@@ -70,26 +70,26 @@ class Convert
         try {
             $im = new \Imagick();
             $im->readimageblob($this->data);
-            if (null!==$this->page) {
+            if (null !== $this->page) {
                 $im->setiteratorindex($this->page);
             }
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
-            $page_opt = (null!==$this->page) ? sprintf("-e PageRange=%d-%d",$this->page,$this->page) : '';
-            $uniq_name = $this->tmp . uniqid('UNO');
-            $actual_file = sprintf('%s.%s',$uniq_name,($this->format) ?: 'tmp');
+            $page_opt = (null !== $this->page) ? sprintf("-e PageRange=%d-%d", $this->page, $this->page) : '';
+            $uniq_name = $this->tmp.uniqid('UNO');
+            $actual_file = sprintf('%s.%s', $uniq_name, ($this->format) ?: 'tmp');
             if (!is_dir($this->tmp)) {
-            	throw new \Exception('Directory tmp is not exist');
-			}
+                throw new \Exception('Directory tmp is not exist');
+            }
             try {
                 $process = $this->getProcess();
-                $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s",$actual_file,$page_opt,$format,$actual_file))
+                $process->setCmd(sprintf("cat - > %s && unoconv %s -f %s --stdout %s", $actual_file, $page_opt, $format, $actual_file))
                         ->setInput($this->data);
                 $datas = $process->run();
-              } catch (ProcessException $e) {
+            } catch (ProcessException $e) {
                 $process = $this->getProcess();
-                $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf",$actual_file,$page_opt,$actual_file,$format,$uniq_name))
+                $process->setCmd(sprintf("cat - > %s && unoconv %s -f pdf %s && unoconv -f %s --stdout %s.pdf", $actual_file, $page_opt, $actual_file, $format, $uniq_name))
                         ->setInput($this->data);
                 $datas = $process->run();
             }
@@ -99,21 +99,21 @@ class Convert
 
         return $datas;
     }
-    
+
     //@todo add interface
     public function setProcess($process)
     {
-    	$this->process = $process;
-    	 
-    	return $this;
+        $this->process = $process;
+
+        return $this;
     }
-    
+
     public function getProcess()
     {
-    	if(null === $this->process) {
-    		$this->process = new Process();
-    	}
-    
-    	return $this->process;
+        if (null === $this->process) {
+            $this->process = new Process();
+        }
+
+        return $this->process;
     }
 }

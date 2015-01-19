@@ -6,13 +6,13 @@ use Dms\Coding\CodingInterface;
 
 class Deflate implements CodingInterface
 {
-	/**
-	 * data for encoded or decoded
-	 *
-	 * @var string
-	 */
+    /**
+     * data for encoded or decoded
+     *
+     * @var string
+     */
     private $data;
-    
+
     /**
      *
      * @var string
@@ -21,7 +21,7 @@ class Deflate implements CodingInterface
 
     /**
      * return string to encoded or decoded
-     * 
+     *
      * @return string
      */
     public function getData()
@@ -31,8 +31,8 @@ class Deflate implements CodingInterface
 
     /**
      * set string to encoded or decoded
-     * 
-     * @param string $data
+     *
+     * @param  string                      $data
      * @return \Dms\Coding\Deflate\Deflate
      */
     public function setData($data)
@@ -48,7 +48,7 @@ class Deflate implements CodingInterface
      */
     public function encode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -61,7 +61,7 @@ class Deflate implements CodingInterface
      */
     public function decode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 

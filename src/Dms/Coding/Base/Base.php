@@ -6,22 +6,22 @@ use Dms\Coding\CodingInterface;
 
 class Base implements CodingInterface
 {
-	/**
-	 * data for encoded or decoded
-	 * 
-	 * @var string
-	 */
-    private $data;
-    
     /**
-     * 
+     * data for encoded or decoded
+     *
+     * @var string
+     */
+    private $data;
+
+    /**
+     *
      * @var string
      */
     private $name = self::CODING_BASE_STR;
 
     /**
      * return string to encoded or decoded
-     * 
+     *
      * @return string
      */
     public function getData()
@@ -31,8 +31,8 @@ class Base implements CodingInterface
 
     /**
      * set string to encoded or decoded
-     * 
-     * @param string $data
+     *
+     * @param  string                $data
      * @return \Dms\Coding\Base\Base
      */
     public function setData($data)
@@ -42,13 +42,13 @@ class Base implements CodingInterface
         return $this;
     }
 
-	/**
-	 * (non-PHPdoc)
-	 * @see \Dms\Coding\CodingInterface::encode()
-	 */
+    /**
+     * (non-PHPdoc)
+     * @see \Dms\Coding\CodingInterface::encode()
+     */
     public function encode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -61,13 +61,13 @@ class Base implements CodingInterface
      */
     public function decode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
-        $datPos = strpos($this->data , 'base64,');
-        if ($datPos!==false) {
-             $this->data = substr($this->data, $datPos+7);
+        $datPos = strpos($this->data, 'base64,');
+        if ($datPos !== false) {
+            $this->data = substr($this->data, $datPos+7);
         }
 
         return base64_decode($this->data);

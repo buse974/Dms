@@ -3,7 +3,7 @@
 namespace Dms\Document;
 
 use Zend\Validator\File\Sha1;
-use \Serializable;
+use Serializable;
 
 /**
  * class Document is a File Model
@@ -114,7 +114,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = $this->getHash() . (($this->size) ? '-'.$this->size : '') . (($this->page) ? '[' . $this->page . ']' : '') . (($this->format) ? '.'.$this->format : '');
+            $this->id = $this->getHash().(($this->size) ? '-'.$this->size : '').(($this->page) ? '['.$this->page.']' : '').(($this->format) ? '.'.$this->format : '');
         }
 
         return $this->id;
@@ -128,7 +128,7 @@ class Document implements Serializable
     public function setId($id)
     {
         $this->id = $id;
-        $this->is_write=false;
+        $this->is_write = false;
         preg_match('/(?P<hash>\w+)($|\-|\.)/', $id, $matches, PREG_OFFSET_CAPTURE);
         $this->hash = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0] : null;
 
@@ -158,15 +158,16 @@ class Document implements Serializable
     }
 
     /**
-	 * get format
-	 *
-	 * @return string
-	 */
+     * get format
+     *
+     * @return string
+     */
     public function getFormat()
     {
-    	if(null === $this->format && null !== $this->type) {
-    		$this->format = MimeType::getExtensionByMimeType($this->type);
-    	}
+        if (null === $this->format && null !== $this->type) {
+            $this->format = MimeType::getExtensionByMimeType($this->type);
+        }
+
         return $this->format;
     }
 
@@ -391,7 +392,7 @@ class Document implements Serializable
     protected function getHash()
     {
         if (!$this->hash) {
-            $this->hash = sha1($this->name . uniqid($_SERVER['REMOTE_ADDR'],true));
+            $this->hash = sha1($this->name.uniqid($_SERVER['REMOTE_ADDR'], true));
         }
 
         return $this->hash;
@@ -448,7 +449,7 @@ class Document implements Serializable
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),
                 'weight' => $this->getWeight(),
-                'format' => $this->getFormat()
+                'format' => $this->getFormat(),
         ));
     }
 

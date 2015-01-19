@@ -11,18 +11,18 @@ class Module implements ConfigProviderInterface
         return array(
                 'Zend\Loader\StandardAutoloader' => array(
                     'namespaces' => array(
-                            __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                            __NAMESPACE__ => __DIR__.'/src/'.__NAMESPACE__,
                         ),
                 ),
                   'Zend\Loader\ClassMapAutoloader' => array(
-                       __DIR__ . '/autoload_classmap.php',
+                       __DIR__.'/autoload_classmap.php',
                 ),
         );
     }
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        return include __DIR__.'/config/module.config.php';
     }
 
     public function getServiceConfig()
@@ -32,9 +32,9 @@ class Module implements ConfigProviderInterface
                 'dms.service'  => '\Dms\Service\DmsService',
                 'dms.manager'  => '\Dms\Document\Manager',
                 'Base64Coding' => 'BaseCoding',
-            	'UrlCoding'    => '\Dms\Coding\Url\Url',
-            	'Resize'       => '\Dms\Resize\Resize',
-            	'Storage'      => '\Dms\Storage\Storage'
+                'UrlCoding'    => '\Dms\Coding\Url\Url',
+                'Resize'       => '\Dms\Resize\Resize',
+                'Storage'      => '\Dms\Storage\Storage',
             ),
             'invokables' => array(
                 'BaseCoding'              => '\Dms\Coding\Base\Base',
@@ -44,7 +44,7 @@ class Module implements ConfigProviderInterface
                 '\Dms\Service\DmsService' => '\Dms\Service\DmsService',
             ),
             'abstract_factories' => array(
-                'Dms\ServiceFactory\CodingFactory'
+                'Dms\ServiceFactory\CodingFactory',
             ),
             'factories' => array(
                     '\Dms\Coding\Url\Url' => function ($sm) {
@@ -52,13 +52,13 @@ class Module implements ConfigProviderInterface
 
                         $url = new \Dms\Coding\Url\Url();
                         $url->setAdapter($config[$config['dms-conf']['adapter']]);
-                        
+
                         return $url;
                     },
                     '\Dms\Resize\Resize' => function ($sm) {
                         return new \Dms\Resize\Resize(array(
-                        		'allow' => $sm->get('config')['dms-conf']['size_allowed'],
-                        		'active' => $sm->get('config')['dms-conf']['check_size_allowed']
+                                'allow' => $sm->get('config')['dms-conf']['size_allowed'],
+                                'active' => $sm->get('config')['dms-conf']['check_size_allowed'],
                         ));
                     },
                     '\Dms\Storage\Storage' => function ($sm) {

@@ -2,7 +2,7 @@
 
 namespace Dms\Convert\Exception;
 
-use \Exception;
+use Exception;
 
 class ConvertException extends Exception
 {

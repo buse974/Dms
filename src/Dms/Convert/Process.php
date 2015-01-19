@@ -17,12 +17,12 @@ class Process
                 0 => array("pipe", "r"),
                 1 => array("pipe", "w"),
                 2 => array("pipe", "w"),
-                3 => array("pipe", "w")
+                3 => array("pipe", "w"),
         );
 
     public function setCmd($cmd)
     {
-        $this->cmd = $cmd . ' ; echo $? >&3';
+        $this->cmd = $cmd.' ; echo $? >&3';
 
         return $this;
     }
@@ -69,7 +69,7 @@ class Process
         $this->error_message = null;
         $this->output = null;
 
-        $process = proc_open($this->cmd, $this->descriptors, $pipes, $this->tmp,$this->env);
+        $process = proc_open($this->cmd, $this->descriptors, $pipes, $this->tmp, $this->env);
 
         if (is_resource($process)) {
             fwrite($pipes[0], $this->input);
@@ -83,8 +83,8 @@ class Process
             proc_close($process);
         }
 
-        if ($this->error_code!=0) {
-            throw new ProcessException($this->error_message,$this->error_code);
+        if ($this->error_code != 0) {
+            throw new ProcessException($this->error_message, $this->error_code);
         }
 
         return $this->output;
@@ -98,5 +98,4 @@ class Process
 
         return $this;
     }
-
 }

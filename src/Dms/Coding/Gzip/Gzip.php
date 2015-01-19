@@ -6,22 +6,22 @@ use Dms\Coding\CodingInterface;
 
 class Gzip implements CodingInterface
 {
-	/**
-	 * data for encoded or decoded
-	 *
-	 * @var string
-	 */
-	private $data;
-    
+    /**
+     * data for encoded or decoded
+     *
+     * @var string
+     */
+    private $data;
+
     /**
      *
      * @var string
      */
-	private $name = self::CODING_GZIP_STR;
+    private $name = self::CODING_GZIP_STR;
 
     /**
      * return string to encoded or decoded
-     * 
+     *
      * @return string
      */
     public function getData()
@@ -31,8 +31,8 @@ class Gzip implements CodingInterface
 
     /**
      * set string to encoded or decoded
-     * 
-     * @param string $data
+     *
+     * @param  string                $data
      * @return \Dms\Coding\Gzip\Gzip
      */
     public function setData($data)
@@ -48,7 +48,7 @@ class Gzip implements CodingInterface
      */
     public function encode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -61,7 +61,7 @@ class Gzip implements CodingInterface
      */
     public function decode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 

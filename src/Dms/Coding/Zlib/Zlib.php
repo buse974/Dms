@@ -12,7 +12,7 @@ class Zlib implements CodingInterface
      * @var string
      */
     private $data;
-    
+
     /**
      *
      * @var string
@@ -31,8 +31,8 @@ class Zlib implements CodingInterface
 
     /**
      * set string to encoded or decoded
-     * 
-     * @param string $data
+     *
+     * @param  string                $data
      * @return \Dms\Coding\Zlib\Zlib
      */
     public function setData($data)
@@ -48,7 +48,7 @@ class Zlib implements CodingInterface
      */
     public function encode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 
@@ -61,7 +61,7 @@ class Zlib implements CodingInterface
      */
     public function decode($data = null)
     {
-        if ($data!=null) {
+        if ($data != null) {
             $this->setData($data);
         }
 

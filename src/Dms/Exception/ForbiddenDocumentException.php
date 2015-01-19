@@ -9,14 +9,14 @@ class ForbiddenDocumentException extends \Exception
 
     public function __construct($message = null, $code = null, $previous = null)
     {
-        if ($message!==null) {
+        if ($message !== null) {
             $this->setMessage($message);
         }
     }
 
     public function setMessage($message)
     {
-        $this->message = $this->message . ' => ' . $message;
+        $this->message = $this->message.' => '.$message;
 
         return $this;
     }

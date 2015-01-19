@@ -6,7 +6,6 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Dms\Storage\StorageInterface;
 use Dms\Convert\Convert;
-use Dms\Convert\Exception\ConvertException;
 use Dms\Resize\Resize;
 
 class Manager implements ServiceLocatorAwareInterface
@@ -60,18 +59,18 @@ class Manager implements ServiceLocatorAwareInterface
             $document = $document->getId();
         }
         if (!is_string($document)) {
-            throw new \Exception('Param is not id: ' . $document);
+            throw new \Exception('Param is not id: '.$document);
         }
 
-        $info = $this->getStorage()->read($document .'.inf');
+        $info = $this->getStorage()->read($document.'.inf');
 
         if (!$info) {
-            throw new \Exception('Not document: ' . $document);
+            throw new \Exception('Not document: '.$document);
         }
 
         $this->document = unserialize($info);
 
-        $datas = $this->getStorage()->read($document . '.dat');
+        $datas = $this->getStorage()->read($document.'.dat');
         if ($datas) {
             $this->document->setDatas($datas);
         }
@@ -92,13 +91,13 @@ class Manager implements ServiceLocatorAwareInterface
             $document = $document->getId();
         }
         if (!is_string($document)) {
-            throw new \Exception('Param is not id: ' . $document);
+            throw new \Exception('Param is not id: '.$document);
         }
 
-        $info = $this->getStorage()->read($document .'.inf');
+        $info = $this->getStorage()->read($document.'.inf');
 
         if (!$info) {
-            throw new \Exception('Not document: ' . $document);
+            throw new \Exception('Not document: '.$document);
         }
 
         $this->document = unserialize($info);
@@ -148,7 +147,7 @@ class Manager implements ServiceLocatorAwareInterface
      *
      * @return \Dms\Document\Manager
      */
-    public function writeFile($id=null)
+    public function writeFile($id = null)
     {
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
@@ -156,90 +155,90 @@ class Manager implements ServiceLocatorAwareInterface
         if (null !== $id) {
             $this->getDocument()->setId($id);
         }
-        
+
         //si que resize
         //
         // si format n'est pas une image ou IN non compatible
         // convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
         // puis resize imagick avec format de sortie par default (jpeg)
-        if (null!== $this->getSize() && null===$this->getFormat()) {
-        	//si format n'est pas une image ou IN non compatible
-        	$obj_mime_type = new MimeType();
-        	$is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
-        	if($is_img && Resize::isCompatible($this->document->getFormat())) {
-        		$this->resize();
-        	} else { //convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
-        		if(!$is_img && $this->page == null) {
-        			$this->setPage(1);
-        		}
-        		$this->setFormat('jpg');
-        		$this->convert();
-        		$this->resize();
-        	}
+        if (null !== $this->getSize() && null === $this->getFormat()) {
+            //si format n'est pas une image ou IN non compatible
+            $obj_mime_type = new MimeType();
+            $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
+            if ($is_img && Resize::isCompatible($this->document->getFormat())) {
+                $this->resize();
+            } else { //convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
+                if (!$is_img && $this->page == null) {
+                    $this->setPage(1);
+                }
+                $this->setFormat('jpg');
+                $this->convert();
+                $this->resize();
+            }
         //si que format
         //
         // vérifier que le format n'est pas le même.
         // sinonuniconv (voir imagmagick selon le suport est quelité)
         //
-        } elseif (null=== $this->getSize() && null!==$this->getFormat()) {
-        	if($this->getFormat() !== $this->getDocument()->getFormat()) {
-        		$obj_mime_type = new MimeType();
-        		$is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
-        		if(!$is_img) {
-        			$this->setPage(1);
-        		}
-        		$this->convert();
-        	}
+        } elseif (null === $this->getSize() && null !== $this->getFormat()) {
+            if ($this->getFormat() !== $this->getDocument()->getFormat()) {
+                $obj_mime_type = new MimeType();
+                $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
+                if (!$is_img) {
+                    $this->setPage(1);
+                }
+                $this->convert();
+            }
         // si resize + format
-        } elseif (null!== $this->getSize() && null!==$this->getFormat()) {
-        	//   si format compatible IN et OUT avec imagik on utilise imagik pour les deux
-        	if(Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
-        		$this->resize();
-        	//   si format IN et OUT non compatible avec Imagick
-        	//		Convertion avec uniconv en format compatible Imagick (jpg)
-        	//      Resize avec imagick
-        	//      Convertion OUT avec uniconv
-        	} elseif (!Resize::isCompatible($this->format) && !Resize::isCompatible($this->getDocument()->getFormat())) {
-        		$tmp_fmt = $this->getFormat();
-        		$this->setFormat('jpg');
-        		$obj_mime_type = new MimeType();
-        		$is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
-        		if(!$is_img) {
-        			$this->setPage(1);
-        		}
-        		$this->convert();
-        		$this->resize();
-        		$this->setFormat($tmp_fmt);
-        		$this->convert();
-        	//   si que format IN compatible Imagick
-        	//      resize avec imagick (jpg)
-        	//      convertie uniconv
-        	} elseif (!Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
-        		$tmp_fmt = $this->getFormat();
-        		$this->setFormat('jpg');
-        		$this->resize();
-        		$this->setFormat($tmp_fmt);
-        		$this->convert();
-        	//   si que OUT compatible
-        	//      convertie uniconv en (jpeg)
-        	//      resize et format avec imagick
-        	} elseif (Resize::isCompatible($this->format) && !Resize::isCompatible($this->getDocument()->getFormat())) {
-        		$tmp_fmt = $this->getFormat();
-        		$this->setFormat('jpg');
-        		$obj_mime_type = new MimeType();
-        		$is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
-        		if(!$is_img) {
-        			$this->setPage(1);
-        		}
-        		$this->convert();
-        		$this->setFormat($tmp_fmt);
-        		$this->resize();
-        	}
+        } elseif (null !== $this->getSize() && null !== $this->getFormat()) {
+            //   si format compatible IN et OUT avec imagik on utilise imagik pour les deux
+            if (Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
+                $this->resize();
+            //   si format IN et OUT non compatible avec Imagick
+            //		Convertion avec uniconv en format compatible Imagick (jpg)
+            //      Resize avec imagick
+            //      Convertion OUT avec uniconv
+            } elseif (!Resize::isCompatible($this->format) && !Resize::isCompatible($this->getDocument()->getFormat())) {
+                $tmp_fmt = $this->getFormat();
+                $this->setFormat('jpg');
+                $obj_mime_type = new MimeType();
+                $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
+                if (!$is_img) {
+                    $this->setPage(1);
+                }
+                $this->convert();
+                $this->resize();
+                $this->setFormat($tmp_fmt);
+                $this->convert();
+            //   si que format IN compatible Imagick
+            //      resize avec imagick (jpg)
+            //      convertie uniconv
+            } elseif (!Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
+                $tmp_fmt = $this->getFormat();
+                $this->setFormat('jpg');
+                $this->resize();
+                $this->setFormat($tmp_fmt);
+                $this->convert();
+            //   si que OUT compatible
+            //      convertie uniconv en (jpeg)
+            //      resize et format avec imagick
+            } elseif (Resize::isCompatible($this->format) && !Resize::isCompatible($this->getDocument()->getFormat())) {
+                $tmp_fmt = $this->getFormat();
+                $this->setFormat('jpg');
+                $obj_mime_type = new MimeType();
+                $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
+                if (!$is_img) {
+                    $this->setPage(1);
+                }
+                $this->convert();
+                $this->setFormat($tmp_fmt);
+                $this->resize();
+            }
         }
-        
-        $this->getStorage()->write($this->document->getDatas(), $this->document->getId() .'.dat',$this->document->getSupport());
+
+        $this->getStorage()->write($this->document->getDatas(), $this->document->getId().'.dat', $this->document->getSupport());
         $this->document->setSupport(Document::SUPPORT_FILE_STR);
-        $this->getStorage()->write(serialize($this->document), $this->document->getId() .'.inf');
+        $this->getStorage()->write(serialize($this->document), $this->document->getId().'.inf');
         $this->document->setIsWrite(true);
 
         return $this;
@@ -257,7 +256,7 @@ class Manager implements ServiceLocatorAwareInterface
             throw new \Exception('Document does not exist');
         }
 
-        if ($this->document->getEncoding()!=Document::TYPE_BINARY_STR && $this->document->getSupport()==Document::SUPPORT_DATA_STR) {
+        if ($this->document->getEncoding() != Document::TYPE_BINARY_STR && $this->document->getSupport() == Document::SUPPORT_DATA_STR) {
             $this->document->setDatas($this->getEncDec($this->document->getEncoding())->decode($this->document->getDatas()));
             $this->document->setEncoding(Document::TYPE_BINARY_STR);
         }
@@ -283,7 +282,6 @@ class Manager implements ServiceLocatorAwareInterface
         $this->document->setPage($this->getPage());
 
         return $this;
-        
     }
 
     /**
@@ -370,7 +368,7 @@ class Manager implements ServiceLocatorAwareInterface
      */
     protected function getEncDec($enc)
     {
-        return $this->getServiceLocator()->get($enc . 'Coding');
+        return $this->getServiceLocator()->get($enc.'Coding');
     }
 
     /**

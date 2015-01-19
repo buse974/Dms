@@ -1,6 +1,6 @@
 <?php
 
-    namespace Dms\Controller;
+namespace Dms\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Dms\Model\Dms;
@@ -14,7 +14,7 @@ class DocumentController extends AbstractActionController
     {
         $document = null;
 
-        if (null===($file=$this->params('file',null))) {
+        if (null === ($file = $this->params('file', null))) {
             throw new \Exception('file id does not exist');
         }
 
@@ -22,7 +22,7 @@ class DocumentController extends AbstractActionController
             $document = $this->getManagerDms()->loadDocument($file)->getDocument();
         } catch (\Exception $e) {
             try {
-                preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE );
+                preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
 
                 $this->getManagerDms()->loadDocument($matches['id'][0])->getDocument();
 
@@ -36,7 +36,7 @@ class DocumentController extends AbstractActionController
                     exit();
                 }
             } catch (\Exception $e) {
-                $content = "file " . $file . " not found";
+                $content = "file ".$file." not found";
             }
         }
 
@@ -45,14 +45,14 @@ class DocumentController extends AbstractActionController
             $headers = $this->getResponse()->getHeaders();
 
             if (null !== $document->getType()) {
-                $headers->addHeaderLine('Content-type',$document->getType());
+                $headers->addHeaderLine('Content-type', $document->getType());
             } else {
-                $headers->addHeaderLine('Content-type','application/octet-stream');
+                $headers->addHeaderLine('Content-type', 'application/octet-stream');
             }
             $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
             $name = $document->getName();
-            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
+            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
         }
 
         return $this->getResponse()->setContent($content);
@@ -60,36 +60,36 @@ class DocumentController extends AbstractActionController
 
     public function getDownloadAction()
     {
-    	$document = null;
-    	
-    	if (null===($file=$this->params('file',null))) {
-    		throw new \Exception('file id does not exist');
-    	}
-    	
-    	try {
-    		$document = $this->getManagerDms()->loadDocument($file)->getDocument();
-    	} catch (\Exception $e) {
-    		$content = "file " . $file . " not found";	
-    	}
-    	
-    	if ($document) {
-    		$content = $document->getDatas();
-    		$headers = $this->getResponse()->getHeaders();
-    		$headers->addHeaderLine('Content-type','application/octet-stream');
-    		$headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
-    		$headers->addHeaderLine('Content-Length', strlen($content));
-    		$name = $document->getName();
-    		$headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file . '.' . $document->getFormat() : $name)));
-    	}
-    	
-    	return $this->getResponse()->setContent($content);
+        $document = null;
+
+        if (null === ($file = $this->params('file', null))) {
+            throw new \Exception('file id does not exist');
+        }
+
+        try {
+            $document = $this->getManagerDms()->loadDocument($file)->getDocument();
+        } catch (\Exception $e) {
+            $content = "file ".$file." not found";
+        }
+
+        if ($document) {
+            $content = $document->getDatas();
+            $headers = $this->getResponse()->getHeaders();
+            $headers->addHeaderLine('Content-type', 'application/octet-stream');
+            $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
+            $headers->addHeaderLine('Content-Length', strlen($content));
+            $name = $document->getName();
+            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
+        }
+
+        return $this->getResponse()->setContent($content);
     }
-    
+
     public function getTypeAction()
     {
         $content = null;
 
-        if (null!==($file=$this->params('file',null))) {
+        if (null !== ($file = $this->params('file', null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {
                 $type = $m_document->getType();
@@ -104,7 +104,7 @@ class DocumentController extends AbstractActionController
     {
         $content = null;
 
-        if (null!==($file=$this->params('file',null))) {
+        if (null !== ($file = $this->params('file', null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {
                 $content = $m_document->getName();
@@ -118,7 +118,7 @@ class DocumentController extends AbstractActionController
     {
         $content = null;
 
-        if (null!==($file=$this->params('file',null))) {
+        if (null !== ($file = $this->params('file', null))) {
             $m_document = $this->getManagerDms()->loadDocumentInfo($file)->getDocument();
             if ($m_document) {
                 $content = $m_document->getDescription();
@@ -146,13 +146,13 @@ class DocumentController extends AbstractActionController
         if ($request->isPost()) {
             $files = $request->getFiles()->toArray();
             foreach ($files as $name_file => $file) {
-                    $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
-                    $document['coding'] = 'binary';
-                    $document['data']   = $file;
-                    $document['name']   = $file['name'];
-                    $document['type']   = $file['type'];
-                    $doc = $this->getServiceDms()->add($document);
-                    $ret[$name_file] = $doc;
+                $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
+                $document['coding'] = 'binary';
+                $document['data']   = $file;
+                $document['name']   = $file['name'];
+                $document['type']   = $file['type'];
+                $doc = $this->getServiceDms()->add($document);
+                $ret[$name_file] = $doc;
             }
         }
 

@@ -26,15 +26,15 @@ class Resize implements ServiceManagerAwareInterface
     public function setData($data)
     {
         $this->data = $data;
-        
+
         return $this;
     }
-    
+
     public function setFormat($format)
     {
-    	$this->format = $format;
-    	
-    	return $this;
+        $this->format = $format;
+
+        return $this;
     }
 
     /**
@@ -50,22 +50,22 @@ class Resize implements ServiceManagerAwareInterface
             throw new \Exception('No data binary or size define');
         }
 
-        $min=true;
+        $min = true;
         $arr_size = array();
         if (is_string($size)) {
-        	if(strpos($size, 'x')!==false) {
-        		$size = explode('x', $size);
-        	} elseif(strpos($size, 'm')!==false) {
-        		$size = explode('m', $size);
-        		$min=false;
-        	} else {
-        		$size = array($size);
-        	}
-            
-            if ( isset($size[0]) && !empty($size[0])) {
+            if (strpos($size, 'x') !== false) {
+                $size = explode('x', $size);
+            } elseif (strpos($size, 'm') !== false) {
+                $size = explode('m', $size);
+                $min = false;
+            } else {
+                $size = array($size);
+            }
+
+            if (isset($size[0]) && !empty($size[0])) {
                 $arr_size['width'] = $size[0];
             }
-            if ( isset($size[1]) && !empty($size[1])) {
+            if (isset($size[1]) && !empty($size[1])) {
                 $arr_size['height'] = $size[1];
             }
             $size = $arr_size;
@@ -73,7 +73,7 @@ class Resize implements ServiceManagerAwareInterface
 
         $size_allowed = $this->options->getAllow();
         if ($this->options->getActive() && !empty($size_allowed) && !in_array($size, $size_allowed)) {
-                throw new \Exception('size conversion denied',3299);
+            throw new \Exception('size conversion denied', 3299);
         }
 
         $img = @imagecreatefromstring($this->data);
@@ -84,74 +84,73 @@ class Resize implements ServiceManagerAwareInterface
         $oriX = imagesx($img);
         $oriY = imagesy($img);
 
-        if ( (!isset($size['width']) || $oriX < $size['width']) && ( !isset($size['height']) || $oriY < $size['height'])) {
+        if ((!isset($size['width']) || $oriX < $size['width']) && (!isset($size['height']) || $oriY < $size['height'])) {
             return $this->data;
         }
 
         $rapportY = (isset($size['height'])) ? $oriY / $size['height'] : 0;
         $rapportX = (isset($size['width'])) ? $oriX / $size['width'] : 0;
-        
-        if($min===false) {
-        	$raportMax = ($rapportY < $rapportX ? $rapportY : $rapportX);
+
+        if ($min === false) {
+            $raportMax = ($rapportY < $rapportX ? $rapportY : $rapportX);
         } else {
-        	$raportMax = ($rapportY > $rapportX ? $rapportY : $rapportX);
+            $raportMax = ($rapportY > $rapportX ? $rapportY : $rapportX);
         }
 
         $optimalWidth = $oriX / $raportMax;
         $optimalHeight = $oriY / $raportMax;
         $imgResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
-        imagefill($imgResized,0,0,imagecolorallocate($imgResized,255,255,255));
+        imagefill($imgResized, 0, 0, imagecolorallocate($imgResized, 255, 255, 255));
         imagecopyresampled($imgResized, $img, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $oriX, $oriY);
 
         switch ($this->format) {
-        	case 'gif':
-        		$fn = 'imagegif';
-        		break;
-        	case 'png':
-        		$fn = 'imagepng';
-        		break;
-        	case 'wbmp':
-        		$fn = 'imagewbmp';
-        		break;
-        	case 'jpg':
-        	case 'jpeg':
-        	default:
-        		$fn ='imagejpeg';
+            case 'gif':
+                $fn = 'imagegif';
+                break;
+            case 'png':
+                $fn = 'imagepng';
+                break;
+            case 'wbmp':
+                $fn = 'imagewbmp';
+                break;
+            case 'jpg':
+            case 'jpeg':
+            default:
+                $fn = 'imagejpeg';
         }
-        
+
         ob_start();
         $fn($imgResized, null, 85);
         $imageFileContents = ob_get_contents();
         ob_end_clean();
 
-    return $imageFileContents;
-
+        return $imageFileContents;
     }
-    
-    public static function isCompatible($ext) {
-    	
-    	switch ($ext) {
-    		case 'gif':
-    			$t = IMG_GIF;
-    			break;
-    		case 'jpg':
-    		case 'jpeg':
-    			$t = IMG_JPG;
-    			break;
-    		case 'png':
-    			$t = IMG_PNG;
-    			break;
-    		case 'wbmp':
-    			$t = IMG_WBMP;
-    			break;
-    		case 'xmp':
-    			$t = IMG_XPM;
-    			break;
-    		default:
-    			return false;
-    	}
-    	
-    	return (imagetypes() & $t);
+
+    public static function isCompatible($ext)
+    {
+        switch ($ext) {
+            case 'gif':
+                $t = IMG_GIF;
+                break;
+            case 'jpg':
+            case 'jpeg':
+                $t = IMG_JPG;
+                break;
+            case 'png':
+                $t = IMG_PNG;
+                break;
+            case 'wbmp':
+                $t = IMG_WBMP;
+                break;
+            case 'xmp':
+                $t = IMG_XPM;
+                break;
+            default:
+                return false;
+        }
+
+        return (imagetypes() & $t);
     }
 
     /**

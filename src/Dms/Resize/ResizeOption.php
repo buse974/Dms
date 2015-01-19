@@ -24,14 +24,14 @@ class ResizeOption extends AbstractOptions
 
         return $this->allow;
     }
-    
+
     public function setActive($active)
     {
         $this->active = $active;
-        
+
         return $this;
     }
-     
+
     public function getActive()
     {
         return $this->active;
