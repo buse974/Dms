@@ -1,12 +1,12 @@
 <?php
 
-namespace Dms\Coding\Url;
+namespace Dms\Coding\Url\Coding\Url;
 
 use Dms\Coding\CodingInterface;
 use Zend\Http\Client;
 use Zend\Http\Client\Adapter\Socket;
-use Dms\Exception\ErrorDocumentException;
-use Dms\Exception\ForbiddenDocumentException;
+use Dms\Coding\Url\Exception\ErrorDocumentException;
+use Dms\Coding\Url\Exception\ForbiddenDocumentException;
 
 class Url implements CodingInterface
 {

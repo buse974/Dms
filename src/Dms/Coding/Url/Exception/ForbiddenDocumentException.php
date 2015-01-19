@@ -1,6 +1,6 @@
 <?php
 
-namespace Dms\Exception;
+namespace Dms\Coding\Url\Exception;
 
 class ForbiddenDocumentException extends \Exception
 {
