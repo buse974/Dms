@@ -98,17 +98,17 @@ class Document implements Serializable
     protected $weight;
 
     /**
-     * 
+     *
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
-    
+
     /**
-     * 
+     *
      * @var bool
      */
     protected $is_read = false;
-    
+
     /**
      * Constructor
      * @param String $encoding
@@ -167,9 +167,9 @@ class Document implements Serializable
      */
     public function getDatas($print = null)
     {
-    	if((null === $this->datas && null !== $this->getStorage()) || $print !== null) {
-    		$this->getStorage()->read($this, 'datas', $print);
-    	}
+        if ((null === $this->datas && null !== $this->getStorage()) || $print !== null) {
+            $this->getStorage()->read($this, 'datas', $print);
+        }
 
         return $this->datas;
     }
@@ -181,10 +181,10 @@ class Document implements Serializable
      */
     public function getFormat()
     {
-    	if(null === $this->format && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('format');
-    	}
-    	
+        if (null === $this->format && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('format');
+        }
+
         if (null === $this->format && null !== $this->type) {
             $this->format = MimeType::getExtensionByMimeType($this->type);
         }
@@ -228,10 +228,10 @@ class Document implements Serializable
      */
     public function getType()
     {
-    	if(null === $this->type && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('type');
-    	}
-    	
+        if (null === $this->type && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('type');
+        }
+
         return $this->type;
     }
 
@@ -291,10 +291,10 @@ class Document implements Serializable
      */
     public function getEncoding()
     {
-    	if(null === $this->encoding && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('encoding');
-    	}
-    	
+        if (null === $this->encoding && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('encoding');
+        }
+
         if (null === $this->encoding) {
             $this->encoding = self::TYPE_BINARY_STR;
         }
@@ -322,10 +322,10 @@ class Document implements Serializable
      */
     public function getName()
     {
-    	if(null === $this->name && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('name');
-    	}
-    	
+        if (null === $this->name && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('name');
+        }
+
         return $this->name;
     }
 
@@ -349,10 +349,10 @@ class Document implements Serializable
      */
     public function getDescription()
     {
-    	if(null === $this->description && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('description');
-    	}
-    	
+        if (null === $this->description && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('description');
+        }
+
         return $this->description;
     }
 
@@ -376,10 +376,10 @@ class Document implements Serializable
      */
     public function getSize()
     {
-    	if(null === $this->size && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('size');
-    	}
-    	
+        if (null === $this->size && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('size');
+        }
+
         return $this->size;
     }
 
@@ -418,10 +418,10 @@ class Document implements Serializable
      */
     public function getSupport()
     {
-    	if(null === $this->support && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('support');
-    	}
-    	
+        if (null === $this->support && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('support');
+        }
+
         if (null === $this->support) {
             $this->support = self::SUPPORT_DATA_STR;
         }
@@ -475,10 +475,10 @@ class Document implements Serializable
      */
     public function getWeight()
     {
-    	if(null === $this->weight && null !== $this->getStorage() && $this->is_read===false) {
-    		$this->read('weight');
-    	}
-    	
+        if (null === $this->weight && null !== $this->getStorage() && $this->is_read === false) {
+            $this->read('weight');
+        }
+
         return  $this->weight;
     }
 
@@ -521,18 +521,18 @@ class Document implements Serializable
         $this->setFormat((isset($datas['format'])) ? $datas['format'] : null);
         $this->setIsWrite(true);
     }
-    
+
     public function read($type)
     {
-    	$this->getStorage()->read($this,$type);
-    	$this->is_read = true;
-    	
-    	return $this;
+        $this->getStorage()->read($this, $type);
+        $this->is_read = true;
+
+        return $this;
     }
-    
+
     public function exist()
     {
-    	return $this->getStorage()->exist($this);
+        return $this->getStorage()->exist($this);
     }
     /**
      * Get storage
@@ -554,9 +554,9 @@ class Document implements Serializable
 
         return $this;
     }
-    
+
     public function write()
     {
-    	$this->getStorage()->write($this);
+        $this->getStorage()->write($this);
     }
 }
