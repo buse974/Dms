@@ -262,10 +262,6 @@ class Manager implements ServiceLocatorAwareInterface
     private function convert()
     {
         $convert = new Convert();
-        syslog(1, 'CONVERT');
-        syslog(1, $this->document->getId());
-        syslog(1, strlen($this->document->getDatas()));
-        syslog(1, 'CONVERT');
         $convert->setData($this->document->getDatas())
                 ->setFormat($this->document->getFormat())
                 ->setTmp($this->getServiceLocator()->get('Config')['dms-conf']['convert']['tmp'])

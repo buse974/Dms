@@ -21,7 +21,6 @@ class DocumentController extends AbstractActionController
         try {
             $document = $this->getManagerDms()->loadDocument($file)->getDocument();
         } catch (\Exception $e) {
-            syslog(1, $e->getMessage());
             try {
                 preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
                 $this->getManagerDms()->loadDocument($matches['id'][0]);

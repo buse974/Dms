@@ -57,13 +57,9 @@ class Storage extends AbstractStorage
         $name = $document->getId().'.inf';
         $filename = $this->options->getPath().'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
 
-        syslog(1, $name);
         if (!file_exists($filename)) {
-            syslog(1, $filename.' : read does not exist');
             $filename = $this->options->getPath().'/'.$name;
             if (!file_exists($filename)) {
-                syslog(1, $filename.' : read does not exist');
-
                 return;
             }
         }
