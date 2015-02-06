@@ -15,41 +15,52 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testCanGetData()
     {
-        $this->dispatch('/data/2b5c466bf06d665b479e85c48ec733d235d13884','GET');
-
-        $this->assertControllerName('ged_document');
-        $this->assertActionName('get');
-        $this->assertResponseStatusCode(200);
-
-        $this->assertEquals(147186, strlen($this->getResponse()->getContent()));
+    	$funct = function($content) {
+    		$this->assertControllerName('ged_document');
+    		$this->assertActionName('get');
+    		$this->assertResponseStatusCode(200);
+    		$this->assertEquals(147186, strlen($content));
+    		
+    		return true;
+    	};
+    	
+    	ob_start($funct);
+        $this->dispatch('/data/e2bd813816c305a8a22e03c95d2ee8fd3f7bc710','GET');
+        ob_flush();
+        ob_clean();
     }
 
+    
     public function testCanNotGetData()
     {
-        $this->dispatch('/data/2b5c466bf06d665b479e85c48ec733d235d138null','GET');
-
+        $this->dispatch('/data/e2bd813816c305a8a22e03c95d2ee8fd3f7bc71012','GET');
+        
         $this->assertControllerName('ged_document');
         $this->assertActionName('get');
         $this->assertResponseStatusCode(200);
 
-        $this->assertEquals("file 2b5c466bf06d665b479e85c48ec733d235d138null not found", $this->getResponse()->getContent());
+        $this->assertEquals("Param is not id: e2bd813816c305a8a22e03c95d2ee8fd3f7bc71012", $this->getResponse()->getContent());
     }
 
     public function testCanGetType()
     {
-        $this->dispatch('/type/2b5c466bf06d665b479e85c48ec733d235d13884','GET');
+        $this->dispatch('/type/e2bd813816c305a8a22e03c95d2ee8fd3f7bc710','GET');
 
         $this->assertControllerName('ged_document');
         $this->assertActionName('gettype');
         $this->assertResponseStatusCode(200);
-        $this->assertEquals("png", $this->getResponse()->getContent());
+        $this->assertEquals("image/png", $this->getResponse()->getContent());
     }
 
     public function testCanGetName()
     {
-        $this->dispatch('/name/2b5c466bf06d665b479e85c48ec733d235d13884','GET');
+        $this->dispatch('/name/e2bd813816c305a8a22e03c95d2ee8fd3f7bc710','GET');
 
         $this->assertControllerName('ged_document');
         $this->assertActionName('getname');
@@ -60,7 +71,7 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
 
     public function testCanGetDescription()
     {
-        $this->dispatch('/description/2b5c466bf06d665b479e85c48ec733d235d13884','GET');
+        $this->dispatch('/description/e2bd813816c305a8a22e03c95d2ee8fd3f7bc710','GET');
 
         $this->assertControllerName('ged_document');
         $this->assertActionName('getdescription');

@@ -45,39 +45,7 @@ class Manager implements ServiceLocatorAwareInterface
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
-
-    /**
-     *  Load document
-     *
-     * @param  string|\Dms\Document\Document $document
-     * @throws \Exception
-     * @return \Dms\Document\Manager
-     */
-    public function loadDocument($document)
-    {
-        if ($document instanceof Document && is_string($document->getId())) {
-            $document = $document->getId();
-        }
-        if (!is_string($document)) {
-            throw new \Exception('Param is not id: '.$document);
-        }
-
-        $info = $this->getStorage()->read($document.'.inf');
-
-        if (!$info) {
-            throw new \Exception('Not document: '.$document);
-        }
-
-        $this->document = unserialize($info);
-
-        $datas = $this->getStorage()->read($document.'.dat');
-        if ($datas) {
-            $this->document->setDatas($datas);
-        }
-
-        return $this;
-    }
-
+    
     /**
      * Load document info
      *
@@ -85,22 +53,20 @@ class Manager implements ServiceLocatorAwareInterface
      * @throws \Exception
      * @return \Dms\Document\Manager
      */
-    public function loadDocumentInfo($document)
+    public function loadDocument($document)
     {
-        if ($document instanceof Document && is_string($document->getId())) {
-            $document = $document->getId();
+    	$this->document = $document;
+        if (!$document instanceof Document && is_string($document)) {
+           	$this->document = new Document();
+        	$this->document->setId($document);
         }
-        if (!is_string($document)) {
+        
+        $this->document->setStorage($this->getStorage());
+        
+        if (($this->document instanceof Document && !is_string($this->document->getId())) || !$this->document->exist()) {
+        	$this->clear();
             throw new \Exception('Param is not id: '.$document);
         }
-
-        $info = $this->getStorage()->read($document.'.inf');
-
-        if (!$info) {
-            throw new \Exception('Not document: '.$document);
-        }
-
-        $this->document = unserialize($info);
 
         return $this;
     }
@@ -138,6 +104,8 @@ class Manager implements ServiceLocatorAwareInterface
                        ->setSize((isset($document['size'])) ? $document['size'] : null)
                        ->setFormat((isset($document['format'])) ? $document['format'] : null)
                        ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
+        
+        $this->document->setStorage($this->getStorage());
 
         return $this;
     }
@@ -149,13 +117,16 @@ class Manager implements ServiceLocatorAwareInterface
      */
     public function writeFile($id = null)
     {
+    	// GET DATA AFTER UPDATE ID
+    	$this->getDocument()->getDatas();
+    	
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
         if (null !== $id) {
             $this->getDocument()->setId($id);
         }
-
+  
         //si que resize
         //
         // si format n'est pas une image ou IN non compatible
@@ -236,10 +207,11 @@ class Manager implements ServiceLocatorAwareInterface
             }
         }
 
-        $this->getStorage()->write($this->document->getDatas(), $this->document->getId().'.dat', $this->document->getSupport());
-        $this->document->setSupport(Document::SUPPORT_FILE_STR);
-        $this->getStorage()->write(serialize($this->document), $this->document->getId().'.inf');
-        $this->document->setIsWrite(true);
+        if(null == $this->document->getStorage()) {
+        	$this->document->setStorage($this->getStorage());
+        }
+        
+        $this->document->write();
 
         return $this;
     }
@@ -290,6 +262,10 @@ class Manager implements ServiceLocatorAwareInterface
     private function convert()
     {
         $convert = new Convert();
+        syslog(1, 'CONVERT');
+        syslog(1, $this->document->getId());
+        syslog(1, strlen($this->document->getDatas()));
+        syslog(1, 'CONVERT');
         $convert->setData($this->document->getDatas())
                 ->setFormat($this->document->getFormat())
                 ->setTmp($this->getServiceLocator()->get('Config')['dms-conf']['convert']['tmp'])

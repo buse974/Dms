@@ -26,7 +26,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     public function testCanGetDocumentById()
     {
         $manager = bootstrap::getServiceManager()->get('dms.manager');
-        $m_document = $manager->loadDocument('2b5c466bf06d665b479e85c48ec733d235d13884')->getDocument();
+        $m_document = $manager->loadDocument('e2bd813816c305a8a22e03c95d2ee8fd3f7bc710')->getDocument();
 
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
         $this->assertNotNull($m_document->getDatas());
@@ -55,17 +55,6 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $m_document = $manager->getDocument();
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
         $this->assertNotEquals($old_document_id, $m_document->getId());
-    }
-
-    public function testCanGetInfoDocumentWithoutData()
-    {
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
-        $m_document = $manager->loadDocumentInfo('2b5c466bf06d665b479e85c48ec733d235d13884')->getDocument();
-
-        $this->assertInstanceOf("Dms\Document\Document", $m_document);
-        $this->assertNull($m_document->getDatas());
-        $this->assertNotNull($m_document->getId());
-        $this->assertNotNull($m_document->getSupport());
     }
 
     public function testCanRecordDocument()

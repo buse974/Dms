@@ -6,6 +6,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 interface StorageInterface extends ServiceManagerAwareInterface
 {
-    public function write($data, $token, $enc);
-    public function read($token);
+    public function write(\Dms\Document\Document $document);
+    public function exist(\Dms\Document\Document $document);
+    public function read(\Dms\Document\Document &$document, $type = null, $print=false);
 }

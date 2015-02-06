@@ -3,12 +3,14 @@
 namespace Dms\Storage;
 
 use \PHPUnit_Framework_TestCase;
+use Dms\Document\Document;
 
 class StorageTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
-        @unlink(__DIR__ . '/../../_upload/pr/fx/filename');
+        @unlink(__DIR__ . '/../../_upload/pr/fx/filename.dat');
+        @unlink(__DIR__ . '/../../_upload/pr/fx/filename.inf');
         @rmdir(__DIR__ . '/../../_upload/pr/fx');
         @rmdir(__DIR__ . '/../../_upload/pr');
     }
@@ -18,19 +20,28 @@ class StorageTest extends PHPUnit_Framework_TestCase
         $path = __DIR__ . '/../../_upload/';
         $data = 'data write binary support data';
         $st = new Storage(array('path' => $path));
-        $res = $st->write($data, 'prfxfilename');
-
-        $this->assertTrue($res===strlen($data));
-        $this->assertFileExists($path . 'pr/fx/filename');
-        $this->assertEquals(file_get_contents($path . 'pr/fx/filename'),$data);
+        
+        $doc = new Document();
+        $doc->setId('prfxfilename');
+        $doc->setDatas($data);
+        
+        $res = $st->write($doc);
+        $this->assertFileExists($path . 'pr/fx/filename.dat');
+        $this->assertTrue(filesize($path . 'pr/fx/filename.dat')===strlen($data));
+        $this->assertFileExists($path . 'pr/fx/filename.inf');
+        $this->assertEquals(file_get_contents($path . 'pr/fx/filename.dat'),$data);
     }
 
     public function testCanRead()
     {
         $path = __DIR__ . '/../../_upload';
         $st = new Storage(array('path' => $path));
-        $file = $st->read('2b5c466bf06d665b479e85c48ec733d235d13884.inf');
+        
+        $doc = new Document();
+        $doc->setId('e2bd813816c305a8a22e03c95d2ee8fd3f7bc710');
+        
+        $file = $st->read($doc, 'fdff');
 
-        $this->assertEquals(file_get_contents(__DIR__ . '/../../_upload/2b/5c/466bf06d665b479e85c48ec733d235d13884.inf'),$file);
+        $this->assertEquals(file_get_contents(__DIR__ . '/../../_upload/e2/bd/813816c305a8a22e03c95d2ee8fd3f7bc710.inf'),serialize($doc));
     }
 }
