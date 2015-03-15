@@ -71,7 +71,7 @@ class Convert
             $im = new \Imagick();
             $im->readimageblob($this->data);
             if (null !== $this->page) {
-                $im->setiteratorindex($this->page);
+                $im->setiteratorindex($this->page-1);
             }
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
