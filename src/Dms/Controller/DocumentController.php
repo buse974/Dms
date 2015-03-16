@@ -109,6 +109,24 @@ class DocumentController extends AbstractActionController
 
         return $this->getResponse()->setContent($content);
     }
+    
+    public function getFormatAction()
+    {
+    	$content = null;
+    
+    	if (null !== ($file = $this->params('file', null))) {
+    		try {
+    			$m_document = $this->getManagerDms()->loadDocument($file)->getDocument();
+    			if ($m_document) {
+    				$content = $m_document->getFormat();
+    			}
+    		} catch (\Exception $e) {
+    			$content = $e->getMessage();
+    		}
+    	}
+    
+    	return $this->getResponse()->setContent($content);
+    }
 
     public function getNameAction()
     {

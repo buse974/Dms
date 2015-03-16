@@ -119,7 +119,8 @@ class Manager implements ServiceLocatorAwareInterface
     {
         // GET DATA AFTER UPDATE ID
         $this->getDocument()->getDatas();
-
+        $this->getDocument()->getFormat();
+        
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }

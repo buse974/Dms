@@ -48,6 +48,16 @@ return array(
                                 ),
                         ),
                 ),
+            	'fileformat' => array(
+            		'type' => 'Segment',
+            		'options' => array(
+            			'route'    => '/format/:file',
+            			'defaults' => array(
+            				'controller' => 'ged_document',
+            				'action'     => 'getFormat',
+            			),
+            		),
+            	),
                 'filedescription' => array(
                             'type' => 'Segment',
                             'options' => array(
