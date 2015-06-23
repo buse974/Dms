@@ -93,9 +93,11 @@ class Storage extends AbstractStorage
         $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
 
         if (!file_exists($filename)) {
+        	syslog(1, $filename);
             $filename = $this->options->getPath().$name;
         }
         if (!file_exists($filename)) {
+        	syslog(1, $filename);
             return false;
         }
 
@@ -110,6 +112,7 @@ class Storage extends AbstractStorage
             $filename = $this->options->getPath().$name;
         }
         if (!file_exists($filename)) {
+        	syslog(1, $filename);
             return;
         }
 
