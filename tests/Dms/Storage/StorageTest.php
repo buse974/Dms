@@ -34,7 +34,7 @@ class StorageTest extends PHPUnit_Framework_TestCase
 
     public function testCanRead()
     {
-        $path = __DIR__ . '/../../_upload';
+        $path = __DIR__ . '/../../_upload/';
         $st = new Storage(array('path' => $path));
         
         $doc = new Document();

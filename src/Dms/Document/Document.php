@@ -502,6 +502,16 @@ class Document implements Serializable
         ));
     }
 
+    public function getPathDat()
+    {
+        $this->getStorage()->getPath('.dat');
+    }
+    
+    public function getPathInf()
+    {
+        $this->getStorage()->getPath('.inf');
+    }
+    
     /**
      * (non-PHPdoc)
      * @see Serializable::unserialize()
@@ -524,9 +534,11 @@ class Document implements Serializable
 
     public function read($type)
     {
+        if($this->exist()) {
         $this->getStorage()->read($this, $type);
         $this->is_read = true;
 
+        }
         return $this;
     }
 

@@ -46,6 +46,7 @@ class Resize implements ServiceManagerAwareInterface
      */
     public function getResizeData($size)
     {
+
         if (empty($this->data) && empty($size)) {
             throw new \Exception('No data binary or size define');
         }

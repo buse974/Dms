@@ -9,7 +9,7 @@ class ResizeTest extends PHPUnit_Framework_TestCase
     public function testCangetResizeData()
     {
     	$file = file_get_contents(__DIR__ . '/../../_file/gnu.png');
-    	$file_resize = file_get_contents(__DIR__ . '/../../_file/gnu80x80.png');
+    	$file_resize = file_get_contents(__DIR__ . '/../../_file/gnu80x80.jpg');
     	
     	$resize = new Resize();
     	$resize->setData($file);

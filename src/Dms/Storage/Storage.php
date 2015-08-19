@@ -44,27 +44,14 @@ class Storage extends AbstractStorage
 
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
-        if (null === $type || $type != 'datas') {
-            $this->_readInf($document);
-        } else {
-            $this->_readData($document, $print);
-        }
+        (null === $type || $type != 'datas') ? $this->_readInf($document):$this->_readData($document, $print);
     }
 
     public function _readInf(\Dms\Document\Document &$document)
     {
         $content = null;
-        $name = $document->getId().'.inf';
-        $filename = $this->options->getPath().'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
-
-        if (!file_exists($filename)) {
-        	syslog(1, $filename);
-            $filename = $this->options->getPath().'/'.$name;
-            if (!file_exists($filename)) {
-            	syslog(1, $filename);
-                return;
-            }
-        }
+        
+        $filename = $this->getPath($document, '.inf');
 
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
@@ -77,6 +64,7 @@ class Storage extends AbstractStorage
         fclose($handle);
 
         $datas = unserialize($content);
+        
         $document->setSize($datas->getSize());
         $document->setName($datas->getName());
         $document->setType($datas->getType());
@@ -91,33 +79,39 @@ class Storage extends AbstractStorage
 
     public function exist(\Dms\Document\Document $document)
     {
-        $name = $document->getId().'.inf';
-        $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
-
-        if (!file_exists($filename)) {
-        	syslog(1, $filename);
-            $filename = $this->options->getPath().$name;
-        }
-        if (!file_exists($filename)) {
-        	syslog(1, $filename);
+        try {
+            $this->getPath($document,'.inf');
+            
+            return true;
+        } catch (\Exception $e) {
             return false;
         }
-
-        return true;
     }
+    
+    public function getPath(\Dms\Document\Document $document, $ext = '')
+    {
+        $name = $document->getId().$ext;
+        
+        $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
+        
+        if (!file_exists($filename)) {
+            syslog(1, $filename);
+            $filename = $this->options->getPath().'/'.$name;
+            if (!file_exists($filename)) {
+                syslog(1, $filename);
+                throw new \Exception('no file');
+            }
+        }
+        
+        return $filename;
+    }
+    
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $content = null;
-        $name = $document->getId().'.dat';
-        $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
-        if (!file_exists($filename)) {
-            $filename = $this->options->getPath().$name;
-        }
-        if (!file_exists($filename)) {
-        	syslog(1, $filename);
-            return;
-        }
 
+        $filename = $this->getPath($document, '.dat');
+        
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
 
@@ -140,6 +134,7 @@ class Storage extends AbstractStorage
         fclose($handle);
 
         if ($print) {
+            syslog(1, 'EXIT PRINT');
             exit();
         }
 

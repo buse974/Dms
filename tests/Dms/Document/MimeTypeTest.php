@@ -8,7 +8,7 @@ use Dms\Document\MimeType;
 class MimeTypeTest extends PHPUnit_Framework_TestCase
 {
 	public function testCanGetExtensionByMimeType()
-	{
+	{   
 		$mime = 'image/png';
 		$ext = 'png';
 		$ext_out = MimeType::getExtensionByMimeType($mime);
