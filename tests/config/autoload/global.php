@@ -15,7 +15,7 @@ return array(
             array('width' => 80, 'height' => 80),
             array('width' => 300),
         ),
-        'default_path' => __DIR__ . '/../../_upload/',
+        'default_path' => __DIR__ . '/../../upload/',
         'adapter' => 'http-adapter',
         'headers'=> array(
             'Access-Control-Allow-Origin'=>'http://local.wow.in',

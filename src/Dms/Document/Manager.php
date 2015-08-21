@@ -88,19 +88,21 @@ class Manager implements ServiceLocatorAwareInterface
     public function createDocument(array $document)
     {
         $this->clear();
+
         $this->document = new Document();
-        $this->document->setId((isset($document['id'])) ? $document['id'] : null)
+        $this->document->isRead()
+            ->setId((isset($document['id'])) ? $document['id'] : null)
             ->setDatas((isset($document['data'])) ? $document['data'] : null)
             ->setEncoding((isset($document['coding'])) ? $document['coding'] : null)
             ->setType((isset($document['type'])) ? $document['type'] : null)
             ->setSupport((isset($document['support'])) ? $document['support'] : null)
+            ->setFormat((isset($document['format'])) ? $document['format'] : null)
             ->setName((isset($document['name'])) ? $document['name'] : null)
             ->setSize((isset($document['size'])) ? $document['size'] : null)
-            ->setFormat((isset($document['format'])) ? $document['format'] : null)
             ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
         
         $this->document->setStorage($this->getStorage());
-        
+
         return $this;
     }
 

@@ -6,3 +6,4 @@ bin/classmap_generator.php
 bin/pluginmap_generator.php
 bin/templatemap_generator.php
 tests/_upload/02/
+tests/upload/

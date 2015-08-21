@@ -35,8 +35,8 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $ret = $dms->add($document);
 
         $this->assertEquals(12, strlen($ret));
-        $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
-        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
+        $this->assertFileExists(__DIR__ . '/../../upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
+        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $ret = $dms->resize('80x80');
 
         $this->assertEquals(strlen('3c12c2b8d91cbb98294ce051c9fb73e7ae9a791b') + strlen('-80x80') , strlen($ret));
-        $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
+        $this->assertFileExists(__DIR__ . '/../../upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
     }
 
     public function testAddDocumentOdt()
@@ -64,7 +64,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $ret = $dms->add($document);
 
         $this->assertEquals(15, strlen($ret));
-        $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
-        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
+        $this->assertFileExists(__DIR__ . '/../../upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
+        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat'));
     }
 }

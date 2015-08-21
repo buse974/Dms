@@ -70,9 +70,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document_id = $document->getId();
 
         $this->assertEquals(11, strlen($document_id));
-        $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat');
-        $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.inf');
-        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../_upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat'));
+        $this->assertFileExists(__DIR__ . '/../../upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat');
+        $this->assertFileExists(__DIR__ . '/../../upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.inf');
+        $this->assertEquals($image, file_get_contents(__DIR__ . '/../../upload/' . substr($document_id, 0, 2) . '/' . substr($document_id, 2, 2) . '/' . substr($document_id, 4) . '.dat'));
     }
 
     public function testCanDecodeBase()

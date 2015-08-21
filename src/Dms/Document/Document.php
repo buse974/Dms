@@ -114,6 +114,13 @@ class Document implements Serializable
         }
     }
 
+    public function isRead()
+    {
+        $this->is_read = true;
+        
+        return $this;
+    }
+    
     /**
      * Get the document id
      * @return string
@@ -301,7 +308,7 @@ class Document implements Serializable
 
         if (null === $this->name) {
             preg_match('/(?P<hash>\w+)($|\-|\.)/', $this->id, $matches, PREG_OFFSET_CAPTURE);
-            $this->name = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0].'.'.$this->format : null;
+            $this->name = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0].'.'.$this->getFormat() : null;
         }
         
         return $this->name;
@@ -512,9 +519,8 @@ class Document implements Serializable
     public function read($type)
     {
         if($this->exist()) {
-        $this->getStorage()->read($this, $type);
-        $this->is_read = true;
-
+            $this->getStorage()->read($this, $type);
+            $this->is_read = true;
         }
         return $this;
     }
