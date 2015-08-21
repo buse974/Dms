@@ -11,26 +11,24 @@ use Dms\Coding\Url\Exception\ForbiddenDocumentException;
 class Url implements CodingInterface
 {
     /**
-     * data for encoded or decoded
+     * data for encoded or decoded.
      *
      * @var string
      */
     private $data;
 
     /**
-     *
      * @var string
      */
     private $name = self::CODING_URL_STR;
 
     /**
-     *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
     private $adapter;
 
     /**
-     * return string to encoded or decoded
+     * return string to encoded or decoded.
      *
      * @return string
      */
@@ -40,9 +38,10 @@ class Url implements CodingInterface
     }
 
     /**
-     * set uri to get
+     * set uri to get.
      *
-     * @param  string              $data
+     * @param string $data
+     *
      * @return \Dms\Coding\Url\Url
      */
     public function setData($data)
@@ -53,7 +52,8 @@ class Url implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -66,7 +66,8 @@ class Url implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)
@@ -92,7 +93,8 @@ class Url implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::getCoding()
      */
     public function getCoding()
@@ -101,9 +103,10 @@ class Url implements CodingInterface
     }
 
     /**
-     * Set adapter
+     * Set adapter.
      *
-     * @param  \Zend\Http\Client\Adapter\AdapterInterface $adapter
+     * @param \Zend\Http\Client\Adapter\AdapterInterface $adapter
+     *
      * @return \Dms\Coding\Url\Url
      */
     public function setAdapter($adapter)
@@ -114,7 +117,7 @@ class Url implements CodingInterface
     }
 
     /**
-     * return adapter
+     * return adapter.
      *
      * @return \Zend\Http\Client\Adapter\AdapterInterface
      */

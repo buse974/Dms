@@ -7,20 +7,19 @@ use Dms\Coding\CodingInterface;
 class Zlib implements CodingInterface
 {
     /**
-     * data for encoded or decoded
+     * data for encoded or decoded.
      *
      * @var string
      */
     private $data;
 
     /**
-     *
      * @var string
      */
     private $name = self::CODING_ZLIB_STR;
 
     /**
-     * return string to encoded or decoded
+     * return string to encoded or decoded.
      *
      * @return string
      */
@@ -30,9 +29,10 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * set string to encoded or decoded
+     * set string to encoded or decoded.
      *
-     * @param  string                $data
+     * @param string $data
+     *
      * @return \Dms\Coding\Zlib\Zlib
      */
     public function setData($data)
@@ -43,7 +43,8 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -56,7 +57,8 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)
@@ -69,7 +71,8 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::getCoding()
      */
     public function getCoding()

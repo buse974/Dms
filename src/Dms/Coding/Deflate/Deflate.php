@@ -7,20 +7,19 @@ use Dms\Coding\CodingInterface;
 class Deflate implements CodingInterface
 {
     /**
-     * data for encoded or decoded
+     * data for encoded or decoded.
      *
      * @var string
      */
     private $data;
 
     /**
-     *
      * @var string
      */
     private $name = self::CODING_DEFLATE_STR;
 
     /**
-     * return string to encoded or decoded
+     * return string to encoded or decoded.
      *
      * @return string
      */
@@ -30,9 +29,10 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * set string to encoded or decoded
+     * set string to encoded or decoded.
      *
-     * @param  string                      $data
+     * @param string $data
+     *
      * @return \Dms\Coding\Deflate\Deflate
      */
     public function setData($data)
@@ -43,7 +43,8 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -56,7 +57,8 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)
@@ -69,7 +71,8 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see \Dms\Coding\CodingInterface::getCoding()
      */
     public function getCoding()

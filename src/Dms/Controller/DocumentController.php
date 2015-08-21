@@ -22,7 +22,7 @@ class DocumentController extends AbstractActionController
         } catch (\Exception $e) {
             try {
                 preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
-                
+
                 $this->getManagerDms()->loadDocument($matches['id'][0]);
                 try {
                     $this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
@@ -39,28 +39,28 @@ class DocumentController extends AbstractActionController
         }
 
         if ($document instanceof Document) {
-            header("HTTP/1.0 200");
+            header('HTTP/1.0 200');
             header('Content-type: '.((null !== $document->getType()) ? $document->getType() : 'application/octet-stream'));
             header('Content-Transfer-Encoding: '.$document->getEncoding());
-            header('Content-Disposition: '.sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1*strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())));
+            header('Content-Disposition: '.sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())));
             header('Accept-Ranges: bytes');
 
             $print = true;
             if (isset($_SERVER['HTTP_RANGE'])) {
                 $print = array();
                 $range = $_SERVER['HTTP_RANGE'];
-                $pieces = explode("=", $range);
-                $seek = explode("-", trim($pieces[1]));
+                $pieces = explode('=', $range);
+                $seek = explode('-', trim($pieces[1]));
                 $print['start'] = intval($seek[0]);
-                $print['end'] = intval((!empty($seek[1]) ? $seek[1] : ($document->getWeight()-1)));
+                $print['end'] = intval((!empty($seek[1]) ? $seek[1] : ($document->getWeight() - 1)));
                 $size = ($print['end'] - $print['start'] + 1);
-                header("HTTP/1.0 206");
-                header("content-length: ".$size);
-                header("Content-Range: bytes ".$print['start']."-".$print['end']."/".$document->getWeight());
+                header('HTTP/1.0 206');
+                header('content-length: '.$size);
+                header('Content-Range: bytes '.$print['start'].'-'.$print['end'].'/'.$document->getWeight());
             } else {
                 header('content-length: '.$document->getWeight());
             }
-            
+
             $document->getDatas($print);
         }
 
@@ -84,7 +84,7 @@ class DocumentController extends AbstractActionController
         $content = $document->getDatas();
         $headers = $this->getResponse()->getHeaders();
         $headers->addHeaderLine('Content-type', 'application/octet-stream');
-        $headers->addHeaderLine("Content-Transfer-Encoding", $document->getEncoding());
+        $headers->addHeaderLine('Content-Transfer-Encoding', $document->getEncoding());
         $headers->addHeaderLine('Content-Length', strlen($content));
         $name = $document->getName();
         $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
@@ -110,23 +110,23 @@ class DocumentController extends AbstractActionController
 
         return $this->getResponse()->setContent($content);
     }
-    
+
     public function getFormatAction()
     {
-    	$content = null;
-    
-    	if (null !== ($file = $this->params('file', null))) {
-    		try {
-    			$m_document = $this->getManagerDms()->loadDocument($file)->getDocument();
-    			if ($m_document) {
-    				$content = $m_document->getFormat();
-    			}
-    		} catch (\Exception $e) {
-    			$content = $e->getMessage();
-    		}
-    	}
-    
-    	return $this->getResponse()->setContent($content);
+        $content = null;
+
+        if (null !== ($file = $this->params('file', null))) {
+            try {
+                $m_document = $this->getManagerDms()->loadDocument($file)->getDocument();
+                if ($m_document) {
+                    $content = $m_document->getFormat();
+                }
+            } catch (\Exception $e) {
+                $content = $e->getMessage();
+            }
+        }
+
+        return $this->getResponse()->setContent($content);
     }
 
     public function getNameAction()
@@ -181,10 +181,10 @@ class DocumentController extends AbstractActionController
             foreach ($files as $name_file => $file) {
                 $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
                 $document['coding'] = 'binary';
-                $document['data']   = $file;
-                $document['name']   = $file['name'];
-                $document['type']   = $file['type'];
-                $document['weight']   = $file['size'];
+                $document['data'] = $file;
+                $document['name'] = $file['name'];
+                $document['type'] = $file['type'];
+                $document['weight'] = $file['size'];
                 $doc = $this->getServiceDms()->add($document);
                 $ret[$name_file] = $doc;
             }
@@ -222,11 +222,10 @@ class DocumentController extends AbstractActionController
             session_start();
         }
 
-        return new JsonModel(array("result" => true));
+        return new JsonModel(array('result' => true));
     }
 
     /**
-     *
      * @return \Dms\Document\Manager
      */
     public function getManagerDms()
@@ -235,7 +234,6 @@ class DocumentController extends AbstractActionController
     }
 
     /**
-     *
      * @return \Dms\Service\DmsService
      */
     public function getServiceDms()

@@ -11,90 +11,90 @@ return array(
                 'fileview' => array(
                     'type' => 'Segment',
                     'options' => array(
-                        'route'    => '/data/:file',
+                        'route' => '/data/:file',
                         'defaults' => array(
                             'controller' => 'ged_document',
-                            'action'     => 'get',
+                            'action' => 'get',
                         ),
                     ),
                 ),
                 'filedownload' => array(
                     'type' => 'Segment',
                     'options' => array(
-                        'route'    => '/download/:file',
+                        'route' => '/download/:file',
                         'defaults' => array(
                                 'controller' => 'ged_document',
-                                'action'     => 'getDownload',
+                                'action' => 'getDownload',
                         ),
                     ),
                 ),
                 'filetype' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/type/:file',
+                                    'route' => '/type/:file',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'getType',
+                                            'action' => 'getType',
                                 ),
                         ),
                 ),
                 'filenamne' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/name/:file',
+                                    'route' => '/name/:file',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'getName',
+                                            'action' => 'getName',
                                 ),
                         ),
                 ),
-            	'fileformat' => array(
-            		'type' => 'Segment',
-            		'options' => array(
-            			'route'    => '/format/:file',
-            			'defaults' => array(
-            				'controller' => 'ged_document',
-            				'action'     => 'getFormat',
-            			),
-            		),
-            	),
+                'fileformat' => array(
+                    'type' => 'Segment',
+                    'options' => array(
+                        'route' => '/format/:file',
+                        'defaults' => array(
+                            'controller' => 'ged_document',
+                            'action' => 'getFormat',
+                        ),
+                    ),
+                ),
                 'filedescription' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/description/:file',
+                                    'route' => '/description/:file',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'getDescription',
+                                            'action' => 'getDescription',
                                 ),
                         ),
                 ),
                 'filesave' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/save[/]',
+                                    'route' => '/save[/]',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'save',
+                                            'action' => 'save',
                                     ),
                             ),
                 ),
                 'fileprogress' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/progress[/]',
+                                    'route' => '/progress[/]',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'progress',
+                                            'action' => 'progress',
                                     ),
                             ),
                 ),
                 'initsession' => array(
                             'type' => 'Segment',
                             'options' => array(
-                                    'route'    => '/initsession[/]',
+                                    'route' => '/initsession[/]',
                                     'defaults' => array(
                                             'controller' => 'ged_document',
-                                            'action'     => 'initSession',
+                                            'action' => 'initSession',
                                     ),
                             ),
                 ),

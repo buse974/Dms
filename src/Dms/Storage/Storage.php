@@ -17,7 +17,7 @@ class Storage extends AbstractStorage
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-        
+
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
             $adp = new Http();
             $adp->setDestination($path);
@@ -45,13 +45,13 @@ class Storage extends AbstractStorage
 
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
-        return (null === $type || $type != 'datas') ? $this->_readInf($document):$this->_readData($document, $print);
+        return (null === $type || $type != 'datas') ? $this->_readInf($document) : $this->_readData($document, $print);
     }
 
     public function _readInf(\Dms\Document\Document &$document)
     {
         $content = null;
-        
+
         $filename = $this->getPath($document, '.inf');
 
         $handle = fopen($filename, 'r');
@@ -65,7 +65,7 @@ class Storage extends AbstractStorage
         fclose($handle);
 
         $datas = unserialize($content);
-        
+
         $document->setSize($datas->getSize());
         $document->setName($datas->getName());
         $document->setType($datas->getType());
@@ -80,20 +80,20 @@ class Storage extends AbstractStorage
     public function exist(\Dms\Document\Document $document)
     {
         try {
-            $this->getPath($document,'.inf');
-            
+            $this->getPath($document, '.inf');
+
             return true;
         } catch (\Exception $e) {
             return false;
         }
     }
-    
+
     public function getPath(\Dms\Document\Document $document, $ext = '')
     {
         $name = $document->getId().$ext;
-        
+
         $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
-        
+
         if (!file_exists($filename)) {
             syslog(1, $filename);
             $filename = $this->options->getPath().'/'.$name;
@@ -102,20 +102,19 @@ class Storage extends AbstractStorage
                 throw new \Exception('no file');
             }
         }
-        
+
         return $filename;
     }
-    
+
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $content = null;
 
         $filename = $this->getPath($document, '.dat');
-        
+
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
 
-        
         if (is_array($print)) {
             $start = (!empty($print['start']) ? $print['start'] : 0);
             $end = (!empty($print['end']) ? $print['end'] : $size);

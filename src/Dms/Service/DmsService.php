@@ -5,7 +5,6 @@ namespace Dms\Service;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ProgressBar\Upload\SessionProgress as Sp;
-use Dms\Document\Document;
 
 class DmsService implements ServiceManagerAwareInterface
 {
@@ -13,8 +12,8 @@ class DmsService implements ServiceManagerAwareInterface
     protected $document_manager;
 
     /**
+     * @param array $document
      *
-     * @param  array  $document
      * @return string token
      */
     public function add(array $document)
@@ -28,8 +27,8 @@ class DmsService implements ServiceManagerAwareInterface
     }
 
     /**
+     * @param array $document
      *
-     * @param  array  $document
      * @return string token
      */
     public function resize($size)
@@ -49,7 +48,6 @@ class DmsService implements ServiceManagerAwareInterface
     }
 
     /**
-     *
      * @return \Dms\Document\Manager
      */
     public function getDocumentManager()
@@ -61,7 +59,7 @@ class DmsService implements ServiceManagerAwareInterface
         return $this->document_manager;
     }
     /**
-     * Retrieve service manager instance
+     * Retrieve service manager instance.
      *
      * @return ServiceManager
      */
@@ -71,7 +69,7 @@ class DmsService implements ServiceManagerAwareInterface
     }
 
     /**
-     * Set service manager
+     * Set service manager.
      *
      * @param ServiceManager $serviceManager
      */

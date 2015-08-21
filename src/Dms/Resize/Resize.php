@@ -38,15 +38,16 @@ class Resize implements ServiceManagerAwareInterface
     }
 
     /**
-     * resize data use library GD
+     * resize data use library GD.
      *
-     * @param  unknown    $size
+     * @param unknown $size
+     *
      * @throws \Exception
+     *
      * @return string
      */
     public function getResizeData($size)
     {
-
         if (empty($this->data) && empty($size)) {
             throw new \Exception('No data binary or size define');
         }
@@ -158,7 +159,6 @@ class Resize implements ServiceManagerAwareInterface
     }
 
     /**
-     *
      * @param ServiceManager $serviceManager
      */
     public function setServiceManager(ServiceManager $serviceManager)

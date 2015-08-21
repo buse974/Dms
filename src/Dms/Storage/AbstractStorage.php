@@ -16,13 +16,11 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
     protected $events;
 
     /**
-     *
      * @var ServiceManager
      */
     protected $servicemanager;
 
     /**
-     *
      * @var StorageOption
      */
     protected $options;
@@ -35,10 +33,9 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
         $this->options = new StorageOption($options);
     }
     /**
-     * Inject an EventManager instance
+     * Inject an EventManager instance.
      *
-     * @param  EventManagerInterface $eventManager
-     * @return void
+     * @param EventManagerInterface $eventManager
      */
     public function setEventManager(EventManagerInterface $events)
     {
@@ -52,7 +49,8 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @return EventManagerInterface
      */
     public function getEventManager()
@@ -65,7 +63,7 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
     }
 
     /**
-     * Set service manager
+     * Set service manager.
      *
      * @param ServiceManager $serviceManager
      */

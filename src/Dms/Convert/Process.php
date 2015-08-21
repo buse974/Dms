@@ -14,10 +14,10 @@ class Process
     protected $output;
     protected $input;
     protected $descriptors = array(
-                0 => array("pipe", "r"),
-                1 => array("pipe", "w"),
-                2 => array("pipe", "w"),
-                3 => array("pipe", "w"),
+                0 => array('pipe', 'r'),
+                1 => array('pipe', 'w'),
+                2 => array('pipe', 'w'),
+                3 => array('pipe', 'w'),
         );
 
     public function setCmd($cmd)
@@ -92,7 +92,7 @@ class Process
 
     public function setDescriptors(array $descriptors)
     {
-        $descriptors[3] = array("pipe", "w");
+        $descriptors[3] = array('pipe', 'w');
 
         $this->descriptors = $descriptors;
 

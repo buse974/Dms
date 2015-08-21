@@ -11,7 +11,7 @@ interface CodingInterface
     const CODING_ZLIB_STR = 'zlib';
 
     /**
-     * return name of type coding
+     * return name of type coding.
      *
      * @return string
      */
@@ -19,18 +19,20 @@ interface CodingInterface
 
     /**
      * string The encoded data, as a string
-     * return false for failure
+     * return false for failure.
      *
-     * @param  <string|false> $data
+     * @param <string|false> $data
+     *
      * @return <string|false>
      */
     public function encode($data);
 
     /**
      * string the original data
-     * return false for failure
+     * return false for failure.
      *
-     * @param  string         $data
+     * @param string $data
+     *
      * @return <string|false>
      */
     public function decode($data);
