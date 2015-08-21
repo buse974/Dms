@@ -9,14 +9,11 @@ class Module implements ConfigProviderInterface
     public function getAutoloaderConfig()
     {
         return array(
-                'Zend\Loader\StandardAutoloader' => array(
-                    'namespaces' => array(
-                            __NAMESPACE__ => __DIR__.'/src/'.__NAMESPACE__,
-                        ),
-                ),
-                  'Zend\Loader\ClassMapAutoloader' => array(
-                       __DIR__.'/autoload_classmap.php',
-                ),
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                        __NAMESPACE__ => __DIR__.'/src/'.__NAMESPACE__,
+                    ),
+            ),
         );
     }
 
@@ -47,23 +44,22 @@ class Module implements ConfigProviderInterface
                 'Dms\ServiceFactory\CodingFactory',
             ),
             'factories' => array(
-                    '\Dms\Coding\Url\Url' => function ($sm) {
-                        $config = $sm->get('Config');
+                '\Dms\Coding\Url\Url' => function ($sm) {
+                    $config = $sm->get('Config');
+                    $url = new \Dms\Coding\Url\Url();
+                    $url->setAdapter($config[$config['dms-conf']['adapter']]);
 
-                        $url = new \Dms\Coding\Url\Url();
-                        $url->setAdapter($config[$config['dms-conf']['adapter']]);
-
-                        return $url;
-                    },
-                    '\Dms\Resize\Resize' => function ($sm) {
-                        return new \Dms\Resize\Resize(array(
-                                'allow' => $sm->get('config')['dms-conf']['size_allowed'],
-                                'active' => $sm->get('config')['dms-conf']['check_size_allowed'],
-                        ));
-                    },
-                    '\Dms\Storage\Storage' => function ($sm) {
-                         return new \Dms\Storage\Storage(array('path' => $sm->get('config')['dms-conf']['default_path']));
-                    },
+                    return $url;
+                },
+                '\Dms\Resize\Resize' => function ($sm) {
+                    return new \Dms\Resize\Resize(array(
+                            'allow' => $sm->get('config')['dms-conf']['size_allowed'],
+                            'active' => $sm->get('config')['dms-conf']['check_size_allowed'],
+                    ));
+                },
+                '\Dms\Storage\Storage' => function ($sm) {
+                    return new \Dms\Storage\Storage(array('path' => $sm->get('config')['dms-conf']['default_path']));
+                },
             ),
         );
     }

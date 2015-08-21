@@ -99,10 +99,25 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager = bootstrap::getServiceManager()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setSize('80x80');
-        $manager->writeFile();
+        $manager->writeFile('0002filname.png');
         $document = $manager->getDocument();
 
         $this->assertTrue(strlen($document->getDatas()) < strlen($image));
+    }
+    
+    public function testCanGetPictureDocument()
+    {
+        $image = file_get_contents(__DIR__ . '/../../_file/video.jpg');
+        
+        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        
+        $manager->loadDocument('2222video');
+        $manager->setFormat('jpg');
+        $manager->writeFile('2222video.jpg');
+        $document = $manager->getDocument();
+
+        $this->assertTrue(strlen($document->getDatas()) === strlen($image));
+        $this->assertEquals($document->getId(),'2222video.jpg');
     }
 
     public function testCanFomatDocument()

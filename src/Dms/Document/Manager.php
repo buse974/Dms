@@ -6,7 +6,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Dms\Storage\StorageInterface;
 use Dms\Convert\Convert;
 use Dms\Resize\Resize;
-use FFMpeg\FFMpeg;
+use Dms\FFmpeg\FFmpeg;
 
 class Manager implements ServiceLocatorAwareInterface
 {
@@ -16,6 +16,12 @@ class Manager implements ServiceLocatorAwareInterface
      * @var \Dms\Document\Document
      */
     protected $document;
+
+    /**
+     *
+     * @var \Dms\Document\Document
+     */
+    protected $new_document;
 
     /**
      *
@@ -56,6 +62,7 @@ class Manager implements ServiceLocatorAwareInterface
      */
     public function loadDocument($document)
     {
+        $this->clear();
         $this->document = $document;
         if (! $document instanceof Document && is_string($document)) {
             $this->document = new Document();
@@ -64,28 +71,12 @@ class Manager implements ServiceLocatorAwareInterface
         
         $this->document->setStorage($this->getStorage());
         
-        syslog(1, ">>>".$this->document->getId());
-        
-        if (!empty($this->document->getId()) && ! $this->document->exist()) {
+        if (! empty($this->document->getId()) && ! $this->document->exist()) {
             $this->clear();
             throw new \Exception('Param is not id: ' . $document);
         }
         
         return $this;
-    }
-
-    /**
-     * Get Document
-     *
-     * @return \Dms\Document\Document
-     */
-    public function getDocument()
-    {
-        if (null === $this->document) {
-            $this->document = new Document();
-        }
-        
-        return $this->document;
     }
 
     /**
@@ -120,29 +111,24 @@ class Manager implements ServiceLocatorAwareInterface
      */
     public function writeFile($id = null)
     {
-        
-        // GET DATA AFTER UPDATE ID
-        $this->getDocument()->getDatas();
-        $this->document->getFormat();
-        
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-        if (null !== $id) {
-            $this->document->setId($id);
-        }
         
         $obj_mime_type = new MimeType();
-        $is_video = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'video') === 0);
-        $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->getFormat()), 'image') === 0);
-        if ($is_video && $is_img) {
-            syslog(1, 'VIDEO');
+        $is_video = ((strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'video') === 0) || (strpos($this->document->getType(), 'video') === 0));
+        if ($is_video && (null !== $this->getFormat() || null !== $this->getSize() || null !== $this->getPage())) {
+            $this->createPicture();
+            $this->document = $this->new_document;
+            $this->new_document = null;
+        }
+        
         // si que resize
         //
         // si format n'est pas une image ou IN non compatible
         // convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
         // puis resize imagick avec format de sortie par default (jpeg)
-        } elseif (null !== $this->getSize() && null === $this->getFormat()) {
+        if (null !== $this->getSize() && null === $this->getFormat()) {
             // si format n'est pas une image ou IN non compatible
             
             $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
@@ -175,6 +161,8 @@ class Manager implements ServiceLocatorAwareInterface
             // si format compatible IN et OUT avec imagik on utilise imagik pour les deux
             if (Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
                 $this->resize();
+                $this->getNewDocument()->setId($id);
+                $document_write = $this->getNewDocument();
                 // si format IN et OUT non compatible avec Imagick
                 // Convertion avec uniconv en format compatible Imagick (jpg)
                 // Resize avec imagick
@@ -217,10 +205,15 @@ class Manager implements ServiceLocatorAwareInterface
             }
         }
         
-        if (null == $this->document->getStorage()) {
-            $this->document->setStorage($this->getStorage());
+        if ($this->new_document !== null) {
+            $this->document = $this->new_document;
         }
         
+        if (null !== $id) {
+            $this->document->setId($id);
+        }
+        
+        $this->document->setStorage($this->getStorage());
         $this->document->write();
         
         return $this;
@@ -255,16 +248,15 @@ class Manager implements ServiceLocatorAwareInterface
      */
     private function resize()
     {
-        
         $resize = $this->getServiceResize();
         $resize->setData($this->getDocument()
             ->getDatas())
             ->setFormat($this->getFormat());
-        $this->document->setEncoding(Document::TYPE_BINARY_STR);
-        $this->document->setDatas($resize->getResizeData($this->size));
-        $this->document->setSize($this->size);
-        $this->document->setFormat($resize->getFormat());
-        $this->document->setPage($this->getPage());
+        $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
+        $this->getNewDocument()->setDatas($resize->getResizeData($this->size));
+        $this->getNewDocument()->setSize($this->size);
+        $this->getNewDocument()->setFormat($resize->getFormat());
+        $this->getNewDocument()->setPage($this->getPage());
         
         return $this;
     }
@@ -281,10 +273,10 @@ class Manager implements ServiceLocatorAwareInterface
             ->get('Config')['dms-conf']['convert']['tmp'])
             ->setPage($this->getPage());
         
-        $this->document->setDatas($convert->getConvertData($this->getFormat()));
-        $this->document->setEncoding(Document::TYPE_BINARY_STR);
-        $this->document->setFormat($this->getFormat());
-        $this->document->setPage($this->getPage());
+        $this->getNewDocument()->setDatas($convert->getConvertData($this->getFormat()));
+        $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
+        $this->getNewDocument()->setFormat($this->getFormat());
+        $this->getNewDocument()->setPage($this->getPage());
     }
 
     /**
@@ -292,28 +284,49 @@ class Manager implements ServiceLocatorAwareInterface
      */
     private function createPicture()
     {
-        $ffmpeg = FFMpeg::create();
+        $ff = new FFmpeg();
+        $ff->setFile($this->document->getPathDat());
+        $this->getNewDocument()->setDatas($ff->getPicture((($this->getPage() !== null) ? $this->getPage() : 50)));
+        $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
+        $this->getNewDocument()->setFormat($ff->getFormat());
+        $this->getNewDocument()->setSize($ff->getSize());
+        $this->getNewDocument()->setType($ff->getTypeMine());
+        $this->getNewDocument()->setName($this->document->getName());
+        $this->getNewDocument()->setWeight(strlen($this->getNewDocument()
+             ->getDatas()));
         
-        $video = $ffmpeg->open($this->document->getPathDat());
-        $video
-        ->filters()
-        ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
-        ->synchronize();
-        $video
-        ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
-        ->save('frame.jpg');
+        $this->setPage(null);
+    }
+
+    /**
+     * Get Document
+     *
+     * @return \Dms\Document\Document
+     */
+    public function getDocument()
+    {
+        if (null === $this->document) {
+            $this->document = new Document();
+        }
         
-        $convert = new Convert();
-        $convert->setData($this->document->getDatas())
-            ->setFormat($this->document->getFormat())
-            ->setTmp($this->getServiceLocator()
-            ->get('Config')['dms-conf']['convert']['tmp'])
-            ->setPage($this->getPage());
+        return $this->document;
+    }
+
+    /**
+     * Get New Document
+     *
+     * @return \Dms\Document\Document
+     */
+    public function getNewDocument()
+    {
+        if (null === $this->new_document) {
+            $this->new_document = new Document();
+            if(null !== $this->document) {
+                $this->new_document->setName($this->document->getName());
+            }
+        }
         
-        $this->document->setDatas($convert->getConvertData($this->getFormat()));
-        $this->document->setEncoding(Document::TYPE_BINARY_STR);
-        $this->document->setFormat($this->getFormat());
-        $this->document->setPage($this->getPage());
+        return $this->new_document;
     }
 
     public function getSize()
@@ -421,6 +434,8 @@ class Manager implements ServiceLocatorAwareInterface
 
     public function clear()
     {
+        $this->document = null;
+        $this->new_document = null;
         $this->size = null;
         $this->format = null;
         $this->document = null;

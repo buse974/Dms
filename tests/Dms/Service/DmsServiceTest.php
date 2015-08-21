@@ -48,7 +48,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $dms = bootstrap::getServiceManager()->get('dms.service');
         $ret = $dms->resize('80x80');
 
-        $this->assertEquals(12 + strlen('-80x80') , strlen($ret));
+        $this->assertEquals(strlen('3c12c2b8d91cbb98294ce051c9fb73e7ae9a791b') + strlen('-80x80') , strlen($ret));
         $this->assertFileExists(__DIR__ . '/../../_upload/' . substr($ret, 0, 2) . '/' . substr($ret, 2, 2) . '/' . substr($ret, 4) . '.dat');
     }
 

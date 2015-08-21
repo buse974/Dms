@@ -9,7 +9,7 @@ class Convert
     protected $data;
     protected $format;
     protected $tmp = '';
-    protected $page;
+    protected $page = 1;
     private $process;
 
     /**
@@ -70,9 +70,7 @@ class Convert
         try {
             $im = new \Imagick();
             $im->readimageblob($this->data);
-            if (null !== $this->page) {
-                $im->setiteratorindex($this->page-1);
-            }
+            $im->setiteratorindex($this->page-1);
             $im->setImageFormat($format);
             $datas = $im->getimageblob();
         } catch (\ImagickException $e) {
@@ -93,8 +91,8 @@ class Convert
                         ->setInput($this->data);
                 $datas = $process->run();
             }
-            //$process = $this->getProcess();
-            //$process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
+            $process = $this->getProcess();
+            $process->setCmd(sprintf("rm -f %s.*",$uniq_name))->run();
         }
 
         return $datas;
