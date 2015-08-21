@@ -17,13 +17,15 @@ class Storage extends AbstractStorage
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+        
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
             $adp = new Http();
             $adp->setDestination($path);
             $adp->addFilter('Rename', array('target' => $nameMod.'.dat'));
             $adp->receive($document->getDatas()['name']);
         } else {
-            $fp = fopen($path.$nameMod.'.dat', 'w');
+            $p = str_replace('//', '/', $path.$nameMod.'.dat');
+            $fp = fopen($p, 'w');
             fwrite($fp, $document->getDatas());
             $document->setWeight(strlen($document->getDatas()));
             fclose($fp);
@@ -32,7 +34,6 @@ class Storage extends AbstractStorage
         $document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('path' => $path, 'short_name' => $nameMod, 'all_path' => $path.$nameMod.'.dat', 'support' => $document->getSupport(), 'name' => $name));
 
-        $document->setIsWrite(true);
         $serialize = serialize($document);
         $fp = fopen($path.$nameMod.'.inf', 'w');
         $ret += fwrite($fp, $serialize);
@@ -44,7 +45,7 @@ class Storage extends AbstractStorage
 
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
-        (null === $type || $type != 'datas') ? $this->_readInf($document):$this->_readData($document, $print);
+        return (null === $type || $type != 'datas') ? $this->_readInf($document):$this->_readData($document, $print);
     }
 
     public function _readInf(\Dms\Document\Document &$document)
@@ -74,7 +75,6 @@ class Storage extends AbstractStorage
         $document->setHash($datas->getHash());
         $document->setWeight($datas->getWeight());
         $document->setFormat($datas->getFormat());
-        $document->setIsWrite(true);
     }
 
     public function exist(\Dms\Document\Document $document)
@@ -115,6 +115,7 @@ class Storage extends AbstractStorage
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
 
+        
         if (is_array($print)) {
             $start = (!empty($print['start']) ? $print['start'] : 0);
             $end = (!empty($print['end']) ? $print['end'] : $size);
@@ -125,7 +126,7 @@ class Storage extends AbstractStorage
         while ($size) {
             $read = ($size > 8192) ? 8192 : $size;
             $size -= $read;
-            if ($print) {
+            if ($print !== null) {
                 print(fread($handle, $read));
             } else {
                 $content .= fread($handle, $read);
@@ -133,7 +134,7 @@ class Storage extends AbstractStorage
         }
         fclose($handle);
 
-        if ($print) {
+        if ($print !== null) {
             syslog(1, 'EXIT PRINT');
             exit();
         }

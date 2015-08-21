@@ -9,6 +9,7 @@ return array(
                         array('width' => 80, 'height' => 80),
                         array('width' => 300),
                 ),
+                'check_size_allowed' => false,
                 'default_path' => 'upload/',
                 'adapter' => 'http-adapter',
                 'convert' => array(

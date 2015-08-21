@@ -27,12 +27,6 @@ class Document implements Serializable
      *
      * @var string
      */
-    protected $is_write = false;
-
-    /**
-     *
-     * @var string
-     */
     protected $hash;
 
     /**
@@ -141,24 +135,12 @@ class Document implements Serializable
     public function setId($id)
     {
         $this->id = $id;
-        $this->is_write = false;
         preg_match('/(?P<hash>\w+)($|\-|\.)/', $id, $matches, PREG_OFFSET_CAPTURE);
         $this->hash = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0] : null;
 
         return $this;
     }
 
-    /**
-     *
-     * @param  bool                   $is_write
-     * @return \Dms\Document\Document
-     */
-    public function setIsWrite($is_write)
-    {
-        $this->is_write = $is_write;
-
-        return $this;
-    }
 
     /**
      * Get body document
@@ -167,7 +149,7 @@ class Document implements Serializable
      */
     public function getDatas($print = null)
     {
-        if ((null === $this->datas && null !== $this->getStorage()) || $print !== null) {
+        if ( (null === $this->datas && null !== $this->getStorage()) || $print!==null) {
             $this->getStorage()->read($this, 'datas', $print);
         }
 
@@ -248,10 +230,6 @@ class Document implements Serializable
         if ($fmt = MimeType::getExtensionByMimeType($this->type)) {
             $this->format = $fmt;
         }
-        if ($this->is_write) {
-            $this->id = null;
-            $this->getId();
-        }
 
         return $this;
     }
@@ -275,11 +253,6 @@ class Document implements Serializable
     public function setPage($page)
     {
         $this->page = $page;
-
-        if ($this->is_write) {
-            $this->id = null;
-            $this->getId();
-        }
 
         return $this;
     }
@@ -326,6 +299,11 @@ class Document implements Serializable
             $this->read('name');
         }
 
+        if (null === $this->name) {
+            preg_match('/(?P<hash>\w+)($|\-|\.)/', $this->id, $matches, PREG_OFFSET_CAPTURE);
+            $this->name = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0].'.'.$this->format : null;
+        }
+        
         return $this->name;
     }
 
@@ -392,11 +370,6 @@ class Document implements Serializable
     public function setSize($size)
     {
         $this->size = $size;
-
-        if ($this->is_write) {
-            $this->id = null;
-            $this->getId();
-        }
 
         return $this;
     }
@@ -488,7 +461,12 @@ class Document implements Serializable
      */
     public function serialize()
     {
-        return serialize(array(
+        return serialize($this->toArray());
+    }
+
+    public function toArray()
+    {
+        return array(
                 'id' => $this->getId(),
                 'size' => $this->getSize(),
                 'name' => $this->getName(),
@@ -499,17 +477,17 @@ class Document implements Serializable
                 'support' => $this->getSupport(),
                 'weight' => $this->getWeight(),
                 'format' => $this->getFormat(),
-        ));
+        );
     }
-
+    
     public function getPathDat()
     {
-        $this->getStorage()->getPath('.dat');
+        return $this->getStorage()->getPath($this,'.dat');
     }
     
     public function getPathInf()
     {
-        $this->getStorage()->getPath('.inf');
+        return $this->getStorage()->getPath($this,'.inf');
     }
     
     /**
@@ -529,7 +507,6 @@ class Document implements Serializable
         $this->setHash((isset($datas['hash'])) ? $datas['hash'] : null);
         $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
         $this->setFormat((isset($datas['format'])) ? $datas['format'] : null);
-        $this->setIsWrite(true);
     }
 
     public function read($type)

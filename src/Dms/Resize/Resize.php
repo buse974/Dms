@@ -104,12 +104,14 @@ class Resize implements ServiceManagerAwareInterface
         imagefill($imgResized, 0, 0, imagecolorallocate($imgResized, 255, 255, 255));
         imagecopyresampled($imgResized, $img, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $oriX, $oriY);
 
+        $q = null;
         switch ($this->format) {
             case 'gif':
                 $fn = 'imagegif';
                 break;
             case 'png':
                 $fn = 'imagepng';
+                $q = 0;
                 break;
             case 'wbmp':
                 $fn = 'imagewbmp';
@@ -118,10 +120,11 @@ class Resize implements ServiceManagerAwareInterface
             case 'jpeg':
             default:
                 $fn = 'imagejpeg';
+                $q = 85;
         }
 
         ob_start();
-        $fn($imgResized, null, 85);
+        $fn($imgResized, null, $q);
         $imageFileContents = ob_get_contents();
         ob_end_clean();
 
@@ -165,7 +168,7 @@ class Resize implements ServiceManagerAwareInterface
 
     public function getTypeMine()
     {
-        return 'image/jpeg';
+        return 'image/'.$this->format;
     }
 
     public function getFormat()
