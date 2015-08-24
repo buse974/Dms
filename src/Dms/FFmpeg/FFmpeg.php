@@ -38,7 +38,7 @@ class FFmpeg
         $stream = $this->video->getStreams()->first();
         $dim = null;
         if($stream->isVideo()) {
-            $dim = $stream->getWidth().'x'.$stream->getDimensions()->getHeight();
+            $dim = $stream->getDimensions()->getWidth().'x'.$stream->getDimensions()->getHeight();
         }
         
         return $dim;
