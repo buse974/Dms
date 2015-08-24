@@ -115,6 +115,7 @@ class Storage extends AbstractStorage
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
 
+        
         if (is_array($print)) {
             $start = (!empty($print['start']) ? $print['start'] : 0);
             $end = (!empty($print['end']) ? $print['end'] : $size);

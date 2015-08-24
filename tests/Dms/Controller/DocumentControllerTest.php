@@ -80,7 +80,7 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals(null, $this->getResponse()->getContent());
     }
 
-    public function testInitSession()
+   /* public function testInitSession()
     {
         $this->dispatch('/initsession','GET');
 
@@ -90,7 +90,7 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         $tab = json_decode($this->getResponse()->getContent(),true);
 
         $this->assertTrue($tab['result']);
-    }
+    }*/
 
     public function testSaveUploadFile()
     {

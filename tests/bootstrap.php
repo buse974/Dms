@@ -17,7 +17,7 @@ class bootstrap
 
     public static function init()
     {
-        session_start();
+       // session_start();
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         ini_set('date.timezone',"Europe/Paris");
         system('cp -r ./_upload ./upload');

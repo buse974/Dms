@@ -146,7 +146,7 @@ class Document implements Serializable
      */
     public function getDatas($print = null)
     {
-        if ((null === $this->datas && null !== $this->getStorage()) || $print !== null) {
+        if ( (null === $this->datas && null !== $this->getStorage()) || $print!==null) {
             $this->getStorage()->read($this, 'datas', $print);
         }
 
@@ -485,7 +485,7 @@ class Document implements Serializable
                 'format' => $this->getFormat(),
         );
     }
-
+    
     public function getPathDat()
     {
         return $this->getStorage()->getPath($this, '.dat');

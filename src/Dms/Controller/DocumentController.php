@@ -22,7 +22,7 @@ class DocumentController extends AbstractActionController
         } catch (\Exception $e) {
             try {
                 preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
-
+                
                 $this->getManagerDms()->loadDocument($matches['id'][0]);
                 try {
                     $this->getManagerDms()->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
@@ -60,7 +60,7 @@ class DocumentController extends AbstractActionController
             } else {
                 header('content-length: '.$document->getWeight());
             }
-
+            
             $document->getDatas($print);
         }
 
