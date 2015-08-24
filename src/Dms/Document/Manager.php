@@ -16,19 +16,11 @@ class Manager implements ServiceLocatorAwareInterface
     protected $document;
 
     /**
-<<<<<<< HEAD
-=======
-     *
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
      * @var \Dms\Document\Document
      */
     protected $new_document;
 
     /**
-<<<<<<< HEAD
-=======
-     *
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
      * @var string
      */
     protected $format;
@@ -72,13 +64,8 @@ class Manager implements ServiceLocatorAwareInterface
         }
 
         $this->document->setStorage($this->getStorage());
-<<<<<<< HEAD
 
         if (!empty($this->document->getId()) && !$this->document->exist()) {
-=======
-        
-        if (! empty($this->document->getId()) && ! $this->document->exist()) {
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
             $this->clear();
             throw new \Exception('Param is not id: '.$document);
         }
@@ -87,13 +74,9 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-<<<<<<< HEAD
      * Initialise Document with a array.
      *
      * @param array $document
-=======
-     * Initialise Document with a array
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
      *
      * @return \Dms\Document\Manager
      */
@@ -128,11 +111,7 @@ class Manager implements ServiceLocatorAwareInterface
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-<<<<<<< HEAD
-
-=======
         
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
         $obj_mime_type = new MimeType();
         $is_video = ((strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'video') === 0) || (strpos($this->document->getType(), 'video') === 0));
         if ($is_video && (null !== $this->getFormat() || null !== $this->getSize() || null !== $this->getPage())) {
@@ -140,11 +119,7 @@ class Manager implements ServiceLocatorAwareInterface
             $this->document = $this->new_document;
             $this->new_document = null;
         }
-<<<<<<< HEAD
-
-=======
         
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
         // si que resize
         //
         // si format n'est pas une image ou IN non compatible
@@ -226,7 +201,6 @@ class Manager implements ServiceLocatorAwareInterface
                 $this->resize();
             }
         }
-<<<<<<< HEAD
 
         if ($this->new_document !== null) {
             $this->document = $this->new_document;
@@ -236,17 +210,6 @@ class Manager implements ServiceLocatorAwareInterface
             $this->document->setId($id);
         }
 
-=======
-        
-        if ($this->new_document !== null) {
-            $this->document = $this->new_document;
-        }
-        
-        if (null !== $id) {
-            $this->document->setId($id);
-        }
-        
->>>>>>> 02e4d9033420186d870b86accaecce8ceb634d0b
         $this->document->setStorage($this->getStorage());
         $this->document->write();
 
