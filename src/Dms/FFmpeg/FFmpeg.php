@@ -35,7 +35,13 @@ class FFmpeg
 
     public function getSize()
     {
-        return $this->video->getStreams()->first()->getDimensions()->getWidth().'x'.$this->video->getStreams()->first()->getDimensions()->getHeight();
+        $stream = $this->video->getStreams()->first();
+        $dim = null;
+        if($stream->isVideo()) {
+            $dim = $stream->getWidth().'x'.$stream->getDimensions()->getHeight();
+        }
+        
+        return $dim;
     }
 
     public function getTypeMine()
