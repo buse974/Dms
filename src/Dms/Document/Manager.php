@@ -61,11 +61,11 @@ class Manager implements ServiceLocatorAwareInterface
         if (!$document instanceof Document && is_string($document)) {
             $this->document = new Document();
             $this->document->setId($document);
-        }
+        }  
 
         $this->document->setStorage($this->getStorage());
 
-        if (!empty($this->document->getId()) && !$this->document->exist()) {
+        if (!$this->document->exist()) {
             $this->clear();
             throw new \Exception('Param is not id: '.$document);
         }
