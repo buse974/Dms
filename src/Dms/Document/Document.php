@@ -22,11 +22,6 @@ class Document implements Serializable
     protected $id;
 
     /**
-     * @var string
-     */
-    protected $hash;
-
-    /**
      * @var number
      */
     protected $page;
@@ -117,7 +112,7 @@ class Document implements Serializable
     public function getId()
     {
         if (null === $this->id) {
-            $this->id = $this->getHash().(($this->size) ? '-'.$this->size : '').(($this->page) ? '['.$this->page.']' : '').(($this->format) ? '.'.$this->format : '');
+            $this->id = sha1($this->name.uniqid($_SERVER['REMOTE_ADDR'], true));
         }
 
         return $this->id;
@@ -133,9 +128,7 @@ class Document implements Serializable
     public function setId($id)
     {
         $this->id = $id;
-        preg_match('/(?P<hash>\w+)($|\-|\.)/', $id, $matches, PREG_OFFSET_CAPTURE);
-        $this->hash = (isset($matches['hash']) && !empty($matches['hash'][0])) ? $matches['hash'][0] : null;
-
+        
         return $this;
     }
 
@@ -407,32 +400,6 @@ class Document implements Serializable
     }
 
     /**
-     * Get Hash.
-     *
-     * @return string
-     */
-    public function getHash()
-    {
-        if (!$this->hash) {
-            $this->hash = sha1($this->name.uniqid($_SERVER['REMOTE_ADDR'], true));
-        }
-
-        return $this->hash;
-    }
-
-    /**
-     * Set Hash.
-     *
-     * @param string
-     */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
-    /**
      * Set weight of document.
      *
      * @param number $weight
@@ -477,7 +444,6 @@ class Document implements Serializable
                 'size' => $this->getSize(),
                 'name' => $this->getName(),
                 'type' => $this->getType(),
-                'hash' => $this->getHash(),
                 'description' => $this->getDescription(),
                 'encoding' => $this->getEncoding(),
                 'support' => $this->getSupport(),
@@ -511,7 +477,6 @@ class Document implements Serializable
         $this->setDescription($datas['description']);
         $this->setEncoding($datas['encoding']);
         $this->setSupport($datas['support']);
-        $this->setHash((isset($datas['hash'])) ? $datas['hash'] : null);
         $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
         $this->setFormat((isset($datas['format'])) ? $datas['format'] : null);
     }

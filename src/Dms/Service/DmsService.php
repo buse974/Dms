@@ -33,8 +33,10 @@ class DmsService implements ServiceManagerAwareInterface
      */
     public function resize($size)
     {
+        $document = $this->getDocumentManager()->getDocument();
+
         $this->getDocumentManager()->setSize($size);
-        $this->getDocumentManager()->writeFile();
+        $this->getDocumentManager()->writeFile($document->getId() .'-'.$size);
         $document = $this->getDocumentManager()->getDocument();
 
         return $document->getId();

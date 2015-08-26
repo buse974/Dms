@@ -72,7 +72,6 @@ class Storage extends AbstractStorage
         $document->setDescription($datas->getDescription());
         $document->setEncoding($datas->getEncoding());
         $document->setSupport($datas->getSupport());
-        $document->setHash($datas->getHash());
         $document->setWeight($datas->getWeight());
         $document->setFormat($datas->getFormat());
     }
