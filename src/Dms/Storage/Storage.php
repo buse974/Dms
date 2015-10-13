@@ -134,7 +134,6 @@ class Storage extends AbstractStorage
         fclose($handle);
 
         if ($print !== null) {
-            syslog(1, 'EXIT PRINT');
             exit();
         }
 
