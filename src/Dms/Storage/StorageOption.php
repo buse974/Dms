@@ -10,6 +10,10 @@ class StorageOption extends AbstractOptions
 
     public function setPath($path)
     {
+        if(substr($path, -1) !== DIRECTORY_SEPARATOR) {
+            $path .= DIRECTORY_SEPARATOR;
+        }
+            
         $this->path = $path;
 
         return $this;

@@ -11,20 +11,18 @@ class Storage extends AbstractStorage
     {
         $ret = null;
         $name = $document->getId();
-
         $nameMod = substr($name, 4);
-        $path = $this->options->getPath().'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
+        $path = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
             $adp = new Http();
             $adp->setDestination($path);
             $adp->addFilter('Rename', array('target' => $nameMod.'.dat'));
             $adp->receive($document->getDatas()['name']);
         } else {
-            $p = str_replace('//', '/', $path.$nameMod.'.dat');
+            $p = $path.$nameMod.'.dat';
             $fp = fopen($p, 'w');
             fwrite($fp, $document->getDatas());
             $document->setWeight(strlen($document->getDatas()));
@@ -45,61 +43,26 @@ class Storage extends AbstractStorage
 
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
-        return (null === $type || $type != 'datas') ? $this->_readInf($document) : $this->_readData($document, $print);
-    }
-
-    public function _readInf(\Dms\Document\Document &$document)
-    {
-        $content = null;
-
-        $filename = $this->getPath($document, '.inf');
-
-        $handle = fopen($filename, 'r');
-        $size = filesize($filename);
-
-        while ($size) {
-            $read = ($size > 8192) ? 8192 : $size;
-            $size -= $read;
-            $content .= fread($handle, $read);
-        }
-        fclose($handle);
-
-        $datas = unserialize($content);
-
-        $document->setSize($datas->getSize());
-        $document->setName($datas->getName());
-        $document->setType($datas->getType());
-        $document->setDescription($datas->getDescription());
-        $document->setEncoding($datas->getEncoding());
-        $document->setSupport($datas->getSupport());
-        $document->setWeight($datas->getWeight());
-        $document->setFormat($datas->getFormat());
+        return (null === $type || $type !== 'datas') ? $this->_readInf($document) : $this->_readData($document, $print);
     }
 
     public function exist(\Dms\Document\Document $document)
     {
         try {
             $this->getPath($document, '.inf');
-
-            return true;
         } catch (\Exception $e) {
             return false;
         }
+        
+        return true;
     }
 
     public function getPath(\Dms\Document\Document $document, $ext = '')
     {
         $name = $document->getId().$ext;
-
         $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
-
         if (!file_exists($filename)) {
-            syslog(1, $filename);
-            $filename = $this->options->getPath().'/'.$name;
-            if (!file_exists($filename)) {
-                syslog(1, $filename);
-                throw new \Exception('no file');
-            }
+            throw new \Exception('no file');
         }
 
         return $filename;
@@ -110,11 +73,9 @@ class Storage extends AbstractStorage
         $content = null;
 
         $filename = $this->getPath($document, '.dat');
-
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
 
-        
         if (is_array($print)) {
             $start = (!empty($print['start']) ? $print['start'] : 0);
             $end = (!empty($print['end']) ? $print['end'] : $size);
@@ -138,5 +99,30 @@ class Storage extends AbstractStorage
         }
 
         $document->setDatas($content);
+    }
+    
+    public function _readInf(\Dms\Document\Document &$document)
+    {
+        $content = null;
+        $filename = $this->getPath($document, '.inf');
+        $handle = fopen($filename, 'r');
+        $size = filesize($filename);
+        
+        while ($size) {
+            $read = ($size > 8192) ? 8192 : $size;
+            $size -= $read;
+            $content .= fread($handle, $read);
+        }
+        
+        fclose($handle);
+        $datas = unserialize($content);
+        $document->setSize($datas->getSize());
+        $document->setName($datas->getName());
+        $document->setType($datas->getType());
+        $document->setDescription($datas->getDescription());
+        $document->setEncoding($datas->getEncoding());
+        $document->setSupport($datas->getSupport());
+        $document->setWeight($datas->getWeight());
+        $document->setFormat($datas->getFormat());
     }
 }
