@@ -127,7 +127,6 @@ class Manager implements ServiceLocatorAwareInterface
         // puis resize imagick avec format de sortie par default (jpeg)
         if (null !== $this->getSize() && null === $this->getFormat()) {
             // si format n'est pas une image ou IN non compatible
-
             $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
             if ($is_img && Resize::isCompatible($this->document->getFormat())) {
                 $this->resize();
@@ -248,9 +247,7 @@ class Manager implements ServiceLocatorAwareInterface
     private function resize()
     {
         $resize = $this->getServiceResize();
-        $resize->setData($this->getDocument()
-            ->getDatas())
-            ->setFormat($this->getFormat());
+        $resize->setData($this->getDocument()->getDatas())->setFormat($this->getFormat());
         $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
         $this->getNewDocument()->setDatas($resize->getResizeData($this->size));
         $this->getNewDocument()->setSize($this->size);
