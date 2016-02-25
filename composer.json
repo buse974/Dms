@@ -13,11 +13,21 @@
   "require": {
     "php-ffmpeg/php-ffmpeg": "~0.5",
     "php": ">=5.4",
-    "zendframework/zendframework": "2.*"
+    "zendframework/zend-file": "2.4.9",
+    "zendframework/zend-servicemanager": "*",
+    "zendframework/zend-mvc": "*",
+    "zendframework/zend-modulemanager": "*",
+    "zendframework/zend-loader": "*",
+    "zendframework/zend-config": "*",
+    "zendframework/zend-view": "*",
+    "zendframework/zend-serializer": "*",
+    "zendframework/zend-log": "*",
+    "zendframework/zend-i18n": "*"
   },
   "require-dev" : {
     "fabpot/php-cs-fixer":"*",
-    "phpunit/phpunit" : ">=3.7,<4"
+    "phpunit/phpunit" : "*",
+    "zendframework/zend-test": "*"
   },
   "autoload": {
         "psr-0": { "Dms": "src/" }
