@@ -32,7 +32,7 @@ class Resize implements ServiceManagerAwareInterface
 
     public function setFormat($format)
     {
-        if(!empty($this->format)) {
+        if(!empty($format)) {
             $this->format = $format;
         }
         

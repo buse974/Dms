@@ -203,6 +203,8 @@ class Manager implements ServiceLocatorAwareInterface
 
         if ($this->new_document !== null) {
             $this->document = $this->new_document;
+        } else {
+        	$this->document->getDatas();
         }
 
         if (null !== $id) {
