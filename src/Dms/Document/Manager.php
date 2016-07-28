@@ -92,7 +92,7 @@ class Manager implements ServiceLocatorAwareInterface
             ->setType((isset($document['type'])) ? $document['type'] : null)
             ->setSupport((isset($document['support'])) ? $document['support'] : null)
             ->setFormat((isset($document['format'])) ? $document['format'] : null)
-            ->setName((isset($document['name'])) ? $document['name'] : null)
+            ->setName((isset($document['name'])) ? str_replace(';','',str_replace(',','',$document['name'])) : null)
             ->setSize((isset($document['size'])) ? $document['size'] : null)
             ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
 
@@ -203,8 +203,6 @@ class Manager implements ServiceLocatorAwareInterface
 
         if ($this->new_document !== null) {
             $this->document = $this->new_document;
-        } else {
-        	$this->document->getDatas();
         }
 
         if (null !== $id) {
