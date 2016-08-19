@@ -19,5 +19,13 @@ return array(
                         'Access-Control-Allow-Origin'=>'http://local.wow.in',
                         'Access-Control-Allow-Credentials'=>'true'
                 ),
+                'storage' => [
+                	'name' => 's3',
+                	'options' => [
+                		'aws_key' => '',
+                		'aws_secret_key' => '',
+                		'bucket' => '',
+                	]
+                ]
         ),
 );

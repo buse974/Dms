@@ -22,7 +22,8 @@
     "zendframework/zend-view": "*",
     "zendframework/zend-serializer": "*",
     "zendframework/zend-log": "*",
-    "zendframework/zend-i18n": "*"
+    "zendframework/zend-i18n": "*",
+    "zendframework/zendservice-amazon": "^2.0"
   },
   "require-dev" : {
     "fabpot/php-cs-fixer":"*",

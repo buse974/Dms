@@ -4,22 +4,24 @@ namespace Dms\Storage;
 
 use Zend\File\Transfer\Adapter\Http;
 use Dms\Document\Document;
+use ZendService\Amazon\Amazon;
 
 class Storage extends AbstractStorage
 {
+    private $init_path = false;
+    
     public function write(\Dms\Document\Document $document)
     {
         $ret = null;
         $name = $document->getId();
         $nameMod = substr($name, 4);
-        $path = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
+        $path = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
             $adp = new Http();
-            $adp->setDestination($path);
-            $adp->addFilter('Rename', array('target' => $nameMod.'.dat'));
+            $adp->addFilter('Rename', array('target' => $path.$nameMod.'.dat'));
             $adp->receive($document->getDatas()['name']);
         } else {
             $p = $path.$nameMod.'.dat';
@@ -60,7 +62,7 @@ class Storage extends AbstractStorage
     public function getPath(\Dms\Document\Document $document, $ext = '')
     {
         $name = $document->getId().$ext;
-        $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
+        $filename = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
         if (!file_exists($filename)) {
             throw new \Exception('no file');
         }
@@ -71,7 +73,6 @@ class Storage extends AbstractStorage
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $content = null;
-
         $filename = $this->getPath($document, '.dat');
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
@@ -124,5 +125,29 @@ class Storage extends AbstractStorage
         $document->setSupport($datas->getSupport());
         $document->setWeight($datas->getWeight());
         $document->setFormat($datas->getFormat());
+    }
+    
+
+    private function getBasePath()
+    {
+        $conf_storage = $this->options->getStorage();
+        if(isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
+            if($init_path === false) {
+                $s3 = new \ZendService\Amazon\S3\S3(
+                    $conf_storage['options']['aws_key'],
+                    $conf_storage['options']['aws_secret_key']);
+                if(!$s3->isBucketAvailable($conf_storage['options']['bucket'])) {
+                    $s3->createBucket($conf_storage['options']['bucket']);
+                }
+                $s3->registerStreamWrapper("s3");
+                $init_path = true;
+            }
+            $path = sprintf("s3://%s/",$conf_storage['options']['bucket']);
+            
+        } else {
+            $path = $this->options->getPath();
+        }
+        
+        return $path;
     }
 }

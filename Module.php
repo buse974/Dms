@@ -26,19 +26,19 @@ class Module implements ConfigProviderInterface
     {
         return array(
             'aliases' => array(
-                'dms.service' => '\Dms\Service\DmsService',
-                'dms.manager' => '\Dms\Document\Manager',
+                'dms.service' => \Dms\Service\DmsService::class,
+                'dms.manager' => \Dms\Document\Manager::class,
                 'Base64Coding' => 'BaseCoding',
                 'UrlCoding' => '\Dms\Coding\Url\Url',
                 'Resize' => '\Dms\Resize\Resize',
                 'Storage' => '\Dms\Storage\Storage',
             ),
             'invokables' => array(
-                'BaseCoding' => '\Dms\Coding\Base\Base',
-                'GzipCoding' => '\Dms\Coding\Gzip\Gzip',
-                'ZlibCoding' => '\Dms\Coding\Zlib\Zlib',
-                '\Dms\Document\Manager' => '\Dms\Document\Manager',
-                '\Dms\Service\DmsService' => '\Dms\Service\DmsService',
+                'BaseCoding' => \Dms\Coding\Base\Base::class,
+                'GzipCoding' => \Dms\Coding\Gzip\Gzip::class,
+                'ZlibCoding' => \Dms\Coding\Zlib\Zlib::class,
+                \Dms\Document\Manager::class => \Dms\Document\Manager::class,
+                \Dms\Service\DmsService::class => \Dms\Service\DmsService::class,
             ),
             'abstract_factories' => array(
                 'Dms\ServiceFactory\CodingFactory',
@@ -52,13 +52,17 @@ class Module implements ConfigProviderInterface
                     return $url;
                 },
                 '\Dms\Resize\Resize' => function ($sm) {
-                    return new \Dms\Resize\Resize(array(
+                    return new \Dms\Resize\Resize([
                             'allow' => $sm->get('config')['dms-conf']['size_allowed'],
                             'active' => $sm->get('config')['dms-conf']['check_size_allowed'],
-                    ));
+                    ]);
                 },
                 '\Dms\Storage\Storage' => function ($sm) {
-                    return new \Dms\Storage\Storage(array('path' => $sm->get('config')['dms-conf']['default_path']));
+                    $dmsconf = $sm->get('config')['dms-conf'];
+                    return new \Dms\Storage\Storage([
+                        'path' => $dmsconf['default_path'],
+                        'storage' => $dmsconf['storage']
+                    ]);
                 },
             ),
         );
