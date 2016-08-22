@@ -106,6 +106,9 @@ class Storage extends AbstractStorage
     {
         $content = null;
         $filename = $this->getPath($document, '.inf');
+        
+        
+        
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
         
@@ -127,23 +130,16 @@ class Storage extends AbstractStorage
         $document->setFormat($datas->getFormat());
     }
     
-
     private function getBasePath()
     {
         $conf_storage = $this->options->getStorage();
         if(isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
-            if($init_path === false) {
-                $s3 = new \ZendService\Amazon\S3\S3(
-                    $conf_storage['options']['aws_key'],
-                    $conf_storage['options']['aws_secret_key']);
-                if(!$s3->isBucketAvailable($conf_storage['options']['bucket'])) {
-                    $s3->createBucket($conf_storage['options']['bucket']);
-                }
-                $s3->registerStreamWrapper("s3");
+            if($this->init_path === false) {
+                $s3Client = new S3Client($conf_storage['options']);
+                $s3Client->registerStreamWrapper();
                 $init_path = true;
             }
-            $path = sprintf("s3://%s/",$conf_storage['options']['bucket']);
-            
+            $path = sprintf("s3://%s/",$conf_storage['bucket']);
         } else {
             $path = $this->options->getPath();
         }

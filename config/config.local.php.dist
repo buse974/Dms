@@ -21,10 +21,14 @@ return array(
                 ),
                 'storage' => [
                 	'name' => 's3',
+                	'bucket' => 'NAME-BUCKET',
                 	'options' => [
-                		'aws_key' => '',
-                		'aws_secret_key' => '',
-                		'bucket' => '',
+                		'version' => 'latest',
+                    	'region' => '',
+                    	'credentials' => [
+                        	'key'    => '',
+                        	'secret' => '',
+                    	]
                 	]
                 ]
         ),

@@ -12,7 +12,7 @@
   ],
   "require": {
     "php-ffmpeg/php-ffmpeg": "~0.5",
-    "php": ">=5.4",
+    "php": ">=5.5",
     "zendframework/zend-file": "2.4.9",
     "zendframework/zend-servicemanager": "*",
     "zendframework/zend-mvc": "*",
@@ -23,7 +23,7 @@
     "zendframework/zend-serializer": "*",
     "zendframework/zend-log": "*",
     "zendframework/zend-i18n": "*",
-    "zendframework/zendservice-amazon": "^2.0"
+    "aws/aws-sdk-php": "^3.19"
   },
   "require-dev" : {
     "fabpot/php-cs-fixer":"*",
@@ -31,7 +31,7 @@
     "zendframework/zend-test": "*"
   },
   "autoload": {
-        "psr-0": { "Dms": "src/" }
+        "psr-4": { "Dms\\": "src/" }
   },
   "config": {
        "bin-dir": "bin/"
