@@ -4,7 +4,7 @@ namespace Dms\Storage;
 
 use Zend\File\Transfer\Adapter\Http;
 use Dms\Document\Document;
-use ZendService\Amazon\Amazon;
+use Aws\S3\S3Client;
 
 class Storage extends AbstractStorage
 {
@@ -106,8 +106,6 @@ class Storage extends AbstractStorage
     {
         $content = null;
         $filename = $this->getPath($document, '.inf');
-        
-        
         
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
