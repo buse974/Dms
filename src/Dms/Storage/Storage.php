@@ -72,34 +72,23 @@ class Storage extends AbstractStorage
 
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
-        $content = null;
         $filename = $this->getPath($document, '.dat');
-        $handle = fopen($filename, 'r');
-        $size = filesize($filename);
-
-        if (is_array($print)) {
-            $start = (!empty($print['start']) ? $print['start'] : 0);
-            $end = (!empty($print['end']) ? $print['end'] : $size);
-            $size = ($end - $start + 1);
-            fseek($handle, $start);
-        }
-
-        while ($size) {
-            $read = ($size > 8192) ? 8192 : $size;
-            $size -= $read;
-            if ($print !== null) {
-                print(fread($handle, $read));
-            } else {
-                $content .= fread($handle, $read);
+        if($print !== null) {
+            $handle = fopen($filename, 'r');
+            if (is_array($print)) {
+                $start = (!empty($print['start']) ? $print['start'] : 0);
+                //$end = (!empty($print['end']) ? $print['end'] : filesize($filename));
+                fseek($handle, $start);
             }
-        }
-        fclose($handle);
-
-        if ($print !== null) {
+            while (!feof($handle)) {
+                print(fread($handle, 8192));
+            }
+            fclose($handle);
             exit();
+        } else {
+            $content = file_get_contents($filename);
+            $document->setDatas($content);
         }
-
-        $document->setDatas($content);
     }
     
     public function _readInf(\Dms\Document\Document &$document)
