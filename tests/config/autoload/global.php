@@ -24,5 +24,13 @@ return array(
         'convert' => array(
             'tmp' =>  __DIR__ . '/../../_tmp/',
         ),
+        'storage' => [
+          /*  'name' => 's3',
+            'options' => [
+                'aws_key' => '',
+                'aws_secret_key' => '',
+                'bucket' => '',
+            ]*/
+        ]
     ),
 );
