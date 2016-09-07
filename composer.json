@@ -12,8 +12,8 @@
   ],
   "require": {
     "php-ffmpeg/php-ffmpeg": "~0.5",
-    "php": ">=5.4",
-    "zendframework/zend-file": "2.4.9",
+    "php": ">=5.6",
+    "zendframework/zend-file": "*",
     "zendframework/zend-servicemanager": "*",
     "zendframework/zend-mvc": "*",
     "zendframework/zend-modulemanager": "*",
