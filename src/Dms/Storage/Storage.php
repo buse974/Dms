@@ -1,12 +1,29 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Storage.php
+ *
+ */
 namespace Dms\Storage;
 
-use Zend\File\Transfer\Adapter\Http;
 use Dms\Document\Document;
+use Zend\Form\Form;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\FileInput;
+use Zend\Form\Element\File;
 
+/**
+ * Class Storage
+ */
 class Storage extends AbstractStorage
 {
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Dms\Storage\StorageInterface::write()
+     */
     public function write(\Dms\Document\Document $document)
     {
         $ret = null;
@@ -16,13 +33,22 @@ class Storage extends AbstractStorage
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+        
+        $p = $path.$nameMod.'.dat';
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
-            $adp = new Http();
-            $adp->setDestination($path);
-            $adp->addFilter('Rename', array('target' => $nameMod.'.dat'));
-            $adp->receive($document->getDatas()['name']);
+            $fileInput = new FileInput(key($document->getDatas()));
+            $fileInput->getFilterChain()->attachByName('filerenameupload', ['target' => $p]);
+            
+            $inputFilter = new InputFilter();
+            $inputFilter->add($fileInput);
+         
+            $form = new Form();
+            $form->setInputFilter($inputFilter);
+            $form->setData($document->getDatas());
+            if($form->isValid()) {
+                $form->getData();
+            }
         } else {
-            $p = $path.$nameMod.'.dat';
             $fp = fopen($p, 'w');
             fwrite($fp, $document->getDatas());
             $document->setWeight(strlen($document->getDatas()));
@@ -41,11 +67,21 @@ class Storage extends AbstractStorage
         return $ret;
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Dms\Storage\StorageInterface::read()
+     */
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
         return (null === $type || $type !== 'datas') ? $this->_readInf($document) : $this->_readData($document, $print);
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Dms\Storage\StorageInterface::exist()
+     */
     public function exist(\Dms\Document\Document $document)
     {
         try {
@@ -57,6 +93,11 @@ class Storage extends AbstractStorage
         return true;
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Dms\Storage\StorageInterface::getPath()
+     */
     public function getPath(\Dms\Document\Document $document, $ext = '')
     {
         $name = $document->getId().$ext;
@@ -68,6 +109,12 @@ class Storage extends AbstractStorage
         return $filename;
     }
 
+    /**
+     * Read Data
+     *  
+     * @param \Dms\Document\Document $document
+     * @param bool|array $print
+     */
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $content = null;
@@ -101,6 +148,11 @@ class Storage extends AbstractStorage
         $document->setDatas($content);
     }
     
+    /**
+     * Read Inf
+     * 
+     * @param \Dms\Document\Document $document
+     */
     public function _readInf(\Dms\Document\Document &$document)
     {
         $content = null;

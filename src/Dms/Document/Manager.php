@@ -1,14 +1,23 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Manager Dms
+ *
+ */
 namespace Dms\Document;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Dms\Convert\Convert;
 use Dms\Resize\Resize;
 use Dms\FFmpeg\FFmpeg;
+use Dms\Storage\Storage;
+use Interop\Container\ContainerInterface;
 
-class Manager implements ServiceLocatorAwareInterface
+/**
+ * Class Manager
+ */
+class Manager 
 {
     /**
      * @var \Dms\Document\Document
@@ -31,7 +40,7 @@ class Manager implements ServiceLocatorAwareInterface
     protected $size;
 
     /**
-     * @var number
+     * @var int
      */
     protected $page;
 
@@ -46,12 +55,33 @@ class Manager implements ServiceLocatorAwareInterface
     protected $storage;
 
     /**
-     * Load document info.
+     * Option dms-conf
+     * 
+     * @var array
+     */
+    protected $option;
+    
+    /**
+     * 
+     * @var ContainerInterface
+     */
+    protected $container;
+    /**
+     * Constructor
+     * 
+     * @param array $option
+     */
+    public function __construct($option, $container)
+    {
+        $this->option = $option;
+        $this->container = $container;
+    }
+    
+    /**
+     * Load document info
      *
      * @param string|\Dms\Document\Document $document
-     *
      * @throws \Exception
-     *
      * @return \Dms\Document\Manager
      */
     public function loadDocument($document)
@@ -67,7 +97,7 @@ class Manager implements ServiceLocatorAwareInterface
 
         if (!$this->document->exist()) {
             $this->clear();
-            throw new \Exception('Param is not id: '.$document);
+            throw new NoFileException($document);
         }
 
         return $this;
@@ -77,13 +107,11 @@ class Manager implements ServiceLocatorAwareInterface
      * Initialise Document with a array.
      *
      * @param array $document
-     *
      * @return \Dms\Document\Manager
      */
     public function createDocument(array $document)
     {
         $this->clear();
-
         $this->document = new Document();
         $this->document->isRead()
             ->setId((isset($document['id'])) ? $document['id'] : null)
@@ -102,8 +130,10 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Record a document to the Dms.
-     *
+     * Record a document to the Dms
+     * 
+     * @param int $id
+     * @throws \Exception
      * @return \Dms\Document\Manager
      */
     public function writeFile($id = null)
@@ -216,10 +246,9 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Decode Document to binary.
+     * Decode Document to binary
      *
      * @throws \Exception
-     *
      * @return \Dms\Document\Manager
      */
     public function decode()
@@ -238,16 +267,16 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Resize document.
+     * Resize document
      *
      * @param number $size
-     *
      * @return \Dms\Document\Manager
      */
     private function resize()
     {
-        $resize = $this->getServiceResize();
+        $resize = new Resize(['allow' => $this->option['size_allowed'],'active' => $this->option['check_size_allowed']]);
         $resize->setData($this->getDocument()->getDatas())->setFormat($this->getFormat());
+        
         $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
         $this->getNewDocument()->setDatas($resize->getResizeData($this->size));
         $this->getNewDocument()->setSize($this->size);
@@ -258,15 +287,14 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Convert format file.
+     * Convert format file
      */
     private function convert()
     {
         $convert = new Convert();
         $convert->setData($this->document->getDatas())
             ->setFormat($this->document->getFormat())
-            ->setTmp($this->getServiceLocator()
-            ->get('Config')['dms-conf']['convert']['tmp'])
+            ->setTmp($this->option['convert']['tmp'])
             ->setPage($this->getPage());
         
         $this->getNewDocument()->setDatas($convert->getConvertData($this->getFormat()));
@@ -276,7 +304,7 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Convert format file.
+     * Convert format file
      */
     private function createPicture()
     {
@@ -295,7 +323,7 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get Document.
+     * Get Document
      *
      * @return \Dms\Document\Document
      */
@@ -309,7 +337,7 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get New Document.
+     * Get New Document
      *
      * @return \Dms\Document\Document
      */
@@ -325,11 +353,22 @@ class Manager implements ServiceLocatorAwareInterface
         return $this->new_document;
     }
 
+    /**
+     * Get Size 
+     * 
+     * @return string
+     */
     public function getSize()
     {
         return $this->size;
     }
 
+    /**
+     * Set Size
+     * 
+     * @param int $size
+     * @return \Dms\Document\Manager
+     */
     public function setSize($size)
     {
         $this->size = $size;
@@ -337,11 +376,22 @@ class Manager implements ServiceLocatorAwareInterface
         return $this;
     }
 
+    /**
+     * Get Format
+     * 
+     * @return string
+     */
     public function getFormat()
     {
         return $this->format;
     }
 
+    /**
+     * Set Format
+     * 
+     * @param string $format
+     * @return \Dms\Document\Manager
+     */
     public function setFormat($format)
     {
         $this->format = $format;
@@ -349,11 +399,22 @@ class Manager implements ServiceLocatorAwareInterface
         return $this;
     }
 
+    /**
+     * Get num Page
+     * 
+     * @return int
+     */
     public function getPage()
     {
         return $this->page;
     }
 
+    /**
+     * Set num Page
+     * 
+     * @param int $page
+     * @return \Dms\Document\Manager
+     */
     public function setPage($page)
     {
         $this->page = $page;
@@ -362,21 +423,21 @@ class Manager implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get storage.
+     * Get storage
      *
      * @return \Dms\Storage\StorageInterface
      */
     public function getStorage()
     {
-        if (null === $this->storage) {
-            $this->storage = $this->getServiceLocator()->get('Storage');
+        if(null === $this->storage) {
+            $this->storage = new Storage(['path' => $this->option['default_path']]);
         }
-
+            
         return $this->storage;
     }
 
     /**
-     * Set Storage.
+     * Set Storage
      *
      * @param \Dms\Storage\StorageInterface $storage
      *
@@ -392,39 +453,9 @@ class Manager implements ServiceLocatorAwareInterface
     /**
      * @return \Dms\Coding\CodingInterface
      */
-    protected function getEncDec($enc)
+    public function getEncDec($enc)
     {
-        return $this->getServiceLocator()->get($enc.'Coding');
-    }
-
-    /**
-     * @return \Dms\Resize\Resize
-     */
-    protected function getServiceResize()
-    {
-        return $this->getServiceLocator()->get('Resize');
-    }
-
-    /**
-     * Get service locator.
-     *
-     * @return \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * Set service locator.
-     *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
+        return $this->container->get($enc.'Coding');
     }
 
     public function clear()

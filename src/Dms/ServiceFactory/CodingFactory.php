@@ -1,43 +1,47 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * CodingFactory.php
+ *
+ */
 namespace Dms\ServiceFactory;
 
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Dms\Coding\CodingInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Interop\Container\ContainerInterface;
 
+/**
+ * Class Factory encode/decode
+ */
 class CodingFactory implements AbstractFactoryInterface
 {
+
     /**
-     * Determine if we can create a service with name.
+     * Determine if we can create a Mapper with name
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
-     *
-     * @return bool
+     * {@inheritDoc}
+     * @see \Zend\ServiceManager\Factory\AbstractFactoryInterface::canCreate()
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         return (substr($requestedName, -6) === 'Coding');
     }
-
+    
     /**
-     * Create service with name.
+     * Create Mapper with name
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
-     *
-     * @return \Dms\ServiceFactory\CodingFactory
+     * {@inheritDoc}
+     * @see \Zend\ServiceManager\Factory\FactoryInterface::__invoke()
      */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $factory = $serviceLocator->get(ucfirst($requestedName));
         if (!$factory instanceof CodingInterface) {
             throw new \Exception('not type CodingInterface');
         }
-
+        
         return $factory;
     }
 }

@@ -1,14 +1,21 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * AbstractStorage.php
+ *
+ */
 namespace Dms\Storage;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
-use Zend\ServiceManager\ServiceManager;
 
-abstract class AbstractStorage implements EventManagerAwareInterface, ServiceManagerAwareInterface, StorageInterface
+/**
+ * Class AbstractStorage
+ */
+abstract class AbstractStorage implements EventManagerAwareInterface, StorageInterface
 {
     /**
      * @var EventManagerInterface
@@ -16,22 +23,20 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
     protected $events;
 
     /**
-     * @var ServiceManager
-     */
-    protected $servicemanager;
-
-    /**
      * @var StorageOption
      */
     protected $options;
 
     /**
+     * Constructor 
+     * 
      * @param array $options
      */
     public function __construct(array $options = array())
     {
         $this->options = new StorageOption($options);
     }
+    
     /**
      * Inject an EventManager instance.
      *
@@ -62,15 +67,4 @@ abstract class AbstractStorage implements EventManagerAwareInterface, ServiceMan
         return $this->events;
     }
 
-    /**
-     * Set service manager.
-     *
-     * @param ServiceManager $serviceManager
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->servicemanager = $serviceManager;
-
-        return $this;
-    }
 }

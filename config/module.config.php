@@ -1,11 +1,18 @@
 <?php
 
+use Dms\Controller\Plugin\DmsFactory;
+
 return array(
-        'view_manager' => array(
-                'strategies' => array(
+        'view_manager' => [
+                'strategies' => [
                         'ViewJsonStrategy',
-                ),
-        ),
+                ],
+        ],
+        'controller_plugins' => [
+            'factories' => [
+                'dms' => DmsFactory::class,
+            ],
+        ],
         'router' => array(
             'routes' => array(
                 'fileview' => array(

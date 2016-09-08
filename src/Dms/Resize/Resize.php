@@ -2,15 +2,9 @@
 
 namespace Dms\Resize;
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
-
-class Resize implements ServiceManagerAwareInterface
+class Resize 
 {
-    /**
-     * @var \Zend\ServiceManager\ServiceManager
-     */
-    protected $serviceManager;
+
     protected $data;
     protected $format = 'jpg';
     protected $options;
@@ -158,14 +152,6 @@ class Resize implements ServiceManagerAwareInterface
         }
 
         return (imagetypes() & $t);
-    }
-
-    /**
-     * @param ServiceManager $serviceManager
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
     }
 
     public function getTypeMine()
