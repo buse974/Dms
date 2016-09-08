@@ -16,13 +16,17 @@ use Zend\Stdlib\AbstractOptions;
 class StorageOption extends AbstractOptions
 {
     /**
-     * 
      * @var string
      */
     private $path;
+    
+    /**
+     * @var array
+     */
+    private $storage;
 
     /**
-     * Path 
+     * Set Path 
      * 
      * @param string $path
      * @return \Dms\Storage\StorageOption
@@ -50,5 +54,28 @@ class StorageOption extends AbstractOptions
         }
 
         return $this->path;
+    }
+    
+    /**
+     * Set Storage
+     * 
+     * @param array $storage
+     * @return \Dms\Storage\StorageOption
+     */
+    public function setStorage($storage)
+    {
+        $this->storage = $storage;
+        
+        return $this;
+    }
+    
+    /**
+     * Get Storage
+     * 
+     * @return array
+     */
+    public function getStorage()
+    {
+        return $this->storage;
     }
 }

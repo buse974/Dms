@@ -13,12 +13,15 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\FileInput;
 use Zend\Form\Element\File;
+use Aws\S3\S3Client;
 
 /**
  * Class Storage
  */
 class Storage extends AbstractStorage
 {
+    private $init_path = false;
+    
     /**
      * 
      * {@inheritDoc}
@@ -29,7 +32,7 @@ class Storage extends AbstractStorage
         $ret = null;
         $name = $document->getId();
         $nameMod = substr($name, 4);
-        $path = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
+        $path = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
@@ -101,7 +104,7 @@ class Storage extends AbstractStorage
     public function getPath(\Dms\Document\Document $document, $ext = '')
     {
         $name = $document->getId().$ext;
-        $filename = $this->options->getPath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
+        $filename = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
         if (!file_exists($filename)) {
             throw new \Exception('no file');
         }
@@ -117,35 +120,23 @@ class Storage extends AbstractStorage
      */
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
-        $content = null;
-
         $filename = $this->getPath($document, '.dat');
-        $handle = fopen($filename, 'r');
-        $size = filesize($filename);
-
-        if (is_array($print)) {
-            $start = (!empty($print['start']) ? $print['start'] : 0);
-            $end = (!empty($print['end']) ? $print['end'] : $size);
-            $size = ($end - $start + 1);
-            fseek($handle, $start);
-        }
-
-        while ($size) {
-            $read = ($size > 8192) ? 8192 : $size;
-            $size -= $read;
-            if ($print !== null) {
-                print(fread($handle, $read));
-            } else {
-                $content .= fread($handle, $read);
+        if($print !== null) {
+            $handle = fopen($filename, 'r');
+            if (is_array($print)) {
+                $start = (!empty($print['start']) ? $print['start'] : 0);
+                //$end = (!empty($print['end']) ? $print['end'] : filesize($filename));
+                fseek($handle, $start);
             }
-        }
-        fclose($handle);
-
-        if ($print !== null) {
+            while (!feof($handle)) {
+                print(fread($handle, 8192));
+            }
+            fclose($handle);
             exit();
+        } else {
+            $content = file_get_contents($filename);
+            $document->setDatas($content);
         }
-
-        $document->setDatas($content);
     }
     
     /**
@@ -157,6 +148,7 @@ class Storage extends AbstractStorage
     {
         $content = null;
         $filename = $this->getPath($document, '.inf');
+        
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
         
@@ -176,5 +168,27 @@ class Storage extends AbstractStorage
         $document->setSupport($datas->getSupport());
         $document->setWeight($datas->getWeight());
         $document->setFormat($datas->getFormat());
+    }
+    
+    /**
+     * Get Path Base
+     * 
+     * @return string
+     */
+    private function getBasePath()
+    {
+        $conf_storage = $this->options->getStorage();
+        if(isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
+            if($this->init_path === false) {
+                $s3Client = new S3Client($conf_storage['options']);
+                $s3Client->registerStreamWrapper();
+                $init_path = true;
+            }
+            $path = sprintf("s3://%s/",$conf_storage['bucket']);
+        } else {
+            $path = $this->options->getPath();
+        }
+        
+        return $path;
     }
 }

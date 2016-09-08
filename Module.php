@@ -41,9 +41,9 @@ class Module implements ConfigProviderInterface
                     $config = $container->get('Config');
                     $url = new Url();
                     $url->setAdapter($config[$config['dms-conf']['adapter']]);
-
                     return $url;
                 },
+
                 \Dms\Resize\Resize::class => function ($container) {
                     $config = $container->get('config')['dms-conf'];
                     return new Resize([
@@ -52,10 +52,15 @@ class Module implements ConfigProviderInterface
                     ]);
                 },
                 \Dms\Storage\Storage::class => function ($container) {
-                    return new Storage(['path' => $container->get('config')['dms-conf']['default_path']]);
+                    $config = $container->get('config')['dms-conf'];
+                    return new Storage([
+                        'path' => $config['default_path'],
+                        'storage' => $config['storage']
+                    ]);
                 },
                 \Dms\Document\Manager::class => function ($container) {
-                    return new Manager($container->get('Config')['dms-conf'], $container);
+                    $config = $container->get('config')['dms-conf'];
+                    return new Manager($config, $container);
                 },
                 \Dms\Service\DmsService::class => function ($container) {
                     return new DmsService($container->get(\Dms\Document\Manager::class));
