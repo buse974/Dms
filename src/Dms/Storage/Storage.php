@@ -20,11 +20,19 @@ use Aws\S3\S3Client;
  */
 class Storage extends AbstractStorage
 {
+    /**
+     * If Path Is init
+     * 
+     * @var bool
+     */
     private $init_path = false;
     
     /**
      * 
      * {@inheritDoc}
+     * 
+     * @param \Dms\Document\Document $document
+     * 
      * @see \Dms\Storage\StorageInterface::write()
      */
     public function write(\Dms\Document\Document $document)
@@ -73,6 +81,11 @@ class Storage extends AbstractStorage
     /**
      * 
      * {@inheritDoc}
+     * 
+     * @param \Dms\Document\Document &$document
+     * @param string type
+     * @param bool $print
+     * 
      * @see \Dms\Storage\StorageInterface::read()
      */
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
@@ -83,6 +96,9 @@ class Storage extends AbstractStorage
     /**
      * 
      * {@inheritDoc}
+     * 
+     * @param \Dms\Document\Document $document
+     * 
      * @see \Dms\Storage\StorageInterface::exist()
      */
     public function exist(\Dms\Document\Document $document)
@@ -99,6 +115,10 @@ class Storage extends AbstractStorage
     /**
      * 
      * {@inheritDoc}
+     * 
+     * @param \Dms\Document\Document $document
+     * @param string $ext
+     * 
      * @see \Dms\Storage\StorageInterface::getPath()
      */
     public function getPath(\Dms\Document\Document $document, $ext = '')

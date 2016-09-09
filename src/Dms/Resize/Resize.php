@@ -14,18 +14,21 @@ namespace Dms\Resize;
 class Resize 
 {
     /**
+     * Data Document
      * 
      * @var string
      */
     protected $data;
     
     /**
+     * Type File
      * 
      * @var string
      */
     protected $format = 'jpg';
     
     /**
+     * Option Resize
      * 
      * @var ResizeOption
      */

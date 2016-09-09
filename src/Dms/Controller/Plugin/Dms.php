@@ -18,11 +18,14 @@ class Dms extends AbstractPlugin
 {
 
     /**
+     * Service Dms Object
+     * 
      * @var DmsService
      */
     protected $service;
     
     /**
+     * Option dms-conf
      * 
      * @var array
      */

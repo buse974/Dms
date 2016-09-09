@@ -1,9 +1,18 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Encode/decode Gzip
+ *
+ */
 namespace Dms\Coding\Gzip;
 
 use Dms\Coding\CodingInterface;
 
+/**
+ * Class Gzip
+ */
 class Gzip implements CodingInterface
 {
     /**
@@ -14,6 +23,8 @@ class Gzip implements CodingInterface
     private $data;
 
     /**
+     * Name Coding
+     * 
      * @var string
      */
     private $name = self::CODING_GZIP_STR;
@@ -43,8 +54,10 @@ class Gzip implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc).
-     *
+     * (non-PHPdoc)
+     * 
+     * @param string $data
+     * 
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -57,8 +70,10 @@ class Gzip implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc).
+     * (non-PHPdoc)
      *
+     * @param string $data
+     * 
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)

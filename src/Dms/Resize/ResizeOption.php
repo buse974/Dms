@@ -16,12 +16,14 @@ use Zend\Stdlib\AbstractOptions;
 class ResizeOption extends AbstractOptions
 {
     /**
+     * Size Allow
      * 
      * @var array
      */
     private $allow;
     
     /**
+     * Check Size Allow
      * 
      * @var bool
      */

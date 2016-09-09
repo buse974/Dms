@@ -1,20 +1,59 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Convert
+ *
+ */
 namespace Dms\Convert;
 
 use Dms\Convert\Exception\ProcessException;
 
+/**
+ * Class Convert
+ */
 class Convert
 {
+    /**
+     * Data binary document
+     * 
+     * @var string
+     */
     protected $data;
+    
+    /**
+     * Extension document
+     * 
+     * @var string
+     */
     protected $format;
+    
+    /**
+     * Folder Tmp
+     * 
+     * @var string
+     */
     protected $tmp = '';
+    
+    /**
+     * Page number
+     * 
+     * @var int
+     */
     protected $page = 1;
+    
+    /**
+     * Procees Object
+     * 
+     * @var Process
+     */
     private $process;
 
     /**
+     * Set Data Document
+     * 
      * @param string $data
-     *
      * @return \Dms\Convert\Convert
      */
     public function setData($data)
@@ -24,6 +63,12 @@ class Convert
         return $this;
     }
 
+    /**
+     * Set Folder Tmp
+     * 
+     * @param string $tmp
+     * @return \Dms\Convert\Convert
+     */
     public function setTmp($tmp)
     {
         $this->tmp = $tmp;
@@ -32,8 +77,9 @@ class Convert
     }
 
     /**
+     * Set Format OUT
+     * 
      * @param string $format
-     *
      * @return \Dms\Convert\Convert
      */
     public function setFormat($format)
@@ -44,8 +90,9 @@ class Convert
     }
 
     /**
+     * Set Page num
+     * 
      * @param string $page
-     *
      * @return \Dms\Convert\Convert
      */
     public function setPage($page)
@@ -58,13 +105,9 @@ class Convert
     /**
      * Convert datas Format IN > Format OUT.
      *
-     * @param string $data_in
-     * @param string $format_in
-     * @param string $format_out
-     *
-     * @throws ImagickException|Eception
-     *
-     * @return string|NULL
+     * @param string $format
+     * @throws \Exception
+     * @return string
      */
     public function getConvertData($format)
     {
@@ -100,7 +143,13 @@ class Convert
         return $datas;
     }
 
-    //@todo add interface
+    /**
+     * Set Process Obj
+     * 
+     * @todo add interface
+     * @param Process $process
+     * @return \Dms\Convert\Convert
+     */
     public function setProcess($process)
     {
         $this->process = $process;
@@ -108,6 +157,11 @@ class Convert
         return $this;
     }
 
+    /**
+     * Get Process Obj
+     * 
+     * @return \Dms\Convert\Process
+     */
     public function getProcess()
     {
         if (null === $this->process) {

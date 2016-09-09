@@ -14,6 +14,7 @@ namespace Dms\Document;
 class MimeType
 {
     /**
+     * Extention => MimeType
      * 
      * @var array
      */

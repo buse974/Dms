@@ -1,18 +1,74 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Process
+ *
+ */
 namespace Dms\Convert;
 
 use Dms\Convert\Exception\ProcessException;
 
+/**
+ * Class Process
+ */
 class Process
 {
+    /**
+     * Command 
+     * 
+     * @var string
+     */
     protected $cmd;
+    
+    /**
+     * Environement
+     * 
+     * @var array
+     */
     protected $env;
+    
+    /**
+     * Code Error
+     * 
+     * @var int
+     */
     protected $error_code;
+    
+    /**
+     * Message Error
+     * 
+     * @var string
+     */
     protected $error_message;
+    
+    /**
+     * Folder Tmp
+     * 
+     * @var string
+     */
     protected $tmp;
+    
+    /**
+     * Output Command
+     * 
+     * @var string
+     */
     protected $output;
+    
+    /**
+     * Input Parm Command
+     * 
+     * @var string
+     */
     protected $input;
+    
+    /**
+     * Descriptors
+     * 
+     * @var array
+     */
     protected $descriptors = array(
                 0 => array('pipe', 'r'),
                 1 => array('pipe', 'w'),
@@ -20,6 +76,12 @@ class Process
                 3 => array('pipe', 'w'),
         );
 
+    /**
+     * Set Command
+     * 
+     * @param string $cmd
+     * @return \Dms\Convert\Process
+     */
     public function setCmd($cmd)
     {
         $this->cmd = $cmd.' ; echo $? >&3';
@@ -27,16 +89,32 @@ class Process
         return $this;
     }
 
+    /**
+     * Get Error Code
+     * 
+     * @return int
+     */
     public function getErrorCode()
     {
         return $this->error_code;
     }
 
+    /**
+     * Get Error Message
+     * 
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->error_message;
     }
 
+    /**
+     * Set Input
+     * 
+     * @param string $input
+     * @return \Dms\Convert\Process
+     */
     public function setInput($input)
     {
         $this->input = $input;
@@ -44,6 +122,12 @@ class Process
         return $this;
     }
 
+    /**
+     * Set Folder Tmp
+     * 
+     * @param string $tmp
+     * @return \Dms\Convert\Process
+     */
     public function setTmp($tmp)
     {
         $this->tmp = $tmp;
@@ -51,6 +135,12 @@ class Process
         return $this;
     }
 
+    /**
+     * Set Env 
+     * 
+     * @param string $env
+     * @return \Dms\Convert\Process
+     */
     public function setEnv($env)
     {
         $this->env = $env;
@@ -58,11 +148,22 @@ class Process
         return $this;
     }
 
+    /**
+     * Get Output
+     * 
+     * @return string
+     */
     public function getOutput()
     {
         return $this->output;
     }
 
+    /**
+     * Run Command
+     * 
+     * @throws ProcessException
+     * @return NULL|string
+     */
     public function run()
     {
         $this->error_code = null;
@@ -90,6 +191,12 @@ class Process
         return $this->output;
     }
 
+    /**
+     * Set Descriptor
+     * 
+     * @param array $descriptors
+     * @return \Dms\Convert\Process
+     */
     public function setDescriptors(array $descriptors)
     {
         $descriptors[3] = array('pipe', 'w');

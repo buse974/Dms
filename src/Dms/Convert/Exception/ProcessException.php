@@ -1,9 +1,16 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Process Exception
+ *
+ */
 namespace Dms\Convert\Exception;
 
-use Exception;
-
-class ProcessException extends Exception
+/**
+ * Class ProcessException
+ */
+class ProcessException extends \Exception
 {
 }

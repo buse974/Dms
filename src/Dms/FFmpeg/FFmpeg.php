@@ -18,18 +18,21 @@ use FFMpeg\Media\Video;
 class FFmpeg
 {
     /**
+     * File
      * 
      * @var string
      */
     protected $file;
     
     /**
+     * FFMpeg Object
      * 
      * @var FFMpeg\FFMpeg
      */
     private $ffmpeg;
     
     /**
+     * Video FFMpeg Object
      * 
      * @var Video
      */

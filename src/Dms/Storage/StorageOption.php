@@ -16,11 +16,15 @@ use Zend\Stdlib\AbstractOptions;
 class StorageOption extends AbstractOptions
 {
     /**
+     * Path storage
+     * 
      * @var string
      */
     private $path;
     
     /**
+     * Option Storage
+     * 
      * @var array
      */
     private $storage;

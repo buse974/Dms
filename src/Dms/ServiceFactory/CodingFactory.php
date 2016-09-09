@@ -21,6 +21,10 @@ class CodingFactory implements AbstractFactoryInterface
     /**
      * Determine if we can create a Mapper with name
      *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @return bool
+     * 
      * {@inheritDoc}
      * @see \Zend\ServiceManager\Factory\AbstractFactoryInterface::canCreate()
      */
@@ -32,6 +36,10 @@ class CodingFactory implements AbstractFactoryInterface
     /**
      * Create Mapper with name
      *
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     * 
      * {@inheritDoc}
      * @see \Zend\ServiceManager\Factory\FactoryInterface::__invoke()
      */

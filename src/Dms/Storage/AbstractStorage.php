@@ -18,11 +18,15 @@ use Zend\EventManager\EventManager;
 abstract class AbstractStorage implements EventManagerAwareInterface, StorageInterface
 {
     /**
+     * Gestionnaire Event
+     * 
      * @var EventManagerInterface
      */
     protected $events;
 
     /**
+     * Storage Option
+     * 
      * @var StorageOption
      */
     protected $options;

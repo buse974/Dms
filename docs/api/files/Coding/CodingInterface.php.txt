@@ -1,0 +1,48 @@
+<?php
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Coding Interface
+ *
+ */
+namespace Dms\Coding;
+
+/**
+ * 
+ * Interface CodingInterface
+ */
+interface CodingInterface
+{
+    const CODING_BASE_STR = 'base';
+    const CODING_DEFLATE_STR = 'deflate';
+    const CODING_GZIP_STR = 'gzip';
+    const CODING_URL_STR = 'url';
+    const CODING_ZLIB_STR = 'zlib';
+
+    /**
+     * return name of type coding.
+     *
+     * @return string
+     */
+    public function getCoding();
+
+    /**
+     * string The encoded data, as a string
+     * return false for failure.
+     *
+     * @param string|false $data
+     * @return string|false
+     */
+    public function encode($data);
+
+    /**
+     * string the original data
+     * return false for failure.
+     *
+     * @param string $data
+     * @return string|false
+     */
+    public function decode($data);
+}
+

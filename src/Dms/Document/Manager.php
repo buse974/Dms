@@ -20,36 +20,43 @@ use Interop\Container\ContainerInterface;
 class Manager 
 {
     /**
+     * Document
+     * 
      * @var \Dms\Document\Document
      */
     protected $document;
 
     /**
+     * New Document
+     * 
      * @var \Dms\Document\Document
      */
     protected $new_document;
 
     /**
+     * Format Out
+     * 
      * @var string
      */
     protected $format;
 
     /**
+     * Size Out
+     * 
      * @var string
      */
     protected $size;
 
     /**
+     * Page Out
+     * 
      * @var int
      */
     protected $page;
 
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
-    /**
+     * Storage Object
+     * 
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
@@ -62,14 +69,17 @@ class Manager
     protected $option;
     
     /**
+     * Container
      * 
      * @var ContainerInterface
      */
     protected $container;
+    
     /**
      * Constructor
      * 
      * @param array $option
+     * @param ContainerInterface $container
      */
     public function __construct($option, $container)
     {
@@ -451,6 +461,9 @@ class Manager
     }
 
     /**
+     * Get Encoder/Decoder Object
+     * 
+     * @param string $enc
      * @return \Dms\Coding\CodingInterface
      */
     public function getEncDec($enc)
@@ -458,6 +471,9 @@ class Manager
         return $this->container->get($enc.'Coding');
     }
 
+    /**
+     * Clear Manager
+     */
     public function clear()
     {
         $this->document = null;

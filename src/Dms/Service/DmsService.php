@@ -18,6 +18,8 @@ use Dms\Document\NoFileException;
 class DmsService 
 {
     /**
+     * Document Manager
+     * 
      * @var \Dms\Document\Manager
      */
     protected $document_manager;

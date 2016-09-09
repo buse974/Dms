@@ -1,7 +1,17 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Coding Interface
+ *
+ */
 namespace Dms\Coding;
 
+/**
+ * 
+ * Interface CodingInterface
+ */
 interface CodingInterface
 {
     const CODING_BASE_STR = 'base';
@@ -21,9 +31,8 @@ interface CodingInterface
      * string The encoded data, as a string
      * return false for failure.
      *
-     * @param <string|false> $data
-     *
-     * @return <string|false>
+     * @param string|false $data
+     * @return string|false
      */
     public function encode($data);
 
@@ -32,8 +41,7 @@ interface CodingInterface
      * return false for failure.
      *
      * @param string $data
-     *
-     * @return <string|false>
+     * @return string|false
      */
     public function decode($data);
 }

@@ -1,9 +1,16 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Convert Exception
+ *
+ */
 namespace Dms\Convert\Exception;
 
-use Exception;
-
-class ConvertException extends Exception
+/**
+ * Class Convert Exception
+ */
+class ConvertException extends \Exception
 {
 }

@@ -23,70 +23,91 @@ class Document implements Serializable
     const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
 
     /**
+     * Id Document 
+     * 
      * @var string
      */
     protected $id;
 
     /**
+     * Page number Document
+     * 
      * @var int
      */
     protected $page;
 
     /**
+     * Data Document
+     * 
      * @var string
      */
-    protected $datas;
+    protected $data;
 
     /**
+     * Support Document (url, file)
      * @var string
      */
     protected $support;
 
     /**
+     * Encoding Document
+     * 
      * @var string
      */
     protected $encoding;
 
     /**
+     * MimeType Document
+     * 
      * @var string
      */
     protected $type;
 
     /**
+     * Extension Document
+     * 
      * @var string
      */
     protected $format;
 
     /**
-     * Document Name.
+     * Document Name
      *
      * @var string
      */
     protected $name;
 
     /**
+     * Description Document
+     * 
      * @var string
      */
     protected $description;
 
     /**
+     * Size Document
+     * 
      * @var string
      */
     protected $size;
 
     /**
-     * weight of document.
+     * weight of document
      *
-     * @var number
+     * @var int
      */
     protected $weight;
 
     /**
+     * Storage Document
+     * 
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
 
     /**
+     * Is Read
+     * 
      * @var bool
      */
     protected $is_read = false;
@@ -144,16 +165,17 @@ class Document implements Serializable
 
     /**
      * Get body document
-     *
+     * 
+     * @param bool $print
      * @return string
      */
     public function getDatas($print = null)
     {
-        if ( (null === $this->datas && null !== $this->getStorage()) || $print!==null) {
-            $this->getStorage()->read($this, 'datas', $print);
+        if ( (null === $this->data && null !== $this->getStorage()) || $print!==null) {
+            $this->getStorage()->read($this, 'data', $print);
         }
 
-        return $this->datas;
+        return $this->data;
     }
 
     /**
@@ -194,12 +216,12 @@ class Document implements Serializable
     /**
      * Set body document
      *
-     * @param string $datas
+     * @param string $data
      * @return \Dms\Document\Document
      */
-    public function setDatas($datas)
+    public function setDatas($data)
     {
-        $this->datas = $datas;
+        $this->data = $data;
 
         return $this;
     }
@@ -484,22 +506,24 @@ class Document implements Serializable
     }
 
     /**
-     * (non-PHPdoc).
+     * (non-PHPdoc)
      *
+     * @param string $serialized
+     * 
      * @see Serializable::unserialize()
      */
     public function unserialize($serialized)
     {
-        $datas = unserialize($serialized);
-        $this->setId($datas['id']);
-        $this->setSize((isset($datas['size']) ? $datas['size'] : null));
-        $this->setName($datas['name']);
-        $this->setType($datas['type']);
-        $this->setDescription($datas['description']);
-        $this->setEncoding($datas['encoding']);
-        $this->setSupport($datas['support']);
-        $this->setWeight((isset($datas['weight'])) ? $datas['weight'] : null);
-        $this->setFormat((isset($datas['format'])) ? $datas['format'] : null);
+        $data = unserialize($serialized);
+        $this->setId($data['id']);
+        $this->setSize((isset($data['size']) ? $data['size'] : null));
+        $this->setName($data['name']);
+        $this->setType($data['type']);
+        $this->setDescription($data['description']);
+        $this->setEncoding($data['encoding']);
+        $this->setSupport($data['support']);
+        $this->setWeight((isset($data['weight'])) ? $data['weight'] : null);
+        $this->setFormat((isset($data['format'])) ? $data['format'] : null);
     }
 
     /**

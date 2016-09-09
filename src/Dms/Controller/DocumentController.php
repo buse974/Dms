@@ -21,6 +21,11 @@ use Dms\Document\NoFileException;
 class DocumentController extends AbstractActionController
 {
     
+    /**
+     * Print File
+     * 
+     * @return string
+     */
     public function getAction()
     {
         try {
@@ -30,6 +35,11 @@ class DocumentController extends AbstractActionController
         }
     }
     
+    /**
+     * Download Document
+     * 
+     * @return string
+     */
     public function getDownloadAction()
     {
         $content = null;
@@ -50,6 +60,11 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    /**
+     * Get Info Type Document
+     * 
+     * @return string
+     */
     public function getTypeAction()
     {
         $content = null;
@@ -62,6 +77,11 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    /**
+     * Get Info Format Document
+     * 
+     * @return string
+     */
     public function getFormatAction()
     {
         $content = null;
@@ -74,6 +94,11 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    /**
+     * Get Info name Document
+     * 
+     * @return string
+     */
     public function getNameAction()
     {
         $content = null;
@@ -86,6 +111,11 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    /**
+     * Get Info description Document
+     * 
+     * @return string
+     */
     public function getDescriptionAction()
     {
         $content = null;
@@ -98,6 +128,11 @@ class DocumentController extends AbstractActionController
         return $this->getResponse()->setContent($content);
     }
 
+    /**
+     * Save For Upload File
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function saveAction()
     {
         foreach ($this->dms()->getHearders() as $key => $value) {
@@ -142,6 +177,11 @@ class DocumentController extends AbstractActionController
         return new JsonModel($ret);
     }
 
+    /**
+     * Progress Upload
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function progressAction()
     {
         foreach ($this->dms()->getHearders() as $key => $value) {
@@ -155,6 +195,11 @@ class DocumentController extends AbstractActionController
         return new JsonModel(Sp::progressAction($this->params()->fromPost('uploadUID')));
     }
 
+    /**
+     * Init Session 
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function initSessionAction()
     {
         foreach ($this->dms()->getHearders() as $key => $value) {

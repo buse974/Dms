@@ -19,6 +19,12 @@ class DmsFactory implements FactoryInterface
 
     /**
      * {@inheritDoc}
+     * 
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     * @return Dms
+     * 
      * @see \Zend\ServiceManager\Factory\FactoryInterface::__invoke()
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
