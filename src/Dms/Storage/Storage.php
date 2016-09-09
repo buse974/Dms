@@ -86,7 +86,7 @@ class Storage extends AbstractStorage
      */
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
     {
-        return (null === $type || $type !== 'datas') ? $this->_readInf($document) : $this->_readData($document, $print);
+        return (null === $type || $type !== 'data') ? $this->_readInf($document) : $this->_readData($document, $print);
     }
 
     /**
@@ -135,6 +135,7 @@ class Storage extends AbstractStorage
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $filename = $this->getPath($document, '.dat');
+
         if ($print !== null) {
             $handle = fopen($filename, 'r');
             if (is_array($print)) {
@@ -173,15 +174,15 @@ class Storage extends AbstractStorage
         }
 
         fclose($handle);
-        $datas = unserialize($content);
-        $document->setSize($datas->getSize());
-        $document->setName($datas->getName());
-        $document->setType($datas->getType());
-        $document->setDescription($datas->getDescription());
-        $document->setEncoding($datas->getEncoding());
-        $document->setSupport($datas->getSupport());
-        $document->setWeight($datas->getWeight());
-        $document->setFormat($datas->getFormat());
+        $data = unserialize($content);
+        $document->setSize($data->getSize());
+        $document->setName($data->getName());
+        $document->setType($data->getType());
+        $document->setDescription($data->getDescription());
+        $document->setEncoding($data->getEncoding());
+        $document->setSupport($data->getSupport());
+        $document->setWeight($data->getWeight());
+        $document->setFormat($data->getFormat());
     }
 
     /**

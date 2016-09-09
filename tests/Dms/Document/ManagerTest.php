@@ -6,6 +6,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class ManagerTest extends AbstractHttpControllerTestCase
 {
+    static $container;
+    
     public function setUp()
     {
         $this->setApplicationConfig(include __DIR__ . '/../../config/application.config.php');
@@ -30,7 +32,8 @@ class ManagerTest extends AbstractHttpControllerTestCase
 
     public function testCanGetDocumentById()
     {
-        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
+        self::$container = $this->getApplicationServiceLocator();
+        $manager = self::$container->get('dms.manager');
         $m_document = $manager->loadDocument('e2bd813816c305a8a22e03c95d2ee8fd3f7bc710')->getDocument();
 
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
@@ -44,7 +47,7 @@ class ManagerTest extends AbstractHttpControllerTestCase
      */
     public function testCanGetDocument()
     {
-        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
+        $manager = self::$container->get('dms.manager');
         $m_document = $manager->getDocument();
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
     }
@@ -54,7 +57,7 @@ class ManagerTest extends AbstractHttpControllerTestCase
      */
     public function testCanClearManager()
     {
-        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
+        $manager = self::$container->get('dms.manager');
         $old_document_id = $manager->getDocument()->getId();
         $manager->clear();
         $m_document = $manager->getDocument();

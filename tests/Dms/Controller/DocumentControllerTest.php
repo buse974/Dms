@@ -45,7 +45,7 @@ class DocumentControllerTest extends AbstractHttpControllerTestCase
         $this->assertActionName('get');
         $this->assertResponseStatusCode(200);
 
-        $this->assertEquals("Param is not id: e2bd813816c305a8a22e03c95d2ee8fd3f7bc71012", $this->getResponse()->getContent());
+        $this->assertEquals('{"error":"Param is not id: e2bd813816c305a8a22e03c95d2ee8fd3f7bc71012"}', $this->getResponse()->getContent());
     }
 
     public function testCanGetType()

@@ -28,7 +28,7 @@ class DocumentController extends AbstractActionController
         try {
             $this->dms()->getService()->get($this->params('file'));
         } catch (NoFileException $e) {
-            return $this->getResponse()->setContent($e->getMessage());
+            return new JsonModel(['error' => $e->getMessage()]);
         }
     }
 
