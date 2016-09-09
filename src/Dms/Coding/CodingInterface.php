@@ -1,16 +1,13 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Coding Interface
- *
  */
 namespace Dms\Coding;
 
 /**
- * 
- * Interface CodingInterface
+ * Interface CodingInterface.
  */
 interface CodingInterface
 {
@@ -32,6 +29,7 @@ interface CodingInterface
      * return false for failure.
      *
      * @param string|false $data
+     *
      * @return string|false
      */
     public function encode($data);
@@ -41,6 +39,7 @@ interface CodingInterface
      * return false for failure.
      *
      * @param string $data
+     *
      * @return string|false
      */
     public function decode($data);

@@ -1,59 +1,58 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Convert
- *
  */
 namespace Dms\Convert;
 
 use Dms\Convert\Exception\ProcessException;
 
 /**
- * Class Convert
+ * Class Convert.
  */
 class Convert
 {
     /**
-     * Data binary document
-     * 
+     * Data binary document.
+     *
      * @var string
      */
     protected $data;
-    
+
     /**
-     * Extension document
-     * 
+     * Extension document.
+     *
      * @var string
      */
     protected $format;
-    
+
     /**
-     * Folder Tmp
-     * 
+     * Folder Tmp.
+     *
      * @var string
      */
     protected $tmp = '';
-    
+
     /**
-     * Page number
-     * 
+     * Page number.
+     *
      * @var int
      */
     protected $page = 1;
-    
+
     /**
-     * Procees Object
-     * 
+     * Procees Object.
+     *
      * @var Process
      */
     private $process;
 
     /**
-     * Set Data Document
-     * 
+     * Set Data Document.
+     *
      * @param string $data
+     *
      * @return \Dms\Convert\Convert
      */
     public function setData($data)
@@ -64,9 +63,10 @@ class Convert
     }
 
     /**
-     * Set Folder Tmp
-     * 
+     * Set Folder Tmp.
+     *
      * @param string $tmp
+     *
      * @return \Dms\Convert\Convert
      */
     public function setTmp($tmp)
@@ -77,9 +77,10 @@ class Convert
     }
 
     /**
-     * Set Format OUT
-     * 
+     * Set Format OUT.
+     *
      * @param string $format
+     *
      * @return \Dms\Convert\Convert
      */
     public function setFormat($format)
@@ -90,9 +91,10 @@ class Convert
     }
 
     /**
-     * Set Page num
-     * 
+     * Set Page num.
+     *
      * @param string $page
+     *
      * @return \Dms\Convert\Convert
      */
     public function setPage($page)
@@ -106,7 +108,9 @@ class Convert
      * Convert datas Format IN > Format OUT.
      *
      * @param string $format
+     *
      * @throws \Exception
+     *
      * @return string
      */
     public function getConvertData($format)
@@ -144,10 +148,12 @@ class Convert
     }
 
     /**
-     * Set Process Obj
-     * 
+     * Set Process Obj.
+     *
      * @todo add interface
+     *
      * @param Process $process
+     *
      * @return \Dms\Convert\Convert
      */
     public function setProcess($process)
@@ -158,8 +164,8 @@ class Convert
     }
 
     /**
-     * Get Process Obj
-     * 
+     * Get Process Obj.
+     *
      * @return \Dms\Convert\Process
      */
     public function getProcess()

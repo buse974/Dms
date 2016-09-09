@@ -1,21 +1,19 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * NoFileException
- *
  */
 namespace Dms\Document;
 
 /**
- * Class NoFileException
+ * Class NoFileException.
  */
-class NoFileException extends \Exception 
+class NoFileException extends \Exception
 {
     /**
-     * Constructor 
-     * 
+     * Constructor.
+     *
      * @param string $token
      */
     public function __construct($token)

@@ -1,54 +1,53 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * StorageOption.php
- *
  */
 namespace Dms\Storage;
 
 use Zend\Stdlib\AbstractOptions;
 
 /**
- * Class Storage Option
+ * Class Storage Option.
  */
 class StorageOption extends AbstractOptions
 {
     /**
-     * Path storage
-     * 
+     * Path storage.
+     *
      * @var string
      */
     private $path;
-    
+
     /**
-     * Option Storage
-     * 
+     * Option Storage.
+     *
      * @var array
      */
     private $storage;
 
     /**
-     * Set Path 
-     * 
+     * Set Path.
+     *
      * @param string $path
+     *
      * @return \Dms\Storage\StorageOption
      */
     public function setPath($path)
     {
-        if(substr($path, -1) !== DIRECTORY_SEPARATOR) {
+        if (substr($path, -1) !== DIRECTORY_SEPARATOR) {
             $path .= DIRECTORY_SEPARATOR;
         }
-            
+
         $this->path = $path;
 
         return $this;
     }
 
     /**
-     * Get Path
-     * 
+     * Get Path.
+     *
      * @return string
      */
     public function getPath()
@@ -59,23 +58,24 @@ class StorageOption extends AbstractOptions
 
         return $this->path;
     }
-    
+
     /**
-     * Set Storage
-     * 
+     * Set Storage.
+     *
      * @param array $storage
+     *
      * @return \Dms\Storage\StorageOption
      */
     public function setStorage($storage)
     {
         $this->storage = $storage;
-        
+
         return $this;
     }
-    
+
     /**
-     * Get Storage
-     * 
+     * Get Storage.
+     *
      * @return array
      */
     public function getStorage()

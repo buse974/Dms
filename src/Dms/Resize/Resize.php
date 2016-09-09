@@ -1,42 +1,40 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Resize.php
- *
  */
 namespace Dms\Resize;
 
 /**
- * Class Resize
+ * Class Resize.
  */
-class Resize 
+class Resize
 {
     /**
-     * Data Document
-     * 
+     * Data Document.
+     *
      * @var string
      */
     protected $data;
-    
+
     /**
-     * Type File
-     * 
+     * Type File.
+     *
      * @var string
      */
     protected $format = 'jpg';
-    
+
     /**
-     * Option Resize
-     * 
+     * Option Resize.
+     *
      * @var ResizeOption
      */
     protected $options;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @param array $options
      */
     public function __construct(array $options = [])
@@ -45,9 +43,10 @@ class Resize
     }
 
     /**
-     * Set Data Binary
-     * 
+     * Set Data Binary.
+     *
      * @param string $data
+     *
      * @return \Dms\Resize\Resize
      */
     public function setData($data)
@@ -58,17 +57,18 @@ class Resize
     }
 
     /**
-     * Set Format
-     * 
+     * Set Format.
+     *
      * @param string $format
+     *
      * @return \Dms\Resize\Resize
      */
     public function setFormat($format)
     {
-        if(!empty($format)) {
+        if (!empty($format)) {
             $this->format = $format;
         }
-        
+
         return $this;
     }
 
@@ -76,7 +76,9 @@ class Resize
      * resize data use library GD.
      *
      * @param string $size
+     *
      * @throws \Exception
+     *
      * @return string
      */
     public function getResizeData($size)
@@ -166,10 +168,11 @@ class Resize
     }
 
     /**
-     * Check if is Compatible
-     * 
+     * Check if is Compatible.
+     *
      * @param string $ext
-     * @return boolean
+     *
+     * @return bool
      */
     public static function isCompatible($ext)
     {
@@ -194,22 +197,22 @@ class Resize
                 return false;
         }
 
-        return (imagetypes() & $t);
+        return imagetypes() & $t;
     }
 
     /**
-     * Get Mine Type
-     * 
+     * Get Mine Type.
+     *
      * @return string
      */
     public function getTypeMine()
     {
         return 'image/'.$this->format;
     }
-    
+
     /**
-     * Get Format
-     * 
+     * Get Format.
+     *
      * @return string
      */
     public function getFormat()

@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * DmsService.php
- *
  */
 namespace Dms\Service;
 
@@ -13,31 +11,32 @@ use Dms\Document\Manager;
 use Dms\Document\NoFileException;
 
 /**
- * Class DmsService
+ * Class DmsService.
  */
-class DmsService 
+class DmsService
 {
     /**
-     * Document Manager
-     * 
+     * Document Manager.
+     *
      * @var \Dms\Document\Manager
      */
     protected $document_manager;
-    
+
     /**
-     * Constructor 
-     * 
+     * Constructor.
+     *
      * @param \Dms\Document\Manager $document_manager
      */
-    public function __construct(\Dms\Document\Manager $document_manager) 
+    public function __construct(\Dms\Document\Manager $document_manager)
     {
         $this->document_manager = $document_manager;
     }
-    
+
     /**
-     * Add Document
-     * 
+     * Add Document.
+     *
      * @param array $document
+     *
      * @return string token
      */
     public function add(array $document)
@@ -51,9 +50,10 @@ class DmsService
     }
 
     /**
-     * Resize Document
-     * 
+     * Resize Document.
+     *
      * @param array $document
+     *
      * @return string token
      */
     public function resize($size)
@@ -61,15 +61,15 @@ class DmsService
         $document = $this->document_manager->getDocument();
 
         $this->document_manager->setSize($size);
-        $this->document_manager->writeFile($document->getId() .'-'.$size);
+        $this->document_manager->writeFile($document->getId().'-'.$size);
         $document = $this->document_manager->getDocument();
 
         return $document->getId();
     }
 
     /**
-     * Progress Action
-     * 
+     * Progress Action.
+     *
      * @param string $id
      */
     public static function progressAction($id)
@@ -78,10 +78,10 @@ class DmsService
 
         return  $progress->getProgress($id);
     }
-    
+
     /**
-     * Print or get Document
-     * 
+     * Print or get Document.
+     *
      * @param string $file
      */
     public function get($file)
@@ -90,7 +90,6 @@ class DmsService
         try {
             $document = $this->document_manager->loadDocument($file)->getDocument();
         } catch (NoFileException $e) {
-            
             preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
             $this->document_manager->loadDocument($matches['id'][0]);
             $this->document_manager->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
@@ -98,9 +97,7 @@ class DmsService
             $this->document_manager->setFormat((isset($matches['fmt']) && !empty($matches['fmt'][0])) ? $matches['fmt'][0] : null);
             $document = $this->document_manager->writeFile($file)->getDocument();
         }
-    
-        
-       
+
         if (null !== $document) {
             header('HTTP/1.0 200');
             header('Content-type: '.((null !== $document->getType()) ? $document->getType() : 'application/octet-stream'));
@@ -128,42 +125,44 @@ class DmsService
     }
 
     /**
-     * Get Document 
-     * 
+     * Get Document.
+     *
      * @param string $file
+     *
      * @return \Dms\Document\Document
      */
     public function getDocument($file)
     {
         return $this->document_manager->loadDocument($file)->getDocument();
     }
-    
+
     /**
-     * Get Info Document
-     * 
+     * Get Info Document.
+     *
      * @param string $file
      * @param string $type
+     *
      * @return string
      */
     public function getInfo($file, $type)
     {
-        $content = "";
+        $content = '';
         $m_document = $this->document_manager->loadDocument($file)->getDocument();
         if ($m_document) {
             switch ($type) {
-                case 'type' :
+                case 'type':
                     $type = $m_document->getType();
                     $content = (empty($type) ? $m_document->getFormat() : $type);
                     break;
-                case 'format' :
+                case 'format':
                     $content = $m_document->getFormat();
                     break;
-                case 'name' :
+                case 'name':
                     $content = $m_document->getName();
                     break;
-                case 'description' :
+                case 'description':
                     $content = $m_document->getDescription();
-                    break;      
+                    break;
             }
         }
 

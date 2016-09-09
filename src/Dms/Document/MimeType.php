@@ -1,21 +1,19 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * MimeType.php
- *
  */
 namespace Dms\Document;
 
 /**
- * Class MimeType
+ * Class MimeType.
  */
 class MimeType
 {
     /**
-     * Extention => MimeType
-     * 
+     * Extention => MimeType.
+     *
      * @var array
      */
     protected static $ext_mime = [
@@ -680,9 +678,10 @@ class MimeType
             ];
 
     /**
-     * Get Mime Type By Extension
-     * 
+     * Get Mime Type By Extension.
+     *
      * @param string $ext
+     *
      * @return string
      */
     public static function getMimeTypeByExtension($ext)
@@ -697,9 +696,10 @@ class MimeType
     }
 
     /**
-     * Get Extension By Mime Type
-     * 
+     * Get Extension By Mime Type.
+     *
      * @param string $mine
+     *
      * @return string
      */
     public static function getExtensionByMimeType($mine)

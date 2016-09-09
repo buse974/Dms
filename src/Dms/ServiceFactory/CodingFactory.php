@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * CodingFactory.php
- *
  */
 namespace Dms\ServiceFactory;
 
@@ -13,34 +11,36 @@ use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 use Interop\Container\ContainerInterface;
 
 /**
- * Class Factory encode/decode
+ * Class Factory encode/decode.
  */
 class CodingFactory implements AbstractFactoryInterface
 {
-
     /**
-     * Determine if we can create a Mapper with name
+     * Determine if we can create a Mapper with name.
      *
-     * @param  ContainerInterface $container
-     * @param  string $requestedName
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     *
      * @return bool
-     * 
-     * {@inheritDoc}
+     *
+     * {@inheritdoc}
+     *
      * @see \Zend\ServiceManager\Factory\AbstractFactoryInterface::canCreate()
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-        return (substr($requestedName, -6) === 'Coding');
+        return substr($requestedName, -6) === 'Coding';
     }
-    
+
     /**
-     * Create Mapper with name
+     * Create Mapper with name.
      *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     * 
-     * {@inheritDoc}
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param null|array         $options
+     *
+     * {@inheritdoc}
+     *
      * @see \Zend\ServiceManager\Factory\FactoryInterface::__invoke()
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -49,7 +49,7 @@ class CodingFactory implements AbstractFactoryInterface
         if (!$factory instanceof CodingInterface) {
             throw new \Exception('not type CodingInterface');
         }
-        
+
         return $factory;
     }
 }

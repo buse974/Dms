@@ -1,30 +1,28 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Encode/decode Zlib
- *
  */
 namespace Dms\Coding\Zlib;
 
 use Dms\Coding\CodingInterface;
 
 /**
- * Class Zlib
+ * Class Zlib.
  */
 class Zlib implements CodingInterface
 {
     /**
-     * data for encoded or decoded
+     * data for encoded or decoded.
      *
      * @var string
      */
     private $data;
 
     /**
-     * Name Coding
-     * 
+     * Name Coding.
+     *
      * @var string
      */
     private $name = self::CODING_ZLIB_STR;
@@ -54,10 +52,10 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -70,10 +68,10 @@ class Zlib implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)

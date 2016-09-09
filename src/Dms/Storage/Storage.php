@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Storage.php
- *
  */
 namespace Dms\Storage;
 
@@ -16,23 +14,22 @@ use Zend\Form\Element\File;
 use Aws\S3\S3Client;
 
 /**
- * Class Storage
+ * Class Storage.
  */
 class Storage extends AbstractStorage
 {
     /**
-     * If Path Is init
-     * 
+     * If Path Is init.
+     *
      * @var bool
      */
     private $init_path = false;
-    
+
     /**
-     * 
-     * {@inheritDoc}
-     * 
+     * {@inheritdoc}
+     *
      * @param \Dms\Document\Document $document
-     * 
+     *
      * @see \Dms\Storage\StorageInterface::write()
      */
     public function write(\Dms\Document\Document $document)
@@ -44,19 +41,19 @@ class Storage extends AbstractStorage
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-        
+
         $p = $path.$nameMod.'.dat';
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
             $fileInput = new FileInput(key($document->getDatas()));
             $fileInput->getFilterChain()->attachByName('filerenameupload', ['target' => $p]);
-            
+
             $inputFilter = new InputFilter();
             $inputFilter->add($fileInput);
-         
+
             $form = new Form();
             $form->setInputFilter($inputFilter);
             $form->setData($document->getDatas());
-            if($form->isValid()) {
+            if ($form->isValid()) {
                 $form->getData();
             }
         } else {
@@ -79,13 +76,12 @@ class Storage extends AbstractStorage
     }
 
     /**
-     * 
-     * {@inheritDoc}
-     * 
+     * {@inheritdoc}
+     *
      * @param \Dms\Document\Document &$document
      * @param string type
      * @param bool $print
-     * 
+     *
      * @see \Dms\Storage\StorageInterface::read()
      */
     public function read(\Dms\Document\Document &$document, $type = null, $print = null)
@@ -94,11 +90,10 @@ class Storage extends AbstractStorage
     }
 
     /**
-     * 
-     * {@inheritDoc}
-     * 
+     * {@inheritdoc}
+     *
      * @param \Dms\Document\Document $document
-     * 
+     *
      * @see \Dms\Storage\StorageInterface::exist()
      */
     public function exist(\Dms\Document\Document $document)
@@ -108,17 +103,16 @@ class Storage extends AbstractStorage
         } catch (\Exception $e) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
-     * 
-     * {@inheritDoc}
-     * 
+     * {@inheritdoc}
+     *
      * @param \Dms\Document\Document $document
-     * @param string $ext
-     * 
+     * @param string                 $ext
+     *
      * @see \Dms\Storage\StorageInterface::getPath()
      */
     public function getPath(\Dms\Document\Document $document, $ext = '')
@@ -133,15 +127,15 @@ class Storage extends AbstractStorage
     }
 
     /**
-     * Read Data
-     *  
+     * Read Data.
+     *
      * @param \Dms\Document\Document $document
-     * @param bool|array $print
+     * @param bool|array             $print
      */
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $filename = $this->getPath($document, '.dat');
-        if($print !== null) {
+        if ($print !== null) {
             $handle = fopen($filename, 'r');
             if (is_array($print)) {
                 $start = (!empty($print['start']) ? $print['start'] : 0);
@@ -149,7 +143,7 @@ class Storage extends AbstractStorage
                 fseek($handle, $start);
             }
             while (!feof($handle)) {
-                print(fread($handle, 8192));
+                echo fread($handle, 8192);
             }
             fclose($handle);
             exit();
@@ -158,26 +152,26 @@ class Storage extends AbstractStorage
             $document->setDatas($content);
         }
     }
-    
+
     /**
-     * Read Inf
-     * 
+     * Read Inf.
+     *
      * @param \Dms\Document\Document $document
      */
     public function _readInf(\Dms\Document\Document &$document)
     {
         $content = null;
         $filename = $this->getPath($document, '.inf');
-        
+
         $handle = fopen($filename, 'r');
         $size = filesize($filename);
-        
+
         while ($size) {
             $read = ($size > 8192) ? 8192 : $size;
             $size -= $read;
             $content .= fread($handle, $read);
         }
-        
+
         fclose($handle);
         $datas = unserialize($content);
         $document->setSize($datas->getSize());
@@ -189,26 +183,26 @@ class Storage extends AbstractStorage
         $document->setWeight($datas->getWeight());
         $document->setFormat($datas->getFormat());
     }
-    
+
     /**
-     * Get Path Base
-     * 
+     * Get Path Base.
+     *
      * @return string
      */
     private function getBasePath()
     {
         $conf_storage = $this->options->getStorage();
-        if(isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
-            if($this->init_path === false) {
+        if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
+            if ($this->init_path === false) {
                 $s3Client = new S3Client($conf_storage['options']);
                 $s3Client->registerStreamWrapper();
                 $init_path = true;
             }
-            $path = sprintf("s3://%s/",$conf_storage['bucket']);
+            $path = sprintf('s3://%s/', $conf_storage['bucket']);
         } else {
             $path = $this->options->getPath();
         }
-        
+
         return $path;
     }
 }

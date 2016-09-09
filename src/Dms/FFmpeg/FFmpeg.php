@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * FFmpeg.php
- *
  */
 namespace Dms\FFmpeg;
 
@@ -13,33 +11,33 @@ use FFMpeg\Coordinate as BFFC;
 use FFMpeg\Media\Video;
 
 /**
- * Class FFmpeg
+ * Class FFmpeg.
  */
 class FFmpeg
 {
     /**
-     * File
-     * 
+     * File.
+     *
      * @var string
      */
     protected $file;
-    
+
     /**
-     * FFMpeg Object
-     * 
+     * FFMpeg Object.
+     *
      * @var FFMpeg\FFMpeg
      */
     private $ffmpeg;
-    
+
     /**
-     * Video FFMpeg Object
-     * 
+     * Video FFMpeg Object.
+     *
      * @var Video
      */
     private $video;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -47,9 +45,10 @@ class FFmpeg
     }
 
     /**
-     * Set File
-     * 
+     * Set File.
+     *
      * @param string $file
+     *
      * @return \Dms\FFmpeg\FFmpeg
      */
     public function setFile($file)
@@ -61,9 +60,10 @@ class FFmpeg
     }
 
     /**
-     * Get Picture
-     * 
+     * Get Picture.
+     *
      * @param int $time
+     *
      * @return string
      */
     public function getPicture($time = 30)
@@ -76,24 +76,24 @@ class FFmpeg
     }
 
     /**
-     * Get Size
-     * 
+     * Get Size.
+     *
      * @return string
      */
     public function getSize()
     {
         $stream = $this->video->getStreams()->first();
         $dim = null;
-        if($stream->isVideo()) {
+        if ($stream->isVideo()) {
             $dim = $stream->getDimensions()->getWidth().'x'.$stream->getDimensions()->getHeight();
         }
-        
+
         return $dim;
     }
 
     /**
-     * Get Mine Type
-     * 
+     * Get Mine Type.
+     *
      * @return string
      */
     public function getTypeMine()
@@ -102,8 +102,8 @@ class FFmpeg
     }
 
     /**
-     * Get Fomat
-     * 
+     * Get Fomat.
+     *
      * @return string
      */
     public function getFormat()

@@ -1,17 +1,15 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Encode/decode Deflate
- *
  */
 namespace Dms\Coding\Deflate;
 
 use Dms\Coding\CodingInterface;
 
 /**
- * Class Deflate
+ * Class Deflate.
  */
 class Deflate implements CodingInterface
 {
@@ -23,8 +21,8 @@ class Deflate implements CodingInterface
     private $data;
 
     /**
-     * Name Coding
-     * 
+     * Name Coding.
+     *
      * @var string
      */
     private $name = self::CODING_DEFLATE_STR;
@@ -43,6 +41,7 @@ class Deflate implements CodingInterface
      * set string to encoded or decoded.
      *
      * @param string $data
+     *
      * @return \Dms\Coding\Deflate\Deflate
      */
     public function setData($data)
@@ -53,10 +52,10 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -69,10 +68,10 @@ class Deflate implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)

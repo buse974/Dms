@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Manager Dms
- *
  */
 namespace Dms\Document;
 
@@ -15,70 +13,70 @@ use Dms\Storage\Storage;
 use Interop\Container\ContainerInterface;
 
 /**
- * Class Manager
+ * Class Manager.
  */
-class Manager 
+class Manager
 {
     /**
-     * Document
-     * 
+     * Document.
+     *
      * @var \Dms\Document\Document
      */
     protected $document;
 
     /**
-     * New Document
-     * 
+     * New Document.
+     *
      * @var \Dms\Document\Document
      */
     protected $new_document;
 
     /**
-     * Format Out
-     * 
+     * Format Out.
+     *
      * @var string
      */
     protected $format;
 
     /**
-     * Size Out
-     * 
+     * Size Out.
+     *
      * @var string
      */
     protected $size;
 
     /**
-     * Page Out
-     * 
+     * Page Out.
+     *
      * @var int
      */
     protected $page;
 
     /**
-     * Storage Object
-     * 
+     * Storage Object.
+     *
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
 
     /**
-     * Option dms-conf
-     * 
+     * Option dms-conf.
+     *
      * @var array
      */
     protected $option;
-    
+
     /**
-     * Container
-     * 
+     * Container.
+     *
      * @var ContainerInterface
      */
     protected $container;
-    
+
     /**
-     * Constructor
-     * 
-     * @param array $option
+     * Constructor.
+     *
+     * @param array              $option
      * @param ContainerInterface $container
      */
     public function __construct($option, $container)
@@ -86,12 +84,14 @@ class Manager
         $this->option = $option;
         $this->container = $container;
     }
-    
+
     /**
-     * Load document info
+     * Load document info.
      *
      * @param string|\Dms\Document\Document $document
+     *
      * @throws \Exception
+     *
      * @return \Dms\Document\Manager
      */
     public function loadDocument($document)
@@ -101,7 +101,7 @@ class Manager
         if (!$document instanceof Document && is_string($document)) {
             $this->document = new Document();
             $this->document->setId($document);
-        }  
+        }
 
         $this->document->setStorage($this->getStorage());
 
@@ -117,6 +117,7 @@ class Manager
      * Initialise Document with a array.
      *
      * @param array $document
+     *
      * @return \Dms\Document\Manager
      */
     public function createDocument(array $document)
@@ -130,7 +131,7 @@ class Manager
             ->setType((isset($document['type'])) ? $document['type'] : null)
             ->setSupport((isset($document['support'])) ? $document['support'] : null)
             ->setFormat((isset($document['format'])) ? $document['format'] : null)
-            ->setName((isset($document['name'])) ? str_replace(';','',str_replace(',','',$document['name'])) : null)
+            ->setName((isset($document['name'])) ? str_replace(';', '', str_replace(',', '', $document['name'])) : null)
             ->setSize((isset($document['size'])) ? $document['size'] : null)
             ->setWeight((isset($document['weight'])) ? $document['weight'] : null);
 
@@ -140,10 +141,12 @@ class Manager
     }
 
     /**
-     * Record a document to the Dms
-     * 
+     * Record a document to the Dms.
+     *
      * @param int $id
+     *
      * @throws \Exception
+     *
      * @return \Dms\Document\Manager
      */
     public function writeFile($id = null)
@@ -151,7 +154,7 @@ class Manager
         if (null === $this->document) {
             throw new \Exception('Document does not exist');
         }
-        
+
         $obj_mime_type = new MimeType();
         $is_video = ((strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'video') === 0) || (strpos($this->document->getType(), 'video') === 0));
         if ($is_video && (null !== $this->getFormat() || null !== $this->getSize() || null !== $this->getPage())) {
@@ -159,9 +162,9 @@ class Manager
             $this->document = $this->new_document;
             $this->new_document = null;
         }
-        
+
         // si que resize
-        //
+
         // si format n'est pas une image ou IN non compatible
         // convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
         // puis resize imagick avec format de sortie par default (jpeg)
@@ -179,10 +182,9 @@ class Manager
                 $this->resize();
             }
             // si que format
-            //
+
             // vérifier que le format n'est pas le même.
             // sinonuniconv (voir imagmagick selon le suport est quelité)
-            //
         } elseif (null === $this->getSize() && null !== $this->getFormat()) {
             if ($this->getFormat() !== $this->getDocument()->getFormat()) {
                 $obj_mime_type = new MimeType();
@@ -256,9 +258,10 @@ class Manager
     }
 
     /**
-     * Decode Document to binary
+     * Decode Document to binary.
      *
      * @throws \Exception
+     *
      * @return \Dms\Document\Manager
      */
     public function decode()
@@ -277,27 +280,28 @@ class Manager
     }
 
     /**
-     * Resize document
+     * Resize document.
      *
      * @param number $size
+     *
      * @return \Dms\Document\Manager
      */
     private function resize()
     {
-        $resize = new Resize(['allow' => $this->option['size_allowed'],'active' => $this->option['check_size_allowed']]);
+        $resize = new Resize(['allow' => $this->option['size_allowed'], 'active' => $this->option['check_size_allowed']]);
         $resize->setData($this->getDocument()->getDatas())->setFormat($this->getFormat());
-        
+
         $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
         $this->getNewDocument()->setDatas($resize->getResizeData($this->size));
         $this->getNewDocument()->setSize($this->size);
         $this->getNewDocument()->setFormat($resize->getFormat());
         $this->getNewDocument()->setPage($this->getPage());
-        
+
         return $this;
     }
 
     /**
-     * Convert format file
+     * Convert format file.
      */
     private function convert()
     {
@@ -306,7 +310,7 @@ class Manager
             ->setFormat($this->document->getFormat())
             ->setTmp($this->option['convert']['tmp'])
             ->setPage($this->getPage());
-        
+
         $this->getNewDocument()->setDatas($convert->getConvertData($this->getFormat()));
         $this->getNewDocument()->setEncoding(Document::TYPE_BINARY_STR);
         $this->getNewDocument()->setFormat($this->getFormat());
@@ -314,7 +318,7 @@ class Manager
     }
 
     /**
-     * Convert format file
+     * Convert format file.
      */
     private function createPicture()
     {
@@ -328,12 +332,12 @@ class Manager
         $this->getNewDocument()->setName($this->document->getName());
         $this->getNewDocument()->setWeight(strlen($this->getNewDocument()
              ->getDatas()));
-        
+
         $this->setPage(null);
     }
 
     /**
-     * Get Document
+     * Get Document.
      *
      * @return \Dms\Document\Document
      */
@@ -342,12 +346,12 @@ class Manager
         if (null === $this->document) {
             $this->document = new Document();
         }
-        
+
         return $this->document;
     }
 
     /**
-     * Get New Document
+     * Get New Document.
      *
      * @return \Dms\Document\Document
      */
@@ -364,8 +368,8 @@ class Manager
     }
 
     /**
-     * Get Size 
-     * 
+     * Get Size.
+     *
      * @return string
      */
     public function getSize()
@@ -374,9 +378,10 @@ class Manager
     }
 
     /**
-     * Set Size
-     * 
+     * Set Size.
+     *
      * @param int $size
+     *
      * @return \Dms\Document\Manager
      */
     public function setSize($size)
@@ -387,8 +392,8 @@ class Manager
     }
 
     /**
-     * Get Format
-     * 
+     * Get Format.
+     *
      * @return string
      */
     public function getFormat()
@@ -397,9 +402,10 @@ class Manager
     }
 
     /**
-     * Set Format
-     * 
+     * Set Format.
+     *
      * @param string $format
+     *
      * @return \Dms\Document\Manager
      */
     public function setFormat($format)
@@ -410,8 +416,8 @@ class Manager
     }
 
     /**
-     * Get num Page
-     * 
+     * Get num Page.
+     *
      * @return int
      */
     public function getPage()
@@ -420,9 +426,10 @@ class Manager
     }
 
     /**
-     * Set num Page
-     * 
+     * Set num Page.
+     *
      * @param int $page
+     *
      * @return \Dms\Document\Manager
      */
     public function setPage($page)
@@ -433,21 +440,21 @@ class Manager
     }
 
     /**
-     * Get storage
+     * Get storage.
      *
      * @return \Dms\Storage\StorageInterface
      */
     public function getStorage()
     {
-        if(null === $this->storage) {
+        if (null === $this->storage) {
             $this->storage = new Storage(['path' => $this->option['default_path']]);
         }
-            
+
         return $this->storage;
     }
 
     /**
-     * Set Storage
+     * Set Storage.
      *
      * @param \Dms\Storage\StorageInterface $storage
      *
@@ -461,9 +468,10 @@ class Manager
     }
 
     /**
-     * Get Encoder/Decoder Object
-     * 
+     * Get Encoder/Decoder Object.
+     *
      * @param string $enc
+     *
      * @return \Dms\Coding\CodingInterface
      */
     public function getEncDec($enc)
@@ -472,7 +480,7 @@ class Manager
     }
 
     /**
-     * Clear Manager
+     * Clear Manager.
      */
     public function clear()
     {

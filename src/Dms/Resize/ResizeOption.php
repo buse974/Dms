@@ -1,38 +1,37 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * ResizeOption.php
- *
  */
 namespace Dms\Resize;
 
 use Zend\Stdlib\AbstractOptions;
 
 /**
- * Class Option Resize
+ * Class Option Resize.
  */
 class ResizeOption extends AbstractOptions
 {
     /**
-     * Size Allow
-     * 
+     * Size Allow.
+     *
      * @var array
      */
     private $allow;
-    
+
     /**
-     * Check Size Allow
-     * 
+     * Check Size Allow.
+     *
      * @var bool
      */
     private $active;
 
     /**
-     * Set Option Size allow
-     * 
+     * Set Option Size allow.
+     *
      * @param array $allow
+     *
      * @return \Dms\Resize\ResizeOption
      */
     public function setAllow($allow)
@@ -43,8 +42,8 @@ class ResizeOption extends AbstractOptions
     }
 
     /**
-     * Get Option Size Allow
-     * 
+     * Get Option Size Allow.
+     *
      * @return array
      */
     public function getAllow()
@@ -57,9 +56,10 @@ class ResizeOption extends AbstractOptions
     }
 
     /**
-     * Set Option Active
-     * 
+     * Set Option Active.
+     *
      * @param bool $active
+     *
      * @return \Dms\Resize\ResizeOption
      */
     public function setActive($active)
@@ -70,9 +70,9 @@ class ResizeOption extends AbstractOptions
     }
 
     /**
-     * Get Option Active 
-     * 
-     * @return boolean
+     * Get Option Active.
+     *
+     * @return bool
      */
     public function getActive()
     {

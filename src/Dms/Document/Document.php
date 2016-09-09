@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Document
- *
  */
 namespace Dms\Document;
 
@@ -13,7 +11,7 @@ use Serializable;
 use Dms\Storage\Storage;
 
 /**
- * class Document is a File Model
+ * class Document is a File Model.
  */
 class Document implements Serializable
 {
@@ -23,99 +21,100 @@ class Document implements Serializable
     const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
 
     /**
-     * Id Document 
-     * 
+     * Id Document.
+     *
      * @var string
      */
     protected $id;
 
     /**
-     * Page number Document
-     * 
+     * Page number Document.
+     *
      * @var int
      */
     protected $page;
 
     /**
-     * Data Document
-     * 
+     * Data Document.
+     *
      * @var string
      */
     protected $data;
 
     /**
-     * Support Document (url, file)
+     * Support Document (url, file).
+     *
      * @var string
      */
     protected $support;
 
     /**
-     * Encoding Document
-     * 
+     * Encoding Document.
+     *
      * @var string
      */
     protected $encoding;
 
     /**
-     * MimeType Document
-     * 
+     * MimeType Document.
+     *
      * @var string
      */
     protected $type;
 
     /**
-     * Extension Document
-     * 
+     * Extension Document.
+     *
      * @var string
      */
     protected $format;
 
     /**
-     * Document Name
+     * Document Name.
      *
      * @var string
      */
     protected $name;
 
     /**
-     * Description Document
-     * 
+     * Description Document.
+     *
      * @var string
      */
     protected $description;
 
     /**
-     * Size Document
-     * 
+     * Size Document.
+     *
      * @var string
      */
     protected $size;
 
     /**
-     * weight of document
+     * weight of document.
      *
      * @var int
      */
     protected $weight;
 
     /**
-     * Storage Document
-     * 
+     * Storage Document.
+     *
      * @var \Dms\Storage\StorageInterface
      */
     protected $storage;
 
     /**
-     * Is Read
-     * 
+     * Is Read.
+     *
      * @var bool
      */
     protected $is_read = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param String $encoding
+     * @param string $encoding
      */
     public function __construct($encoding = null)
     {
@@ -125,8 +124,8 @@ class Document implements Serializable
     }
 
     /**
-     * Mark Read
-     * 
+     * Mark Read.
+     *
      * @return \Dms\Document\Document
      */
     public function isRead()
@@ -137,7 +136,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get the document id
+     * Get the document id.
      *
      * @return string
      */
@@ -151,27 +150,29 @@ class Document implements Serializable
     }
 
     /**
-     * Setter Id Document
+     * Setter Id Document.
      *
      * @param $id
+     *
      * @return \Dms\Document\Document
      */
     public function setId($id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
     /**
-     * Get body document
-     * 
+     * Get body document.
+     *
      * @param bool $print
+     *
      * @return string
      */
     public function getDatas($print = null)
     {
-        if ( (null === $this->data && null !== $this->getStorage()) || $print!==null) {
+        if ((null === $this->data && null !== $this->getStorage()) || $print !== null) {
             $this->getStorage()->read($this, 'data', $print);
         }
 
@@ -179,7 +180,7 @@ class Document implements Serializable
     }
 
     /**
-     * get format
+     * get format.
      *
      * @return string
      */
@@ -197,9 +198,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set format
+     * Set format.
      *
      * @param string $format
+     *
      * @return \Dms\Document\Document
      */
     public function setFormat($format)
@@ -214,9 +216,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set body document
+     * Set body document.
      *
      * @param string $data
+     *
      * @return \Dms\Document\Document
      */
     public function setDatas($data)
@@ -227,7 +230,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get type of file
+     * Get type of file.
      *
      * @return string
      */
@@ -241,9 +244,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set type of File
+     * Set type of File.
      *
      * @param string $type
+     *
      * @return \Dms\Document\Document
      */
     public function setType($type)
@@ -258,7 +262,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get page of file
+     * Get page of file.
      *
      * @return number
      */
@@ -268,9 +272,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set page of File
+     * Set page of File.
      *
      * @param number $page
+     *
      * @return \Dms\Document\Document
      */
     public function setPage($page)
@@ -299,9 +304,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set document encoding
+     * Set document encoding.
      *
      * @param encoding
+     *
      * @return \Dms\Document\Document
      */
     public function setEncoding($encoding)
@@ -312,7 +318,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get Name
+     * Get Name.
      *
      * @return string
      */
@@ -331,9 +337,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set Name
+     * Set Name.
      *
      * @param string $name
+     *
      * @return \Dms\Document\Document
      */
     public function setName($name)
@@ -344,7 +351,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get Description Document
+     * Get Description Document.
      *
      * @return string
      */
@@ -358,9 +365,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set Description Document
+     * Set Description Document.
      *
      * @param string $description
+     *
      * @return \Dms\Document\Document
      */
     public function setDescription($description)
@@ -371,7 +379,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get size
+     * Get size.
      *
      * @return string
      */
@@ -388,6 +396,7 @@ class Document implements Serializable
      * Set size.
      *
      * @param string $size
+     *
      * @return \Dms\Document\Document
      */
     public function setSize($size)
@@ -398,9 +407,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set Support
-     * 
+     * Set Support.
+     *
      * @param string $support
+     *
      * @return \Dms\Document\Document
      */
     public function setSupport($support)
@@ -411,8 +421,8 @@ class Document implements Serializable
     }
 
     /**
-     * Get Support
-     * 
+     * Get Support.
+     *
      * @param string $support
      */
     public function getSupport()
@@ -429,9 +439,10 @@ class Document implements Serializable
     }
 
     /**
-     * Set weight of document
+     * Set weight of document.
      *
      * @param number $weight
+     *
      * @return \Dms\Document\Document
      */
     public function setWeight($weight)
@@ -442,7 +453,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get weight of document
+     * Get weight of document.
      *
      * @return number
      */
@@ -466,8 +477,8 @@ class Document implements Serializable
     }
 
     /**
-     * To Array
-     * 
+     * To Array.
+     *
      * @return array
      */
     public function toArray()
@@ -484,10 +495,10 @@ class Document implements Serializable
                 'format' => $this->getFormat(),
         );
     }
-    
+
     /**
-     * Get Path Data
-     * 
+     * Get Path Data.
+     *
      * @return string
      */
     public function getPathDat()
@@ -496,7 +507,7 @@ class Document implements Serializable
     }
 
     /**
-     * Get Path Info
+     * Get Path Info.
      *
      * @return string
      */
@@ -506,10 +517,10 @@ class Document implements Serializable
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $serialized
-     * 
+     *
      * @see Serializable::unserialize()
      */
     public function unserialize($serialized)
@@ -527,9 +538,10 @@ class Document implements Serializable
     }
 
     /**
-     * Read File
-     * 
+     * Read File.
+     *
      * @param string $type
+     *
      * @return \Dms\Document\Document
      */
     public function read($type)
@@ -543,8 +555,8 @@ class Document implements Serializable
     }
 
     /**
-     * If Exist 
-     * 
+     * If Exist.
+     *
      * @return bool
      */
     public function exist()
@@ -552,7 +564,7 @@ class Document implements Serializable
         return $this->getStorage()->exist($this);
     }
     /**
-     * Get storage
+     * Get storage.
      *
      * @return \Dms\Storage\StorageInterface
      */
@@ -562,7 +574,7 @@ class Document implements Serializable
     }
 
     /**
-     * Set Storage
+     * Set Storage.
      *
      * @param \Dms\Storage\StorageInterface $storage
      *
@@ -576,7 +588,7 @@ class Document implements Serializable
     }
 
     /**
-     * Write Document
+     * Write Document.
      */
     public function write()
     {

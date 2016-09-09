@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * AbstractStorage.php
- *
  */
 namespace Dms\Storage;
 
@@ -13,34 +11,34 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 
 /**
- * Class AbstractStorage
+ * Class AbstractStorage.
  */
 abstract class AbstractStorage implements EventManagerAwareInterface, StorageInterface
 {
     /**
-     * Gestionnaire Event
-     * 
+     * Gestionnaire Event.
+     *
      * @var EventManagerInterface
      */
     protected $events;
 
     /**
-     * Storage Option
-     * 
+     * Storage Option.
+     *
      * @var StorageOption
      */
     protected $options;
 
     /**
-     * Constructor 
-     * 
+     * Constructor.
+     *
      * @param array $options
      */
     public function __construct(array $options = array())
     {
         $this->options = new StorageOption($options);
     }
-    
+
     /**
      * Inject an EventManager instance.
      *
@@ -70,5 +68,4 @@ abstract class AbstractStorage implements EventManagerAwareInterface, StorageInt
 
         return $this->events;
     }
-
 }

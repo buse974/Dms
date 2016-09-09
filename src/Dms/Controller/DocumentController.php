@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Controller Document
- *
  */
 namespace Dms\Controller;
 
@@ -16,28 +14,27 @@ use Dms\Document\Document;
 use Dms\Document\NoFileException;
 
 /**
- * Class DocumentController
+ * Class DocumentController.
  */
 class DocumentController extends AbstractActionController
 {
-    
     /**
-     * Print File
-     * 
+     * Print File.
+     *
      * @return string
      */
     public function getAction()
     {
         try {
-        $this->dms()->getService()->get($this->params('file'));
+            $this->dms()->getService()->get($this->params('file'));
         } catch (NoFileException $e) {
             return $this->getResponse()->setContent($e->getMessage());
         }
     }
-    
+
     /**
-     * Download Document
-     * 
+     * Download Document.
+     *
      * @return string
      */
     public function getDownloadAction()
@@ -45,7 +42,7 @@ class DocumentController extends AbstractActionController
         $content = null;
         try {
             $document = $this->dms()->getService()->getDocument($this->params('file'));
-            
+
             $content = $document->getDatas();
             $headers = $this->getResponse()->getHeaders();
             $headers->addHeaderLine('Content-type', 'application/octet-stream');
@@ -61,8 +58,8 @@ class DocumentController extends AbstractActionController
     }
 
     /**
-     * Get Info Type Document
-     * 
+     * Get Info Type Document.
+     *
      * @return string
      */
     public function getTypeAction()
@@ -73,13 +70,13 @@ class DocumentController extends AbstractActionController
         } catch (NoFileException $e) {
             $content = $e->getMessage();
         }
-        
+
         return $this->getResponse()->setContent($content);
     }
 
     /**
-     * Get Info Format Document
-     * 
+     * Get Info Format Document.
+     *
      * @return string
      */
     public function getFormatAction()
@@ -90,13 +87,13 @@ class DocumentController extends AbstractActionController
         } catch (NoFileException $e) {
             $content = $e->getMessage();
         }
-        
+
         return $this->getResponse()->setContent($content);
     }
 
     /**
-     * Get Info name Document
-     * 
+     * Get Info name Document.
+     *
      * @return string
      */
     public function getNameAction()
@@ -107,13 +104,13 @@ class DocumentController extends AbstractActionController
         } catch (NoFileException $e) {
             $content = $e->getMessage();
         }
-        
+
         return $this->getResponse()->setContent($content);
     }
 
     /**
-     * Get Info description Document
-     * 
+     * Get Info description Document.
+     *
      * @return string
      */
     public function getDescriptionAction()
@@ -124,13 +121,13 @@ class DocumentController extends AbstractActionController
         } catch (NoFileException $e) {
             $content = $e->getMessage();
         }
-        
+
         return $this->getResponse()->setContent($content);
     }
 
     /**
-     * Save For Upload File
-     * 
+     * Save For Upload File.
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function saveAction()
@@ -138,7 +135,7 @@ class DocumentController extends AbstractActionController
         foreach ($this->dms()->getHearders() as $key => $value) {
             $this->getResponse()->getHeaders()->addHeaderLine($key, $value);
         }
-        
+
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -149,7 +146,7 @@ class DocumentController extends AbstractActionController
             $files = $request->getFiles()->toArray();
 
             foreach ($files as $name_file => $file) {
-                if(isset($file['name'])) {
+                if (isset($file['name'])) {
                     $file = [$file];
                 }
                 foreach ($file as $f) {
@@ -159,13 +156,13 @@ class DocumentController extends AbstractActionController
                     $document['name'] = $f['name'];
                     $document['type'] = $f['type'];
                     $document['weight'] = $f['size'];
-                    
+
                     $doc = $this->dms()->getService()->add($document);
-                    if(isset($ret[$name_file])) {
-                        if(is_array($ret[$name_file])) {
+                    if (isset($ret[$name_file])) {
+                        if (is_array($ret[$name_file])) {
                             $ret[$name_file][] = $doc;
                         } else {
-                            $ret[$name_file] = [$ret[$name_file],$doc];
+                            $ret[$name_file] = [$ret[$name_file], $doc];
                         }
                     } else {
                         $ret[$name_file] = $doc;
@@ -178,8 +175,8 @@ class DocumentController extends AbstractActionController
     }
 
     /**
-     * Progress Upload
-     * 
+     * Progress Upload.
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function progressAction()
@@ -196,8 +193,8 @@ class DocumentController extends AbstractActionController
     }
 
     /**
-     * Init Session 
-     * 
+     * Init Session.
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function initSessionAction()
@@ -212,5 +209,4 @@ class DocumentController extends AbstractActionController
 
         return new JsonModel(array('result' => true));
     }
-
 }

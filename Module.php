@@ -11,7 +11,6 @@ use Dms\Service\DmsService;
 
 class Module implements ConfigProviderInterface
 {
-
     public function getConfig()
     {
         return include __DIR__.'/config/module.config.php';
@@ -20,7 +19,7 @@ class Module implements ConfigProviderInterface
     public function getServiceConfig()
     {
         return [
-            'aliases' =>[
+            'aliases' => [
                 'dms.service' => \Dms\Service\DmsService::class,
                 'dms.manager' => \Dms\Document\Manager::class,
                 'Base64Coding' => 'BaseCoding',
@@ -41,11 +40,13 @@ class Module implements ConfigProviderInterface
                     $config = $container->get('Config');
                     $url = new Url();
                     $url->setAdapter($config[$config['dms-conf']['adapter']]);
+
                     return $url;
                 },
 
                 \Dms\Resize\Resize::class => function ($container) {
                     $config = $container->get('config')['dms-conf'];
+
                     return new Resize([
                         'allow' => $config['size_allowed'],
                         'active' => $config['check_size_allowed'],
@@ -53,13 +54,15 @@ class Module implements ConfigProviderInterface
                 },
                 \Dms\Storage\Storage::class => function ($container) {
                     $config = $container->get('config')['dms-conf'];
+
                     return new Storage([
                         'path' => $config['default_path'],
-                        'storage' => $config['storage']
+                        'storage' => $config['storage'],
                     ]);
                 },
                 \Dms\Document\Manager::class => function ($container) {
                     $config = $container->get('config')['dms-conf'];
+
                     return new Manager($config, $container);
                 },
                 \Dms\Service\DmsService::class => function ($container) {

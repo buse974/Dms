@@ -1,72 +1,70 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Process
- *
  */
 namespace Dms\Convert;
 
 use Dms\Convert\Exception\ProcessException;
 
 /**
- * Class Process
+ * Class Process.
  */
 class Process
 {
     /**
-     * Command 
-     * 
+     * Command.
+     *
      * @var string
      */
     protected $cmd;
-    
+
     /**
-     * Environement
-     * 
+     * Environement.
+     *
      * @var array
      */
     protected $env;
-    
+
     /**
-     * Code Error
-     * 
+     * Code Error.
+     *
      * @var int
      */
     protected $error_code;
-    
+
     /**
-     * Message Error
-     * 
+     * Message Error.
+     *
      * @var string
      */
     protected $error_message;
-    
+
     /**
-     * Folder Tmp
-     * 
+     * Folder Tmp.
+     *
      * @var string
      */
     protected $tmp;
-    
+
     /**
-     * Output Command
-     * 
+     * Output Command.
+     *
      * @var string
      */
     protected $output;
-    
+
     /**
-     * Input Parm Command
-     * 
+     * Input Parm Command.
+     *
      * @var string
      */
     protected $input;
-    
+
     /**
-     * Descriptors
-     * 
+     * Descriptors.
+     *
      * @var array
      */
     protected $descriptors = array(
@@ -77,9 +75,10 @@ class Process
         );
 
     /**
-     * Set Command
-     * 
+     * Set Command.
+     *
      * @param string $cmd
+     *
      * @return \Dms\Convert\Process
      */
     public function setCmd($cmd)
@@ -90,8 +89,8 @@ class Process
     }
 
     /**
-     * Get Error Code
-     * 
+     * Get Error Code.
+     *
      * @return int
      */
     public function getErrorCode()
@@ -100,8 +99,8 @@ class Process
     }
 
     /**
-     * Get Error Message
-     * 
+     * Get Error Message.
+     *
      * @return string
      */
     public function getErrorMessage()
@@ -110,9 +109,10 @@ class Process
     }
 
     /**
-     * Set Input
-     * 
+     * Set Input.
+     *
      * @param string $input
+     *
      * @return \Dms\Convert\Process
      */
     public function setInput($input)
@@ -123,9 +123,10 @@ class Process
     }
 
     /**
-     * Set Folder Tmp
-     * 
+     * Set Folder Tmp.
+     *
      * @param string $tmp
+     *
      * @return \Dms\Convert\Process
      */
     public function setTmp($tmp)
@@ -136,9 +137,10 @@ class Process
     }
 
     /**
-     * Set Env 
-     * 
+     * Set Env.
+     *
      * @param string $env
+     *
      * @return \Dms\Convert\Process
      */
     public function setEnv($env)
@@ -149,8 +151,8 @@ class Process
     }
 
     /**
-     * Get Output
-     * 
+     * Get Output.
+     *
      * @return string
      */
     public function getOutput()
@@ -159,10 +161,11 @@ class Process
     }
 
     /**
-     * Run Command
-     * 
+     * Run Command.
+     *
      * @throws ProcessException
-     * @return NULL|string
+     *
+     * @return null|string
      */
     public function run()
     {
@@ -192,9 +195,10 @@ class Process
     }
 
     /**
-     * Set Descriptor
-     * 
+     * Set Descriptor.
+     *
      * @param array $descriptors
+     *
      * @return \Dms\Convert\Process
      */
     public function setDescriptors(array $descriptors)

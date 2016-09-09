@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Dms
- *
  */
 namespace Dms\Controller\Plugin;
 
@@ -12,30 +10,29 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Dms\Service\DmsService;
 
 /**
- * Plugin Dms
+ * Plugin Dms.
  */
 class Dms extends AbstractPlugin
 {
-
     /**
-     * Service Dms Object
-     * 
+     * Service Dms Object.
+     *
      * @var DmsService
      */
     protected $service;
-    
+
     /**
-     * Option dms-conf
-     * 
+     * Option dms-conf.
+     *
      * @var array
      */
     protected $options;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @param DmsService $service
-     * @param array $options
+     * @param array      $options
      */
     public function __construct(DmsService $service, $options)
     {
@@ -44,18 +41,18 @@ class Dms extends AbstractPlugin
     }
 
     /**
-     * Get Service Dms
-     * 
+     * Get Service Dms.
+     *
      * @return DmsService
      */
     public function getService()
     {
         return $this->service;
     }
-    
+
     /**
-     * Get Array Hearders 
-     * 
+     * Get Array Hearders.
+     *
      * @return array
      */
     public function getHearders()

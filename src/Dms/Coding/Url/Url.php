@@ -1,10 +1,8 @@
 <?php
 /**
- * 
- * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ * github.com/buse974/Dms (https://github.com/buse974/Dms).
  *
  * Encode/decode Url
- *
  */
 namespace Dms\Coding\Url;
 
@@ -15,27 +13,27 @@ use Dms\Coding\Url\Exception\ErrorDocumentException;
 use Dms\Coding\Url\Exception\ForbiddenDocumentException;
 
 /**
- * Class Url
+ * Class Url.
  */
 class Url implements CodingInterface
 {
     /**
-     * data for encoded or decoded
+     * data for encoded or decoded.
      *
      * @var string
      */
     private $data;
 
     /**
-     * Name Coding
-     * 
+     * Name Coding.
+     *
      * @var string
      */
     private $name = self::CODING_URL_STR;
 
     /**
-     * Adapter Http
-     * 
+     * Adapter Http.
+     *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
     private $adapter;
@@ -65,10 +63,10 @@ class Url implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::encode()
      */
     public function encode($data = null)
@@ -81,10 +79,10 @@ class Url implements CodingInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @param string $data
-     * 
+     *
      * @see \Dms\Coding\CodingInterface::decode()
      */
     public function decode($data = null)
