@@ -2,11 +2,18 @@
 
 namespace DmsTest\Service;
 
-use \PHPUnit_Framework_TestCase;
-use DmsTest\bootstrap;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class DmsServiceTest extends PHPUnit_Framework_TestCase
+class DmsServiceTest extends AbstractHttpControllerTestCase
 {
+    static public $container;
+    
+    public function setUp()
+    {
+        $this->setApplicationConfig(include __DIR__ . '/../../config/application.config.php');
+        parent::setUp();
+    }
+    
     public function tearDown()
     {
         $this->deleteDirRec(__DIR__ . '/../../_upload/01');
@@ -31,7 +38,9 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $document['type'] = 'image/png';
         $document['data'] =  'data:image/jpeg;base64,' . base64_encode($image);
 
-        $dms = bootstrap::getServiceManager()->get('dms.service');
+        self::$container = $this->getApplicationServiceLocator();
+        
+        $dms = self::$container->get('dms.service');
         $ret = $dms->add($document);
 
         $this->assertEquals(12, strlen($ret));
@@ -45,7 +54,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testResize()
     {
-        $dms = bootstrap::getServiceManager()->get('dms.service');
+        $dms = self::$container->get('dms.service');
         $ret = $dms->resize('80x80');
 
         $this->assertEquals(strlen('0200filename') + strlen('-80x80') , strlen($ret));
@@ -60,7 +69,7 @@ class DmsServiceTest extends PHPUnit_Framework_TestCase
         $document['data'] = base64_encode($image);
         $document['type'] = 'odt';
 
-        $dms = bootstrap::getServiceManager()->get('dms.service');
+        $dms = self::$container->get('dms.service');
         $ret = $dms->add($document);
 
         $this->assertEquals(15, strlen($ret));

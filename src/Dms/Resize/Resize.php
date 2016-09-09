@@ -1,22 +1,52 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * Resize.php
+ *
+ */
 namespace Dms\Resize;
 
+/**
+ * Class Resize
+ */
 class Resize 
 {
-
+    /**
+     * 
+     * @var string
+     */
     protected $data;
+    
+    /**
+     * 
+     * @var string
+     */
     protected $format = 'jpg';
+    
+    /**
+     * 
+     * @var ResizeOption
+     */
     protected $options;
 
     /**
+     * Constructor
+     * 
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = new ResizeOption($options);
     }
 
+    /**
+     * Set Data Binary
+     * 
+     * @param string $data
+     * @return \Dms\Resize\Resize
+     */
     public function setData($data)
     {
         $this->data = $data;
@@ -24,6 +54,12 @@ class Resize
         return $this;
     }
 
+    /**
+     * Set Format
+     * 
+     * @param string $format
+     * @return \Dms\Resize\Resize
+     */
     public function setFormat($format)
     {
         if(!empty($format)) {
@@ -36,10 +72,8 @@ class Resize
     /**
      * resize data use library GD.
      *
-     * @param unknown $size
-     *
+     * @param string $size
      * @throws \Exception
-     *
      * @return string
      */
     public function getResizeData($size)
@@ -128,6 +162,12 @@ class Resize
         return $imageFileContents;
     }
 
+    /**
+     * Check if is Compatible
+     * 
+     * @param string $ext
+     * @return boolean
+     */
     public static function isCompatible($ext)
     {
         switch ($ext) {
@@ -154,11 +194,21 @@ class Resize
         return (imagetypes() & $t);
     }
 
+    /**
+     * Get Mine Type
+     * 
+     * @return string
+     */
     public function getTypeMine()
     {
         return 'image/'.$this->format;
     }
-
+    
+    /**
+     * Get Format
+     * 
+     * @return string
+     */
     public function getFormat()
     {
         return $this->format;

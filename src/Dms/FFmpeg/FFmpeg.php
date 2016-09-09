@@ -1,21 +1,54 @@
 <?php
-
+/**
+ * 
+ * github.com/buse974/Dms (https://github.com/buse974/Dms)
+ *
+ * FFmpeg.php
+ *
+ */
 namespace Dms\FFmpeg;
 
 use FFMpeg\FFMpeg as BFF;
 use FFMpeg\Coordinate as BFFC;
+use FFMpeg\Media\Video;
 
+/**
+ * Class FFmpeg
+ */
 class FFmpeg
 {
+    /**
+     * 
+     * @var string
+     */
     protected $file;
+    
+    /**
+     * 
+     * @var FFMpeg\FFMpeg
+     */
     private $ffmpeg;
+    
+    /**
+     * 
+     * @var Video
+     */
     private $video;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->ffmpeg = BFF::create();
     }
 
+    /**
+     * Set File
+     * 
+     * @param string $file
+     * @return \Dms\FFmpeg\FFmpeg
+     */
     public function setFile($file)
     {
         $this->file = $file;
@@ -24,6 +57,12 @@ class FFmpeg
         return $this;
     }
 
+    /**
+     * Get Picture
+     * 
+     * @param int $time
+     * @return string
+     */
     public function getPicture($time = 30)
     {
         $duration = $this->video->getStreams()->first()->get('duration');
@@ -33,6 +72,11 @@ class FFmpeg
         return file_get_contents('/tmp/picture.jpg');
     }
 
+    /**
+     * Get Size
+     * 
+     * @return string
+     */
     public function getSize()
     {
         $stream = $this->video->getStreams()->first();
@@ -44,11 +88,21 @@ class FFmpeg
         return $dim;
     }
 
+    /**
+     * Get Mine Type
+     * 
+     * @return string
+     */
     public function getTypeMine()
     {
         return 'image/jpeg';
     }
 
+    /**
+     * Get Fomat
+     * 
+     * @return string
+     */
     public function getFormat()
     {
         return 'jpg';

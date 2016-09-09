@@ -37,7 +37,7 @@ class CodingFactory implements AbstractFactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $factory = $serviceLocator->get(ucfirst($requestedName));
+        $factory = $container->get(ucfirst($requestedName));
         if (!$factory instanceof CodingInterface) {
             throw new \Exception('not type CodingInterface');
         }

@@ -2,11 +2,16 @@
 
 namespace DmsTest\Document;
 
-use DmsTest\bootstrap;
-use \PHPUnit_Framework_TestCase;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class ManagerTest extends PHPUnit_Framework_TestCase
+class ManagerTest extends AbstractHttpControllerTestCase
 {
+    public function setUp()
+    {
+        $this->setApplicationConfig(include __DIR__ . '/../../config/application.config.php');
+        parent::setUp();
+    }
+    
     public function tearDown()
     {
         $this->deleteDirRec(__DIR__ . '/../../_upload/00');
@@ -25,7 +30,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     public function testCanGetDocumentById()
     {
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $m_document = $manager->loadDocument('e2bd813816c305a8a22e03c95d2ee8fd3f7bc710')->getDocument();
 
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
@@ -39,7 +44,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanGetDocument()
     {
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $m_document = $manager->getDocument();
         $this->assertInstanceOf("Dms\Document\Document", $m_document);
     }
@@ -49,7 +54,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanClearManager()
     {
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $old_document_id = $manager->getDocument()->getId();
         $manager->clear();
         $m_document = $manager->getDocument();
@@ -64,7 +69,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['coding'] = 'binary';
         $document['data'] = $image;
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
 
         $document = $manager->createDocument($document)->writeFile()->getDocument();
         $document_id = $document->getId();
@@ -82,8 +87,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['coding'] = 'base';
         $document['data'] = base64_encode($image);
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
-        $manager->decode($document);
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
+        $manager->createDocument($document);
+        $manager->decode();
         $document = $manager->getDocument();
         $this->assertEquals('binary', $document->getEncoding());
         $this->assertEquals($image, $document->getDatas());
@@ -96,7 +102,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['coding'] = 'binary';
         $document['data'] = $image;
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setSize('80x80');
         $manager->writeFile('0002filname.png');
@@ -109,7 +115,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     {
         $image = file_get_contents(__DIR__ . '/../../_file/video.jpg');
         
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         
         $manager->loadDocument('2222video');
         $manager->setFormat('jpg');
@@ -128,7 +134,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['data'] = $image;
         $document['format'] = 'png';
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setFormat('pdf');
         $manager->writeFile();
@@ -145,7 +151,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['data'] = $image;
         $document['format'] = 'odt';
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setFormat('pdf');
         $manager->writeFile();
@@ -162,7 +168,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['data'] = $image;
         $document['format'] = 'odt';
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setFormat('jpg');
         $manager->writeFile();
@@ -179,7 +185,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $document['data'] = $image;
         $document['format'] = 'docx';
 
-        $manager = bootstrap::getServiceManager()->get('dms.manager');
+        $manager = $this->getApplicationServiceLocator()->get('dms.manager');
         $manager->createDocument($document);
         $manager->setFormat('pdf');
         $manager->writeFile();
@@ -190,7 +196,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     public function testCanGetStorage()
     {
-        $dm = bootstrap::getServiceManager()->get('dms.manager');
+        $dm = $this->getApplicationServiceLocator()->get('dms.manager');
         $storage = $dm->getStorage();
         $this->assertInstanceOf("Dms\Storage\StorageInterface", $storage);
     }
