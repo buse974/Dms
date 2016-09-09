@@ -13,16 +13,13 @@
   "require": {
     "php-ffmpeg/php-ffmpeg": "~0.5",
     "php": ">=5.6",
-    "zendframework/zend-file": "*",
     "zendframework/zend-servicemanager": "*",
     "zendframework/zend-mvc": "*",
     "zendframework/zend-modulemanager": "*",
-    "zendframework/zend-loader": "*",
     "zendframework/zend-config": "*",
     "zendframework/zend-view": "*",
     "zendframework/zend-serializer": "*",
     "zendframework/zend-log": "*",
-    "zendframework/zend-i18n": "*",
     "aws/aws-sdk-php": "^3.19"
   },
   "require-dev" : {
