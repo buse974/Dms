@@ -447,7 +447,9 @@ class Manager
     public function getStorage()
     {
         if (null === $this->storage) {
-            $this->storage = new Storage(['path' => $this->option['default_path']]);
+            $this->storage = new Storage([
+                'path' => $this->option['default_path'], 
+                'storage' => $this->option['storage']]);
         }
 
         return $this->storage;

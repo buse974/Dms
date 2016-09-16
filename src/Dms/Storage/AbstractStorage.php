@@ -34,7 +34,7 @@ abstract class AbstractStorage implements EventManagerAwareInterface, StorageInt
      *
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = new StorageOption($options);
     }
