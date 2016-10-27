@@ -21,15 +21,18 @@ class DmsService
      * @var \Dms\Document\Manager
      */
     protected $document_manager;
+    protected $options;
 
     /**
      * Constructor.
      *
      * @param \Dms\Document\Manager $document_manager
+     * @param array $options
      */
-    public function __construct(\Dms\Document\Manager $document_manager)
+    public function __construct(\Dms\Document\Manager $document_manager, $options)
     {
         $this->document_manager = $document_manager;
+        $this->options = $options;
     }
 
     /**
@@ -99,6 +102,12 @@ class DmsService
         }
 
         if (null !== $document) {
+            if($this->options['storage']['name'] === 's3') {
+                $name = $document->getId();
+                header('Location: http://s3.amazonaws.com/'.$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
+                exit();
+            }
+           
             header('HTTP/1.0 200');
             header('Content-type: '.((null !== $document->getType()) ? $document->getType() : 'application/octet-stream'));
             header('Content-Transfer-Encoding: '.$document->getEncoding());

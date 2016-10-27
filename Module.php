@@ -43,7 +43,6 @@ class Module implements ConfigProviderInterface
 
                     return $url;
                 },
-
                 \Dms\Resize\Resize::class => function ($container) {
                     $config = $container->get('config')['dms-conf'];
 
@@ -66,7 +65,9 @@ class Module implements ConfigProviderInterface
                     return new Manager($config, $container);
                 },
                 \Dms\Service\DmsService::class => function ($container) {
-                    return new DmsService($container->get(\Dms\Document\Manager::class));
+                    $config = $container->get('config')['dms-conf'];
+                    
+                    return new DmsService($container->get(\Dms\Document\Manager::class), $config);
                 },
             ],
         ];

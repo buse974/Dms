@@ -18,6 +18,7 @@ use Aws\S3\S3Client;
  */
 class Storage extends AbstractStorage
 {
+    private $s3Client;
     /**
      * If Path Is init.
      *
@@ -37,7 +38,9 @@ class Storage extends AbstractStorage
         $ret = null;
         $name = $document->getId();
         $nameMod = substr($name, 4);
-        $path = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
+        $f = substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
+         
+        $path=$this->getBasePath().$f;
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
@@ -62,7 +65,18 @@ class Storage extends AbstractStorage
             $document->setWeight(strlen($document->getDatas()));
             fclose($fp);
         }
-
+        $conf_storage = $this->options->getStorage();
+        if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
+            print_r($_FILES);
+            $this->s3Client->copyObject([
+                'Bucket' => $conf_storage['bucket'],
+                'Key' => $f.$nameMod.'.dat',
+                'CopySource' => $conf_storage['bucket'].'/'.$f.$nameMod.'.dat',
+                'ContentType' => $document->getType(),
+                'ContentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
+                'MetadataDirective' => 'REPLACE',
+            ]);
+        }
         $document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('path' => $path, 'short_name' => $nameMod, 'all_path' => $path.$nameMod.'.dat', 'support' => $document->getSupport(), 'name' => $name));
 
@@ -137,14 +151,14 @@ class Storage extends AbstractStorage
         $filename = $this->getPath($document, '.dat');
 
         if ($print !== null) {
-            $handle = fopen($filename, 'r');
+            $handle = fopen($filename, 'r', false, stream_context_create(['s3' => ['seekable' => true]]));
             if (is_array($print)) {
                 $start = (!empty($print['start']) ? $print['start'] : 0);
                 //$end = (!empty($print['end']) ? $print['end'] : filesize($filename));
                 fseek($handle, $start);
             }
             while (!feof($handle)) {
-                echo fread($handle, 8192);
+                echo fread($handle, 1024);
             }
             fclose($handle);
             exit();
@@ -195,8 +209,8 @@ class Storage extends AbstractStorage
         $conf_storage = $this->options->getStorage();
         if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
             if ($this->init_path === false) {
-                $s3Client = new S3Client($conf_storage['options']);
-                $s3Client->registerStreamWrapper();
+                $this->s3Client = new S3Client($conf_storage['options']);
+                $this->s3Client->registerStreamWrapper();
                 $init_path = true;
             }
             $path = sprintf('s3://%s/', $conf_storage['bucket']);
