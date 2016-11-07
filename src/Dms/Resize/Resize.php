@@ -121,13 +121,13 @@ class Resize
         $oriX = imagesx($img);
         $oriY = imagesy($img);
 
-        if ((!isset($size['width']) || $oriX < $size['width']) && (!isset($size['height']) || $oriY < $size['height'])) {
+        if((!isset($size['width']) && !isset($size['height'])) || $oriY < $size['height'] || $oriX < $size['width']) {
             return $this->data;
         }
 
         $rapportY = (isset($size['height'])) ? $oriY / $size['height'] : 0;
         $rapportX = (isset($size['width'])) ? $oriX / $size['width'] : 0;
-
+        
         if ($min === false) {
             $raportMax = ($rapportY < $rapportX ? $rapportY : $rapportX);
         } else {
