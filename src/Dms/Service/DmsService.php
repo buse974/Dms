@@ -102,7 +102,7 @@ class DmsService
         }
 
         if (null !== $document) {
-            if($this->options['storage']['name'] === 's3') {
+            if(isset($this->options['storage']['name']) &&  $this->options['storage']['name'] === 's3') {
                 $name = $document->getId();
                 header('Location: http://s3.amazonaws.com/'.$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
