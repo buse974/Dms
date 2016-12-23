@@ -104,10 +104,10 @@ class DmsService
         if (null !== $document) {
             if(isset($this->options['storage']['name']) &&  $this->options['storage']['name'] === 's3') {
                 $name = $document->getId();
-                header('Location: http://s3.amazonaws.com/'.$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
+                header('Location: https://s3.amazonaws.com/'.$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
             }
-           
+
             header('HTTP/1.0 200');
             header('Content-type: '.((null !== $document->getType()) ? $document->getType() : 'application/octet-stream'));
             header('Content-Transfer-Encoding: '.$document->getEncoding());
