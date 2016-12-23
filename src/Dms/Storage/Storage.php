@@ -67,7 +67,6 @@ class Storage extends AbstractStorage
         }
         $conf_storage = $this->options->getStorage();
         if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
-            print_r($_FILES);
             $this->s3Client->copyObject([
                 'Bucket' => $conf_storage['bucket'],
                 'Key' => $f.$nameMod.'.dat',
