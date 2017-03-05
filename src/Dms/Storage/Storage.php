@@ -68,14 +68,21 @@ class Storage extends AbstractStorage
         }
         $conf_storage = $this->options->getStorage();
         if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
-            $this->s3Client->copyObject([
-                'Bucket' => $conf_storage['bucket'],
-                'Key' => $f.$nameMod.'.dat',
-                'CopySource' => $conf_storage['bucket'].'/'.$f.$nameMod.'.dat',
-                'ContentType' => $document->getType(),
-                'ContentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
-                'MetadataDirective' => 'REPLACE',
-            ]);
+          $this->client->copyObject([
+              'Bucket' => $conf_storage['bucket'],
+              'Key' => $f.$nameMod.'.dat',
+              'CopySource' => $conf_storage['bucket'].'/'.$f.$nameMod.'.dat',
+              'ContentType' => $document->getType(),
+              'ContentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
+              'MetadataDirective' => 'REPLACE',
+          ]);
+        } elseif (isset($conf_storage['name']) && $conf_storage['name'] === 'gs') {
+          $bucket = $this->client->bucket($conf_storage['bucket']);
+          $obj = $bucket->object($f.$nameMod.'.dat');
+          $obj->update([
+            'contentType' => $document->getType(),
+            'contentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
+          ]);
         }
         $document->setSupport(Document::SUPPORT_FILE_STR);
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('path' => $path, 'short_name' => $nameMod, 'all_path' => $path.$nameMod.'.dat', 'support' => $document->getSupport(), 'name' => $name));
@@ -149,7 +156,6 @@ class Storage extends AbstractStorage
     public function _readData(\Dms\Document\Document &$document, $print = null)
     {
         $filename = $this->getPath($document, '.dat');
-
         if ($print !== null) {
             $handle = fopen($filename, 'r', false, stream_context_create(['s3' => ['seekable' => true]]));
             if (is_array($print)) {

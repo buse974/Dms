@@ -102,9 +102,9 @@ class DmsService
         }
 
         if (null !== $document) {
-            if(isset($this->options['storage']['name']) &&  $this->options['storage']['name'] === 's3') {
+            if(isset($this->options['storage']['name']) && ( $this->options['storage']['name'] === 's3' || $this->options['storage']['name'] === 'gs' ) ) {
                 $name = $document->getId();
-                header('Location: https://s3.amazonaws.com/'.$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
+                header('Location: '.$this->options['storage']['url'].$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
             }
 
@@ -115,7 +115,7 @@ class DmsService
             header('Accept-Ranges: bytes');
             $print = true;
             if (isset($_SERVER['HTTP_RANGE'])) {
-                $print = array();
+                $print = [];
                 $range = $_SERVER['HTTP_RANGE'];
                 $pieces = explode('=', $range);
                 $seek = explode('-', trim($pieces[1]));
