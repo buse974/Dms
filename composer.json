@@ -21,7 +21,8 @@
     "zendframework/zend-serializer": "*",
     "zendframework/zend-log": "*",
     "zendframework/zend-form": "*",
-    "aws/aws-sdk-php": "^3.19"
+    "aws/aws-sdk-php": "^3.19",
+    "google/cloud": "*" 
   },
   "require-dev" : {
     "friendsofphp/php-cs-fixer":"*",

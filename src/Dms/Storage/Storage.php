@@ -12,6 +12,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\FileInput;
 use Zend\Form\Element\File;
 use Aws\S3\S3Client;
+use Google\Cloud\Storage\StorageClient;
 
 /**
  * Class Storage.
@@ -39,7 +40,7 @@ class Storage extends AbstractStorage
         $name = $document->getId();
         $nameMod = substr($name, 4);
         $f = substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
-         
+
         $path=$this->getBasePath().$f;
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
@@ -153,7 +154,6 @@ class Storage extends AbstractStorage
             $handle = fopen($filename, 'r', false, stream_context_create(['s3' => ['seekable' => true]]));
             if (is_array($print)) {
                 $start = (!empty($print['start']) ? $print['start'] : 0);
-                //$end = (!empty($print['end']) ? $print['end'] : filesize($filename));
                 fseek($handle, $start);
             }
             while (!feof($handle)) {
@@ -206,13 +206,22 @@ class Storage extends AbstractStorage
     private function getBasePath()
     {
         $conf_storage = $this->options->getStorage();
-        if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
+        if (isset($conf_storage['name'])) {
+          if ($conf_storage['name'] === 's3') {
             if ($this->init_path === false) {
-                $this->s3Client = new S3Client($conf_storage['options']);
-                $this->s3Client->registerStreamWrapper();
-                $init_path = true;
+              $this->client = new S3Client($conf_storage['options']);
+              $this->client->registerStreamWrapper();
+              $init_path = true;
             }
             $path = sprintf('s3://%s/', $conf_storage['bucket']);
+          } elseif ($conf_storage['name'] === 'gs') {
+            if ($this->init_path === false) {
+              $this->client = new StorageClient($conf_storage['options']);
+              $this->client->registerStreamWrapper();
+              $init_path = true;
+            }
+            $path = sprintf('gs://%s/', $conf_storage['bucket']);
+          }
         } else {
             $path = $this->options->getPath();
         }

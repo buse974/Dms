@@ -142,31 +142,28 @@ class DocumentController extends AbstractActionController
 
         $ret = [];
         $request = $this->getRequest();
-        if ($request->isPost()) {
-            $files = $request->getFiles()->toArray();
+        $files = $request->getFiles()->toArray();
+        foreach ($files as $name_file => $file) {
+            if (isset($file['name'])) {
+                $file = [$file];
+            }
+            foreach ($file as $f) {
+                $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
+                $document['coding'] = 'binary';
+                $document['data'] = [$name_file => $f];
+                $document['name'] = $f['name'];
+                $document['type'] = $f['type'];
+                $document['weight'] = $f['size'];
 
-            foreach ($files as $name_file => $file) {
-                if (isset($file['name'])) {
-                    $file = [$file];
-                }
-                foreach ($file as $f) {
-                    $document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
-                    $document['coding'] = 'binary';
-                    $document['data'] = [$name_file => $f];
-                    $document['name'] = $f['name'];
-                    $document['type'] = $f['type'];
-                    $document['weight'] = $f['size'];
-
-                    $doc = $this->dms()->getService()->add($document);
-                    if (isset($ret[$name_file])) {
-                        if (is_array($ret[$name_file])) {
-                            $ret[$name_file][] = $doc;
-                        } else {
-                            $ret[$name_file] = [$ret[$name_file], $doc];
-                        }
+                $doc = $this->dms()->getService()->add($document);
+                if (isset($ret[$name_file])) {
+                    if (is_array($ret[$name_file])) {
+                        $ret[$name_file][] = $doc;
                     } else {
-                        $ret[$name_file] = $doc;
+                        $ret[$name_file] = [$ret[$name_file], $doc];
                     }
+                } else {
+                    $ret[$name_file] = $doc;
                 }
             }
         }
