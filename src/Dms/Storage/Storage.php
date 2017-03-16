@@ -73,7 +73,7 @@ class Storage extends AbstractStorage
               'Key' => $f.$nameMod.'.dat',
               'CopySource' => $conf_storage['bucket'].'/'.$f.$nameMod.'.dat',
               'ContentType' => $document->getType(),
-              'Cache-Control' => 'public, max-age=31536000',
+              'CacheControl' => 'public, max-age=31536000',
               'ContentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
               'MetadataDirective' => 'REPLACE',
           ]);
@@ -82,7 +82,7 @@ class Storage extends AbstractStorage
           $obj = $bucket->object($f.$nameMod.'.dat');
           $obj->update([
             'contentType' => $document->getType(),
-            'Cache-Control' => 'public, max-age=31536000',
+            'CacheControl' => 'public, max-age=31536000',
             'contentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
           ]);
         }
