@@ -104,6 +104,11 @@ class DmsService
         if (null !== $document) {
             if(isset($this->options['storage']['name']) && ( $this->options['storage']['name'] === 's3' || $this->options['storage']['name'] === 'gs' ) ) {
                 $name = $document->getId();
+                if(isset($this->options['headers'])) {
+                  foreach ($this->options['headers'] as $key => $value) {
+                    header(sprintf("%s: %s", $key, $value));
+                  }
+                }
                 header('Location: '.$this->options['storage']['url'].$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
             }
