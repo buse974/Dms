@@ -109,7 +109,7 @@ class DmsService
                     header(sprintf("%s: %s", $key, $value));
                   }
                 }
-                header('Location: '.$this->options['storage']['url'].$this->options['storage']['bucket'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
+                header('Location: '.$this->options['storage']['url'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
             }
 
