@@ -6,9 +6,7 @@
  */
 namespace Dms\Document;
 
-use Zend\Validator\File\Sha1;
 use Serializable;
-use Dms\Storage\Storage;
 
 /**
  * class Document is a File Model.

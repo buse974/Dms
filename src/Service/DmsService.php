@@ -7,7 +7,6 @@
 namespace Dms\Service;
 
 use Zend\ProgressBar\Upload\SessionProgress as Sp;
-use Dms\Document\Manager;
 use Dms\Document\NoFileException;
 
 /**
