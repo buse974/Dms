@@ -12,6 +12,7 @@ use Zend\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\RequestInterface;
 use Dms\Document\NoFileException;
 use Dms\Document\Document;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * The configuration provider for the App module
@@ -48,12 +49,11 @@ class ConfigProvider
                     'tmp' => '/tmp/',
                 ],
                 'headers'=> [
-                    'Access-Control-Allow-Origin'=>'http://local.wow.in',
-                    'Access-Control-Allow-Credentials'=>'true'
                 ],
-                'storage' => [
+               /* 'storage' => [
                     'name' => 's3',
                     'bucket' => 'NAME-BUCKET',
+                    'bucket_upload' => 'NAME-BUCKET',
                     'options' => [
                         'version' => 'latest',
                         'region' => '',
@@ -62,10 +62,12 @@ class ConfigProvider
                             'secret' => '',
                         ],
                     ],
-                ],
+                ],*/
                 /*  'storage' => [
                  'name' => 'gs',
                  'bucket' => 'NAME-BUCKET',
+                 'bucket_upload' => 'NAME-BUCKET',
+                 'credentials_file' => 'tagncar-c26f3232cbb7.json',
                  'options' => [
                  'projectId' => *****
                  ]
@@ -163,45 +165,41 @@ class ConfigProvider
                     };
                 },
                 'Action\filesaveAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
 
                     	if (session_status() == PHP_SESSION_NONE) {
                     		session_start();
                     	}
                     	
                     	$ret = [];
-                    	$request = $this->getRequest();
-                    	$files = $request->getFiles()->toArray();
+                    	$files = $request->getUploadedFiles();
+                    	
                     	foreach ($files as $name_file => $file) {
-                    		if (isset($file['name'])) {
-                    			$file = [$file];
-                    		}
-                    		foreach ($file as $f) {
-                    			$document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
-                    			$document['coding'] = 'binary';
-                    			$document['data'] = [$name_file => $f];
-                    			$document['name'] = $f['name'];
-                    			$document['type'] = $f['type'];
-                    			$document['weight'] = $f['size'];
-                    			
-                    			$doc = $this->dms()->getService()->add($document);
-                    			if (isset($ret[$name_file])) {
-                    				if (is_array($ret[$name_file])) {
-                    					$ret[$name_file][] = $doc;
-                    				} else {
-                    					$ret[$name_file] = [$ret[$name_file], $doc];
-                    				}
-                    			} else {
-                    				$ret[$name_file] = $doc;
-                    			}
-                    		}
+                    		/** @var  \Zend\Diactoros\UploadedFile $file */
+                    		$document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
+                    		$document['coding'] = 'binary';
+                    		$document['data']  = [$name_file => $file->getStream()];
+                    		$document['name'] = $file->getClientFilename();
+                   			$document['type'] = $file->getClientMediaType();
+                   			$document['weight'] = $file->getSize();
+                   			
+                    		$doc = $container->get(\Dms\Service\DmsService::class)->add($document);
+                    		if (isset($ret[$name_file])) {
+                    			if (is_array($ret[$name_file])) {
+                   					$ret[$name_file][] = $doc;
+                   				} else {
+                   					$ret[$name_file] = [$ret[$name_file], $doc];
+                   				}
+                   			} else {
+                   				$ret[$name_file] = $doc;
+                   			}
                     	}
                     	
                     	return new JsonResponse((string) $ret, 200, $container->get('config')['dms-conf']['headers']);
                     };
                 },
                 'Action\filedownloadAction' => function ($container) {
-	                return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
 	                	$content = null;
 	                	try {
 	                		$document = $container->get(\Dms\Service\DmsService::class)->getDocument($request->getAttribute('file'));
@@ -221,7 +219,7 @@ class ConfigProvider
 	                };
                 },
                 'Action\filedescriptionAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                     	$content = null;
                     	try {
                     		$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'description');
@@ -233,7 +231,7 @@ class ConfigProvider
                     };
                 },
                 'Action\fileformatAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                     	$content = null;
                     	try {
                     		$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'format');
@@ -245,7 +243,7 @@ class ConfigProvider
                     };
                 },
                 'Action\filenamneAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                     	$content = null;
                     	try {
                     		$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'namne');
@@ -257,7 +255,7 @@ class ConfigProvider
                     };
                 },
                 'Action\filetypeAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                         $content = null;
                         try {
                         	$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'type');
@@ -269,6 +267,28 @@ class ConfigProvider
                     };
                 },
                 
+                
+                
+                
+                'Action\filecopyAction' => function ($container) {
+                	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
+                	
+                		if (session_status() == PHP_SESSION_NONE) {
+                			session_start();
+                		}
+                			
+                		$document = [];
+                		$document['support'] = Document::SUPPORT_FILE_BUCKET_STR;
+                		$document['coding'] = 'binary';
+                		$document['data'] =  $request->getParsedBody()['object'];
+                		$document['name'] = $request->getParsedBody()['name'];
+
+                		$doc = $container->get(\Dms\Service\DmsService::class)->add($document);
+ 
+                		return new JsonResponse(['id'=>$doc], 200, $container->get('config')['dms-conf']['headers']);
+                			
+                	};
+                },
             ],
         ];
     }
@@ -280,49 +300,55 @@ class ConfigProvider
      */
     public function getRoutes() : array
     {
-        return [[
+        return [
+        	[
+        		'name'            => 'filecopy',
+        		'path'            => '/copy[/]',
+        		'middleware'      => 'Action\filecopyAction',
+        		'allowed_methods' => ['GET', 'OPTIONS'],
+        	],[
                 'name'            => 'fileview',
-                'path'            => '/data', ///data/:file
+                'path'            => '/data/{file}',
                 'middleware'      => 'Action\fileviewAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+                'allowed_methods' => ['GET', 'OPTIONS'],
             ],[
                 'name'            => 'initsession',
-                'path'            => '/initsession', // /initsession[/]
+                'path'            => '/initsession[/]', 
                 'middleware'      => 'Action\initsessionAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'fileprogress',
-                'path'            => '/progress', // /progress[/]
+                'path'            => '/progress[/]', 
                 'middleware'      => 'Action\fileprogressAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'filesave',
-                'path'            => '/save', // /save[/]
+                'path'            => '/save[/]', 
                 'middleware'      => 'Action\filesaveAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'filedescription',
-                'path'            => '/description', // /description/:file
+                'path'            => '/description/{file}',
                 'middleware'      => 'Action\filedescriptionAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'fileformat',
-                'path'            => '/format/:file', // /format/:file
+                'path'            => '/format/{file}', 
                 'middleware'      => 'Action\fileformatAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'filenamne',
-                'path'            => '/name/:file', // /name/:file
+                'path'            => '/name/{file}',
                 'middleware'      => 'Action\filenamneAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'filetype',
-                'path'            => '/type/:file', // /type/:file
+                'path'            => '/type/{file}', 
                 'middleware'      => 'Action\filetypeAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
                 'name'            => 'filedownload',
-                'path'            => '/download/:file', // /download/:file
+                'path'            => '/download/{file}', 
                 'middleware'      => 'Action\filedownloadAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],
