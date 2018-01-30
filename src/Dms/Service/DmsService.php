@@ -7,7 +7,6 @@
 namespace Dms\Service;
 
 use Zend\ProgressBar\Upload\SessionProgress as Sp;
-use Dms\Document\Manager;
 use Dms\Document\NoFileException;
 
 /**
@@ -109,6 +108,7 @@ class DmsService
                     header(sprintf("%s: %s", $key, $value));
                   }
                 }
+                header("Status: 301 Moved Permanently", false, 301);
                 header('Location: '.$this->options['storage']['url'].'/'.substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4).'.dat');
                 exit();
             }

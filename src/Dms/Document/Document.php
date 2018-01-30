@@ -6,9 +6,7 @@
  */
 namespace Dms\Document;
 
-use Zend\Validator\File\Sha1;
 use Serializable;
-use Dms\Storage\Storage;
 
 /**
  * class Document is a File Model.
@@ -18,6 +16,7 @@ class Document implements Serializable
     const TYPE_BINARY_STR = 'binary';
     const SUPPORT_DATA_STR = 'data';
     const SUPPORT_FILE_STR = 'file';
+    const SUPPORT_FILE_BUCKET_STR = 'bucket';
     const SUPPORT_FILE_MULTI_PART_STR = 'file_multi_part';
 
     /**
