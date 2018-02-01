@@ -9,10 +9,10 @@ use Dms\Coding\Url\Url;
 use Dms\Resize\Resize;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Zend\Diactoros\Response\JsonResponse;
-use Psr\Http\Message\RequestInterface;
 use Dms\Document\NoFileException;
 use Dms\Document\Document;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\TextResponse;
 
 /**
  * The configuration provider for the App module
@@ -138,7 +138,7 @@ class ConfigProvider
                 
                 
                 'Action\fileviewAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                    return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                         try {
                             $container->get(\Dms\Service\DmsService::class)->get($request->getAttribute('file'));
                         } catch (NoFileException $e) {
@@ -147,7 +147,7 @@ class ConfigProvider
                     };
                 },
                 'Action\initsessionAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                    return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                         if (session_status() == PHP_SESSION_NONE) {
                             session_start();
                         }
@@ -156,7 +156,7 @@ class ConfigProvider
                     };
                 },
                 'Action\fileprogressAction' => function ($container) {
-                    return function (RequestInterface $request, DelegateInterface $delegate) use ($container) {
+                    return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                         if (session_status() == PHP_SESSION_NONE) {
                             session_start();
                         }
@@ -178,11 +178,11 @@ class ConfigProvider
                     		/** @var  \Zend\Diactoros\UploadedFile $file */
                     		$document['support'] = Document::SUPPORT_FILE_MULTI_PART_STR;
                     		$document['coding'] = 'binary';
-                    		$document['data']  = [$name_file => $file->getStream()];
+                    		$document['data']  = $file;
                     		$document['name'] = $file->getClientFilename();
                    			$document['type'] = $file->getClientMediaType();
                    			$document['weight'] = $file->getSize();
-                   			
+
                     		$doc = $container->get(\Dms\Service\DmsService::class)->add($document);
                     		if (isset($ret[$name_file])) {
                     			if (is_array($ret[$name_file])) {
@@ -195,7 +195,7 @@ class ConfigProvider
                    			}
                     	}
                     	
-                    	return new JsonResponse((string) $ret, 200, $container->get('config')['dms-conf']['headers']);
+                    	return new JsonResponse($ret, 200, $container->get('config')['dms-conf']['headers']);
                     };
                 },
                 'Action\filedownloadAction' => function ($container) {
@@ -203,19 +203,19 @@ class ConfigProvider
 	                	$content = null;
 	                	try {
 	                		$document = $container->get(\Dms\Service\DmsService::class)->getDocument($request->getAttribute('file'));
-	                		
 	                		$content = $document->getDatas();
-	                		$headers = $this->getResponse()->getHeaders();
-	                		$headers->addHeaderLine('Content-type', 'application/octet-stream');
-	                		$headers->addHeaderLine('Content-Transfer-Encoding', $document->getEncoding());
-	                		$headers->addHeaderLine('Content-Length', strlen($content));
 	                		$name = $document->getName();
-	                		$headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
+	                		$headers = [
+	                		    'Content-type' => 'application/octet-stream',
+	                		    'Content-Transfer-Encoding' => $document->getEncoding(),
+	                		    'Content-Length' => "".strlen($content)."",
+	                		    'Content-Disposition' => sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name))
+	                		];
 	                	} catch (NoFileException $e) {
 	                		$content = $e->getMessage();
 	                	}
 	                	
-	                	return $this->getResponse()->setContent($content);
+	                	return new TextResponse($content, 200, $headers);
 	                };
                 },
                 'Action\filedescriptionAction' => function ($container) {
@@ -246,7 +246,7 @@ class ConfigProvider
                 	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
                     	$content = null;
                     	try {
-                    		$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'namne');
+                    		$content = $container->get(\Dms\Service\DmsService::class)->getInfo($request->getAttribute('file'), 'name');
                     	} catch (NoFileException $e) {
                     		$content = $e->getMessage();
                     	}
@@ -266,17 +266,12 @@ class ConfigProvider
                         return new JsonResponse((string) $content);
                     };
                 },
-                
-                
-                
-                
                 'Action\filecopyAction' => function ($container) {
                 	return function (ServerRequestInterface $request, DelegateInterface $delegate) use ($container) {
-                	
                 		if (session_status() == PHP_SESSION_NONE) {
                 			session_start();
                 		}
-                			
+                		
                 		$document = [];
                 		$document['support'] = Document::SUPPORT_FILE_BUCKET_STR;
                 		$document['coding'] = 'binary';
@@ -302,16 +297,46 @@ class ConfigProvider
     {
         return [
         	[
-        		'name'            => 'filecopy',
-        		'path'            => '/copy[/]',
-        		'middleware'      => 'Action\filecopyAction',
-        		'allowed_methods' => ['GET', 'OPTIONS'],
-        	],[
                 'name'            => 'fileview',
                 'path'            => '/data/{file}',
                 'middleware'      => 'Action\fileviewAction',
                 'allowed_methods' => ['GET', 'OPTIONS'],
-            ],[
+        	],[
+        	    'name'            => 'fileformat',
+        	    'path'            => '/format/{file}',
+        	    'middleware'      => 'Action\fileformatAction',
+        	    'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+        	],[
+        	    'name'            => 'filetype',
+        	    'path'            => '/type/{file}',
+        	    'middleware'      => 'Action\filetypeAction',
+        	    'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+        	],[
+        	    'name'            => 'filesave',
+        	    'path'            => '/save[/]',
+        	    'middleware'      => 'Action\filesaveAction',
+        	    'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+        	],[
+        	    'name'            => 'filenamne',
+        	    'path'            => '/name/{file}',
+        	    'middleware'      => 'Action\filenamneAction',
+        	    'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+        	],[
+        	    'name'            => 'filedownload',
+        	    'path'            => '/download/{file}',
+        	    'middleware'      => 'Action\filedownloadAction',
+        	    'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
+        	],[
+        	    'name'            => 'filecopy',
+        	    'path'            => '/copy[/]',
+        	    'middleware'      => 'Action\filecopyAction',
+        	    'allowed_methods' => ['POST', 'OPTIONS'],
+        	],
+            
+            
+            
+            
+            [
                 'name'            => 'initsession',
                 'path'            => '/initsession[/]', 
                 'middleware'      => 'Action\initsessionAction',
@@ -322,130 +347,11 @@ class ConfigProvider
                 'middleware'      => 'Action\fileprogressAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],[
-                'name'            => 'filesave',
-                'path'            => '/save[/]', 
-                'middleware'      => 'Action\filesaveAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
-            ],[
                 'name'            => 'filedescription',
                 'path'            => '/description/{file}',
                 'middleware'      => 'Action\filedescriptionAction',
                 'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
-            ],[
-                'name'            => 'fileformat',
-                'path'            => '/format/{file}', 
-                'middleware'      => 'Action\fileformatAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
-            ],[
-                'name'            => 'filenamne',
-                'path'            => '/name/{file}',
-                'middleware'      => 'Action\filenamneAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
-            ],[
-                'name'            => 'filetype',
-                'path'            => '/type/{file}', 
-                'middleware'      => 'Action\filetypeAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
-            ],[
-                'name'            => 'filedownload',
-                'path'            => '/download/{file}', 
-                'middleware'      => 'Action\filedownloadAction',
-                'allowed_methods' => ['POST', 'GET', 'OPTIONS'],
             ],
         ];
-        
-        
-        
-        /*
-         *         'router' => array(
-            'routes' => array(
-                'fileview' => array(
-                    'type' => 'Segment',
-                    
-                ),
-                'filedownload' => array(
-                    'type' => 'Segment',
-                    'options' => array(
-                        'route' => '/download/:file',
-                        'defaults' => array(
-                                'controller' => 'ged_document',
-                                'action' => 'getDownload',
-                        ),
-                    ),
-                ),
-                'filetype' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/type/:file',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'getType',
-                                ),
-                        ),
-                ),
-                'filenamne' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/name/:file',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'getName',
-                                ),
-                        ),
-                ),
-                'fileformat' => array(
-                    'type' => 'Segment',
-                    'options' => array(
-                        'route' => '/format/:file',
-                        'defaults' => array(
-                            'controller' => 'ged_document',
-                            'action' => 'getFormat',
-                        ),
-                    ),
-                ),
-                'filedescription' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/description/:file',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'getDescription',
-                                ),
-                        ),
-                ),
-                'filesave' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/save[/]',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'save',
-                                    ),
-                            ),
-                ),
-                'fileprogress' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/progress[/]',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'progress',
-                                    ),
-                            ),
-                ),
-                'initsession' => array(
-                            'type' => 'Segment',
-                            'options' => array(
-                                    'route' => '/initsession[/]',
-                                    'defaults' => array(
-                                            'controller' => 'ged_document',
-                                            'action' => 'initSession',
-                                    ),
-                            ),
-                ),
-            ),
-        ),
-         
-         */
     }
 }

@@ -7,9 +7,6 @@
 namespace Dms\Storage;
 
 use Dms\Document\Document;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\FileInput;
 use Aws\S3\S3Client;
 use Google\Cloud\Storage\StorageClient;
 
@@ -46,20 +43,12 @@ class Storage extends AbstractStorage
             mkdir($path, 0777, true);
         }
 
+        // Write Data File
         $p = $path.$nameMod.'.dat';
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
-            $fileInput = new FileInput(key($document->getDatas()));
-            $fileInput->getFilterChain()->attachByName('filerenameupload', ['target' => $p]);
-
-            $inputFilter = new InputFilter();
-            $inputFilter->add($fileInput);
-
-            $form = new Form();
-            $form->setInputFilter($inputFilter);
-            $form->setData($document->getDatas());
-            if ($form->isValid()) {
-                $form->getData();
-            }
+            $file = $document->getDatas();
+            /** @var  \Zend\Diactoros\UploadedFile $file */
+            move_uploaded_file($file->getStream()->getMetadata('uri') , $p);
         } else if ($document->getSupport() === Document::SUPPORT_FILE_BUCKET_STR) {
             $bucket = $this->client->bucket($conf_storage['bucket_upload']);
             $object = $bucket->object($document->getDatas());
@@ -71,6 +60,7 @@ class Storage extends AbstractStorage
             fclose($fp);
         }
         
+        // Update type name ect file data
         if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
           $this->client->copyObject([
               'Bucket' => $conf_storage['bucket'],
@@ -90,15 +80,13 @@ class Storage extends AbstractStorage
             'contentDisposition' => sprintf('filename=%s', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
           ]);
         }
+        
+        // write info file
         $document->setSupport(Document::SUPPORT_FILE_STR);
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('path' => $path, 'short_name' => $nameMod, 'all_path' => $path.$nameMod.'.dat', 'support' => $document->getSupport(), 'name' => $name));
-
         $serialize = serialize($document);
         $fp = fopen($path.$nameMod.'.inf', 'w');
         $ret += fwrite($fp, $serialize);
         fclose($fp);
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('path' => $path, 'short_name' => $nameMod, 'all_path' => $path.$nameMod.'inf', 'support' => $document->getSupport(), 'name' => $name));
-
         return $ret;
     }
 
