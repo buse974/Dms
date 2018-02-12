@@ -271,12 +271,14 @@ class ConfigProvider
                 		if (session_status() == PHP_SESSION_NONE) {
                 			session_start();
                 		}
-                		
+                		$body = $request->getParsedBody();
                 		$document = [];
                 		$document['support'] = Document::SUPPORT_FILE_BUCKET_STR;
                 		$document['coding'] = 'binary';
-                		$document['data'] =  $request->getParsedBody()['object'];
-                		$document['name'] = $request->getParsedBody()['name'];
+                		$document['data'] =  $body['object'];
+                		$document['name'] = $body['name'];
+                		$document['type'] = isset($body['type'])?$body['type']:null; 
+                		$document['weight'] = isset($body['size'])?$body['size']:null; 
 
                 		$doc = $container->get(\Dms\Service\DmsService::class)->add($document);
  
@@ -332,10 +334,6 @@ class ConfigProvider
         	    'middleware'      => 'Action\filecopyAction',
         	    'allowed_methods' => ['POST', 'OPTIONS'],
         	],
-            
-            
-            
-            
             [
                 'name'            => 'initsession',
                 'path'            => '/initsession[/]', 
