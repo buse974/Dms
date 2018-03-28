@@ -48,7 +48,7 @@ class DocumentController extends AbstractActionController
             $headers->addHeaderLine('Content-Transfer-Encoding', $document->getEncoding());
             $headers->addHeaderLine('Content-Length', strlen($content));
             $name = $document->getName();
-            $headers->addHeaderLine('Content-Disposition', sprintf('filename=%s', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
+            $headers->addHeaderLine('Content-Disposition', sprintf('attachment;filename="%s"', ((empty($name)) ? $file.'.'.$document->getFormat() : $name)));
         } catch (NoFileException $e) {
             $content = $e->getMessage();
         }
