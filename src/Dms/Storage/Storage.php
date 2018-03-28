@@ -78,7 +78,7 @@ class Storage extends AbstractStorage
               'CopySource' => $conf_storage['bucket'].'/'.$f.$nameMod.'.dat',
               'ContentType' => $document->getType(),
               'CacheControl' => 'public, max-age=31536000',
-              'ContentDisposition' => sprintf('attachment;filename="%s"', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName())),
+              'ContentDisposition' => sprintf('attachment;filename="%s"', str_replace(' ', '_', ((null === $document->getName()) ? (substr($file, -1 * strlen($document->getFormat())) === $document->getFormat()) ? $file : $file.'.'.$document->getFormat() : $document->getName()))),
               'MetadataDirective' => 'REPLACE',
           ]);
         } elseif (isset($conf_storage['name']) && $conf_storage['name'] === 'gs') {
