@@ -7,7 +7,6 @@
 namespace Dms\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Dms\Model\Dms;
 use Zend\View\Model\JsonModel;
 use Dms\Service\DmsService as Sp;
 use Dms\Document\Document;
@@ -171,6 +170,32 @@ class DocumentController extends AbstractActionController
         return new JsonModel($ret);
     }
 
+    /**
+     * Save For Upload File.
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function copyAction()
+    {
+        foreach ($this->dms()->getHearders() as $key => $value) {
+            $this->getResponse()->getHeaders()->addHeaderLine($key, $value);
+        }
+        
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $document = [];
+        $document['support'] = Document::SUPPORT_FILE_BUCKET_STR;
+        $document['coding'] = 'binary';
+        $document['data'] = $this->params()->fromPost('object', 'noo');
+        $document['name'] = $this->params()->fromPost('name', 'non');
+              
+        $doc = $this->dms()->getService()->add($document);
+
+        return new JsonModel(['id'=>$doc]);
+    }
+    
     /**
      * Progress Upload.
      *

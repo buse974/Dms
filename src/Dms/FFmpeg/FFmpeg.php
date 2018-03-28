@@ -25,7 +25,7 @@ class FFmpeg
     /**
      * FFMpeg Object.
      *
-     * @var FFMpeg\FFMpeg
+     * @var \FFMpeg\FFMpeg
      */
     private $ffmpeg;
 

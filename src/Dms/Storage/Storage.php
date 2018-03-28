@@ -10,7 +10,6 @@ use Dms\Document\Document;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\FileInput;
-use Zend\Form\Element\File;
 use Aws\S3\S3Client;
 use Google\Cloud\Storage\StorageClient;
 
@@ -37,6 +36,7 @@ class Storage extends AbstractStorage
     public function write(\Dms\Document\Document $document)
     {
         $ret = null;
+        $conf_storage = $this->options->getStorage();
         $name = $document->getId();
         $nameMod = substr($name, 4);
         $f = substr($name, 0, 2).'/'.substr($name, 2, 2).'/';
@@ -60,13 +60,17 @@ class Storage extends AbstractStorage
             if ($form->isValid()) {
                 $form->getData();
             }
+        } else if ($document->getSupport() === Document::SUPPORT_FILE_BUCKET_STR) {
+            $bucket = $this->client->bucket($conf_storage['bucket_upload']);
+            $object = $bucket->object($document->getDatas());
+            $object->copy($conf_storage['bucket'], ['name' => $f.$nameMod.'.dat']);
         } else {
             $fp = fopen($p, 'w');
             fwrite($fp, $document->getDatas());
             $document->setWeight(strlen($document->getDatas()));
             fclose($fp);
         }
-        $conf_storage = $this->options->getStorage();
+        
         if (isset($conf_storage['name']) && $conf_storage['name'] === 's3') {
           $this->client->copyObject([
               'Bucket' => $conf_storage['bucket'],
@@ -142,6 +146,7 @@ class Storage extends AbstractStorage
     {
         $name = $document->getId().$ext;
         $filename = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
+        
         if (!file_exists($filename)) {
             throw new \Exception('no file');
         }
@@ -224,6 +229,10 @@ class Storage extends AbstractStorage
             $path = sprintf('s3://%s/', $conf_storage['bucket']);
           } elseif ($conf_storage['name'] === 'gs') {
             if ($this->init_path === false) {
+              
+              if(!empty($conf_storage['credentials_file'])) {
+                  putenv('GOOGLE_APPLICATION_CREDENTIALS='.$conf_storage['credentials_file']);
+              }
               $this->client = new StorageClient($conf_storage['options']);
               $this->client->registerStreamWrapper();
               $init_path = true;

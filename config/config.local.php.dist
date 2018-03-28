@@ -22,6 +22,7 @@ return array(
                 'storage' => [
                 	'name' => 's3',
                 	'bucket' => 'NAME-BUCKET',
+                	'bucket_upload' => 'NAME-BUCKET',
                 	'options' => [
                 		'version' => 'latest',
                     	'region' => '',
@@ -34,8 +35,9 @@ return array(
               /*  'storage' => [
                 	'name' => 'gs',
                 	'bucket' => 'NAME-BUCKET',
+                	'credentials_file' => 'tagncar-c26f3232cbb7.json',
                 	'options' => [
-                    'projectId' => *****
+                    	'projectId' => *****
                   ]
                 ]*/
 
