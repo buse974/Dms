@@ -22,7 +22,8 @@
     "zendframework/zend-log": "*",
     "zendframework/zend-form": "*",
     "aws/aws-sdk-php": "^3.19",
-    "google/cloud": "*" 
+    "google/cloud": "*",
+    "zendframework/zend-progressbar": "^2.5" 
   },
   "require-dev" : {
     "friendsofphp/php-cs-fixer":"*",
