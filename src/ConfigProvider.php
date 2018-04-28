@@ -132,15 +132,15 @@ class ConfigProvider
                     
                     return new DmsService($container->get(\Dms\Document\Manager::class), $config);
                 },
-                Action\FileviewAction::class => function ($container) {
+                Action\FileViewAction::class => function ($container) {
                     
-                    return new Action\FileviewAction(
+                    return new Action\FileViewAction(
                         $container->get('config')['dms-conf']['headers'],
                         $container->get(\Dms\Service\DmsService::class));
                 },
-                Action\InitsessionAction::class => function ($container) {
+                Action\InitSessionAction::class => function ($container) {
                     
-                    return new Action\InitsessionAction(
+                    return new Action\InitSessionAction(
                         $container->get('config')['dms-conf']['headers'],
                         $container->get(\Dms\Service\DmsService::class));
                 },
@@ -150,15 +150,15 @@ class ConfigProvider
                         $container->get('config')['dms-conf']['headers'],
                         $container->get(\Dms\Service\DmsService::class));
                 },
-                Action\FileprogressAction::class => function ($container) {
+                Action\FileProgressAction::class => function ($container) {
                     
-                    return new Action\FileprogressAction(
+                    return new Action\FileProgressAction(
                         $container->get('config')['dms-conf']['headers'],
                         $container->get(\Dms\Service\DmsService::class));
                 },
-                Action\FilesaveAction::class => function ($container) {
+                Action\FileSaveAction::class => function ($container) {
                     
-                    return new Action\FilesaveAction(
+                    return new Action\FileSaveAction(
                         $container->get('config')['dms-conf']['headers'], 
                         $container->get(\Dms\Service\DmsService::class));
                 },
@@ -168,7 +168,9 @@ class ConfigProvider
                         $container->get(\Dms\Service\DmsService::class));
                 },
                 Action\FileCopyAction::class => function ($container) {
-                    
+                    return new Action\FileCopyAction(
+                        $container->get('config')['dms-conf']['headers'],
+                        $container->get(\Dms\Service\DmsService::class));
                 },
             ],
             'abstract_factories' => [
