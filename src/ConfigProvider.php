@@ -7,12 +7,6 @@ use Dms\Document\Manager;
 use Dms\Service\DmsService;
 use Dms\Coding\Url\Url;
 use Dms\Resize\Resize;
-use Zend\Diactoros\Response\JsonResponse;
-use Dms\Document\NoFileException;
-use Dms\Document\Document;
-use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\TextResponse;
-use Tests\FFMpeg\Unit\Format\Audio\AacTest;
 
 /**
  * The configuration provider for the App module
