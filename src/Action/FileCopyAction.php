@@ -23,7 +23,7 @@ class FileCopyAction extends AbstractAction
         $document['type'] = isset($body['type'])?$body['type']:null;
         $document['weight'] = isset($body['size'])?$body['size']:null;
         
-        $doc = $container->get(\Dms\Service\DmsService::class)->add($document);
+        $doc = $this->service_dms->add($document);
         
         return new JsonResponse(['id'=>$doc], 200, $this->headers);
     }
