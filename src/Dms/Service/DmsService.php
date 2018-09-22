@@ -92,7 +92,7 @@ class DmsService
         try {
             $document = $this->document_manager->loadDocument($file)->getDocument();
         } catch (NoFileException $e) {
-            preg_match('/(?P<id>\w+)($)?(-(?P<size>\w+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
+            preg_match('/(?P<id>\w+)($)?(-(?P<size>[0-9xm.]+)($)?)?(\[(?P<page>\d+)\]($)?)?(.*\.(?P<fmt>\w+)$)?/', $file, $matches, PREG_OFFSET_CAPTURE);
             $this->document_manager->loadDocument($matches['id'][0]);
             $this->document_manager->setSize((isset($matches['size']) && !empty($matches['size'][0])) ? $matches['size'][0] : null);
             $this->document_manager->setPage((isset($matches['page']) && !empty($matches['page'][0])) ? $matches['page'][0] : null);
