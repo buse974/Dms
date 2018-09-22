@@ -100,10 +100,10 @@ class Resize
             }
 
             if (isset($size[0]) && !empty($size[0])) {
-                $arr_size['width'] = $size[0];
+                $arr_size['width'] = intval($size[0]);
             }
             if (isset($size[1]) && !empty($size[1])) {
-                $arr_size['height'] = $size[1];
+                $arr_size['height'] = intval($size[1]);
             }
             $size = $arr_size;
         }
