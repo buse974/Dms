@@ -140,6 +140,15 @@ class Manager
         return $this;
     }
 
+    protected function saveTmp($document, $id = null)
+    {
+        if (null !== $id) {
+            $document->setId($id);
+        }
+        $document->setStorage($this->getStorage());
+        $document->write();
+    }
+    
     /**
      * Record a document to the Dms.
      *
@@ -155,14 +164,6 @@ class Manager
             throw new \Exception('Document does not exist');
         }
 
-        // Je sauvegarde le document dans l'état pour que les prochains la récupére 
-        // dans le format original et ne la redimensionne pas a nouveau
-        if (null !== $id) {
-            $this->document->setId($id);
-        }
-        $this->document->setStorage($this->getStorage());
-        $this->document->write();
-        
         $obj_mime_type = new MimeType();
         $is_video = ((strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'video') === 0) || (strpos($this->document->getType(), 'video') === 0));
         if ($is_video && (null !== $this->getFormat() || null !== $this->getSize() || null !== $this->getPage())) {
@@ -176,6 +177,7 @@ class Manager
         // convertire d'abort avec uniconv en format compatible imagick puis par defaut mettre un numéro de page 1 si non existant
         // puis resize imagick avec format de sortie par default (jpeg)
         if (null !== $this->getSize() && null === $this->getFormat()) {
+            $this->saveTmp(clone $document, $id);
             // si format n'est pas une image ou IN non compatible
             $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
             if ($is_img && Resize::isCompatible($this->document->getFormat())) {
@@ -193,6 +195,7 @@ class Manager
         // vérifier que le format n'est pas le même.
         // sinon uniconv (voir imagmagick selon le suport est qualité)
             if ($this->getFormat() !== $this->getDocument()->getFormat()) {
+                $this->saveTmp(clone $document, $id);
                 $obj_mime_type = new MimeType();
                 $is_img = (strpos($obj_mime_type->getMimeTypeByExtension($this->document->getFormat()), 'image') === 0);
                 if (!$is_img) {
@@ -201,6 +204,7 @@ class Manager
                 $this->convert();
             }
         } elseif (null !== $this->getSize() && null !== $this->getFormat()) {
+            $this->saveTmp(clone $document, $id);
         // si resize + format
             if (Resize::isCompatible($this->format) && Resize::isCompatible($this->getDocument()->getFormat())) {
             // si format compatible IN et OUT avec imagik on utilise imagik pour les deux
