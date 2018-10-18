@@ -161,7 +161,7 @@ class Storage extends AbstractStorage
         $filename = $this->getBasePath().substr($name, 0, 2).'/'.substr($name, 2, 2).'/'.substr($name, 4);
         
         if (!file_exists($filename)) {
-            throw new \Exception('no file');
+            throw new \Exception('no file' . $filename);
         }
 
         return $filename;
