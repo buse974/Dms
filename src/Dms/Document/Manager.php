@@ -140,8 +140,9 @@ class Manager
         return $this;
     }
 
-    protected function saveTmp($document, $id = null)
+    protected function saveTmp(Document $document, $id = null)
     {
+        $document->getDatas();
         if (null !== $id) {
             $document->setId($id);
         }
