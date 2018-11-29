@@ -48,9 +48,6 @@ class Storage extends AbstractStorage
 
         $p = $path.$nameMod.'.dat';
         if ($document->getSupport() === Document::SUPPORT_FILE_MULTI_PART_STR) {
-            
-            echo "COUCOUCOU";
-            
             try {
             $fileInput = new FileInput(key($document->getDatas()));
             $fileInput->getFilterChain()->attachByName('filerenameupload', ['target' => $p]);
@@ -61,15 +58,11 @@ class Storage extends AbstractStorage
             $form = new Form();
             $form->setInputFilter($inputFilter);
             $form->setData($document->getDatas());
-            print_r($_FILES);
-            print_r($p. ">>>".  $form->isValid());
+
             //if ($form->isValid()) {
                 $ret = $form->getData();
-                
-                
             //}
-            
-            print_r($ret);
+
             } catch (\Exception $e) {
                 print_r($e->getMessage());
             }
